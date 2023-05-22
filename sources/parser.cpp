@@ -21,14 +21,14 @@ bool parser::parse(std::uint8_t* data, std::size_t len, std::size_t bytes_read, 
 			break;
 		// Filename
 		case 2:
-			packet.filename.push_back(ntohs(byte));
+			packet.filename.push_back(byte);
 
 			if (!byte)
 				step_++;
 			break;
 		// Mode
 		case 3:
-			packet.mode.push_back(ntohs(byte));
+			packet.mode.push_back(byte);
 
 			if (!byte) {
 				step_ = 0;
@@ -143,7 +143,7 @@ bool parser::parse(std::uint8_t* data, std::size_t len, std::size_t bytes_read, 
 			break;
 		// ErrorMessage
 		case 4:
-			packet.error_message.push_back(ntohs(byte));
+			packet.error_message.push_back(byte);
 
 			if (!byte) {
 				step_ = 0;

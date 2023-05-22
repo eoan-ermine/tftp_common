@@ -1,8 +1,12 @@
+#pragma once
+
 #include <arpa/inet.h>
 
 #include <cstdint>
 #include <vector>
 #include <string>
+
+namespace tftp_common {
 
 namespace packets {
 
@@ -13,9 +17,7 @@ public:
 
 	void serialize(std::vector<std::uint8_t>& buf);
 public:
-	enum class request_type : std::uint16_t {
-		read = 1, write = 2
-	} type;
+	std::uint16_t type;
 	std::vector<std::uint8_t> filename;
 	std::vector<std::uint8_t> mode;
 };
@@ -27,6 +29,7 @@ public:
 
 	void serialize(std::vector<std::uint8_t>& buf);
 public:
+	std::uint16_t type = 0x3;
 	std::uint16_t block;
 	std::vector<std::uint8_t> data_;
 };
@@ -38,6 +41,7 @@ public:
 
 	void serialize(std::vector<std::uint8_t>& buf);
 public:
+	std::uint16_t type = 0x4;
 	std::uint16_t block;
 };
 
@@ -48,8 +52,11 @@ public:
 
 	void serialize(std::vector<std::uint8_t>& buf);
 public:
+	std::uint16_t type = 0x5;
 	std::uint16_t error_code;
 	std::vector<std::uint8_t> error_message;
 };
+
+}
 
 }
