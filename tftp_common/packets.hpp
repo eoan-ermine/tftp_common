@@ -13,12 +13,16 @@ namespace packets {
 
 class request {
 public:
+	enum type {
+		read = 0x1, write=0x2
+	};
+
 	request() { }
 	request(std::uint16_t type_, std::string_view filename_, std::string_view mode_)
 		: type(type_), filename(filename_.begin(), filename_.end() + 1), mode(mode_.begin(), mode_.end() + 1) { }
 	~request() { }
 
-	void serialize(std::vector<std::uint8_t>& buf) {
+	std::size_t serialize(std::vector<std::uint8_t>& buf) {
 		buf.push_back(htons(type) >> 8);
 		buf.push_back(htons(type) >> 0);
 		for (auto byte: filename) {
@@ -27,6 +31,8 @@ public:
 		for (auto byte: mode) {
 			buf.push_back(byte);
 		}
+
+		return sizeof(type) + filename.size() + mode.size();
 	}
 public:
 	std::uint16_t type;
@@ -43,7 +49,7 @@ public:
 		: block(block_), data_(std::move(buffer_)) { }
 	~data() { }
 
-	void serialize(std::vector<std::uint8_t>& buf) {
+	std::size_t serialize(std::vector<std::uint8_t>& buf) {
 		buf.push_back(htons(type) >> 8);
 		buf.push_back(htons(type) >> 0);
 		buf.push_back(htons(block) >> 8);
@@ -51,6 +57,8 @@ public:
 		for (auto byte: data_) {
 			buf.push_back(byte);
 		}
+
+		return sizeof(type) + sizeof(block) + data_.size();
 	}
 public:
 	std::uint16_t type = 0x3;
@@ -65,11 +73,13 @@ public:
 		: block(block_) { }
 	~acknowledgment() { }
 
-	void serialize(std::vector<std::uint8_t>& buf) { 
+	std::size_t serialize(std::vector<std::uint8_t>& buf) { 
 		buf.push_back(htons(type) >> 8);
 		buf.push_back(htons(type) >> 0);
 		buf.push_back(htons(block) >> 8);
 		buf.push_back(htons(block) >> 0);
+
+		return sizeof(type) + sizeof(block);
 	}
 public:
 	std::uint16_t type = 0x4;
@@ -83,7 +93,7 @@ public:
 		: error_code(error_code_), error_message(error_message_.begin(), error_message_.end() + 1) { }
 	~error() { }
 
-	void serialize(std::vector<std::uint8_t>& buf) { 
+	std::size_t serialize(std::vector<std::uint8_t>& buf) { 
 		buf.push_back(htons(type) >> 8);
 		buf.push_back(htons(type) >> 0);
 		buf.push_back(htons(error_code) >> 8);
@@ -91,6 +101,8 @@ public:
 		for (auto byte: error_message) {
 			buf.push_back(byte);
 		}
+
+		return sizeof(type) + sizeof(error_code) + error_message.size();
 	}
 public:
 	std::uint16_t type = 0x5;
