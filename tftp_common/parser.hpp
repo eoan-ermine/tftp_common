@@ -7,10 +7,10 @@ namespace tftp_common {
 class parser
 {
 public:
-	bool parse(std::uint8_t* data, std::size_t len, std::size_t& bytes_read, packets::request& packet) {
+	bool parse(std::uint8_t* buffer, std::size_t len, std::size_t& bytes_read, packets::request& packet) {
 		bytes_read = 0;
 		for (std::size_t i = 0; i != len; ++i) {
-			const auto byte = data[i];
+			const auto byte = buffer[i];
 			bytes_read++;
 
 			switch (step_) {
@@ -22,7 +22,7 @@ public:
 			case 1:
 				packet.type_ |= std::uint16_t(byte) << 0;
 				packet.type_ = ntohs(packet.type_);
-				if (packet.type_ != packets::type::read && packet.type_ != packets::type::write) {
+				if (packet.type_ != packets::type::read_request && packet.type_ != packets::type::write_request) {
 					step_ = 0;
 					continue;
 				}
@@ -48,22 +48,22 @@ public:
 		}
 		return false;
 	}
-	bool parse(std::uint8_t* data, std::size_t len, std::size_t& bytes_read, packets::data& packet) {
+	bool parse(std::uint8_t* buffer, std::size_t len, std::size_t& bytes_read, packets::data& packet) {
 		bytes_read = 0;
 		for (std::size_t i = 0; i != len; ++i) {
-			const auto byte = data[i];
+			const auto byte = buffer[i];
 			bytes_read++;
 
 			switch (step_) {
 			// Opcode (2 bytes)
 			case 0:
-				packet.type_ = std::uint16_t(byte) << 8;
+				packet.type = std::uint16_t(byte) << 8;
 				step_++;
 				break;
 			case 1:
-				packet.type_ |= std::uint16_t(byte) << 0;
-				packet.type_ = ntohs(packet.type_);
-				if (packet.type_ != packets::type::data) {
+				packet.type |= std::uint16_t(byte) << 0;
+				packet.type = ntohs(packet.type);
+				if (packet.type != packets::type::data_packet) {
 					step_ = 0;
 					continue;
 				}
@@ -79,7 +79,7 @@ public:
 				packet.block = ntohs(packet.block);
 				step_++;
 				break;
-			// Data
+			// buffer
 			case 4:
 				packet.data_.push_back(byte);
 
@@ -93,22 +93,22 @@ public:
 		}
 		return false;
 	}
-	bool parse(std::uint8_t* data, std::size_t len, std::size_t& bytes_read, packets::acknowledgment& packet) {
+	bool parse(std::uint8_t* buffer, std::size_t len, std::size_t& bytes_read, packets::acknowledgment& packet) {
 		bytes_read = 0;
 		for (std::size_t i = 0; i != len; ++i) {
-			const auto byte = data[i];
+			const auto byte = buffer[i];
 			bytes_read++;
 
 			switch (step_) {
 			// Opcode (2 bytes)
 			case 0:
-				packet.type_ = std::uint16_t(byte) << 8;
+				packet.type = std::uint16_t(byte) << 8;
 				step_++;
 				break;
 			case 1:
-				packet.type_ |= std::uint16_t(byte) << 0;
-				packet.type_ = ntohs(packet.type_);
-				if (packet.type_ != packets::type::acknowledgment) {
+				packet.type |= std::uint16_t(byte) << 0;
+				packet.type = ntohs(packet.type);
+				if (packet.type != packets::type::acknowledgment_packet) {
 					step_ = 0;
 					continue;
 				}
@@ -128,22 +128,22 @@ public:
 		}
 		return false;
 	}
-	bool parse(std::uint8_t* data, std::size_t len, std::size_t& bytes_read, packets::error& packet) {
+	bool parse(std::uint8_t* buffer, std::size_t len, std::size_t& bytes_read, packets::error& packet) {
 		bytes_read = 0;
 		for (std::size_t i = 0; i != len; ++i) {
-			const auto byte = data[i];
+			const auto byte = buffer[i];
 			bytes_read++;
 
 			switch (step_) {
 			// Opcode (2 bytes)
 			case 0:
-				packet.type_ = std::uint16_t(byte) << 8;
+				packet.type = std::uint16_t(byte) << 8;
 				step_++;
 				break;
 			case 1:
-				packet.type_ |= std::uint16_t(byte) << 0;
-				packet.type_ = ntohs(packet.type_);
-				if (packet.type_ != packets::type::error) {
+				packet.type |= std::uint16_t(byte) << 0;
+				packet.type = ntohs(packet.type);
+				if (packet.type != packets::type::error_packet) {
 					step_ = 0;
 					continue;
 				}
@@ -156,7 +156,7 @@ public:
 				break;
 			case 3:
 				packet.error_code |= std::uint16_t(byte) << 0;
-				packet.error_code = ntohs(packet.type_);
+				packet.error_code = ntohs(packet.type);
 				step_++;
 				break;
 			// ErrorMessage

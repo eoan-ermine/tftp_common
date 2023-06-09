@@ -1,3 +1,5 @@
+#pragma once
+
 #include <arpa/inet.h>
 
 #include <string_view>
@@ -10,7 +12,7 @@ namespace tftp_common {
 namespace packets {
 
 enum type: std::uint16_t {
-	read = 0x01, write = 0x02, data = 0x03, acknowledgment = 0x04, error = 0x05
+	read_request = 0x01, write_request = 0x02, data_packet = 0x03, acknowledgment_packet = 0x04, error_packet = 0x05
 };
 
 class request {
@@ -30,7 +32,7 @@ public:
 			buf.push_back(byte);
 		}
 
-		return sizeof(type) + filename.size() + mode.size();
+		return sizeof(type_) + filename.size() + mode.size();
 	}
 public:
 	std::uint16_t type_;
@@ -59,7 +61,7 @@ public:
 		return sizeof(type) + sizeof(block) + data_.size();
 	}
 public:
-	std::uint16_t type = type::data;
+	std::uint16_t type = type::data_packet;
 	std::uint16_t block;
 	std::vector<std::uint8_t> data_;
 };
@@ -80,7 +82,7 @@ public:
 		return sizeof(type) + sizeof(block);
 	}
 public:
-	std::uint16_t type = type::acknowledgment;
+	std::uint16_t type = type::acknowledgment_packet;
 	std::uint16_t block;
 };
 
@@ -103,7 +105,7 @@ public:
 		return sizeof(type) + sizeof(error_code) + error_message.size();
 	}
 public:
-	std::uint16_t type = type::error;
+	std::uint16_t type = type::error_packet;
 	std::uint16_t error_code;
 	std::vector<std::uint8_t> error_message;
 };
