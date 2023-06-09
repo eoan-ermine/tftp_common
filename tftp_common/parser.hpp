@@ -6,6 +6,9 @@ namespace tftp_common {
 
 class parser {
   public:
+    /// Parse read/write request packet from buffer converting all fields to host byte order
+    /// @return if the parsing was successful
+    /// @n If parsing wasn't successful, \p packet remains in valid but unspecified state
     bool parse(std::uint8_t *buffer, std::size_t len, std::size_t &bytes_read, packets::request &packet) {
         bytes_read = 0;
         for (std::size_t i = 0; i != len; ++i) {
@@ -47,6 +50,9 @@ class parser {
         }
         return false;
     }
+    /// Parse data packet from buffer converting all fields to host byte order
+    /// @return if the parsing was successful
+    /// @n If parsing wasn't successful, \p packet remains in valid but unspecified state
     bool parse(std::uint8_t *buffer, std::size_t len, std::size_t &bytes_read, packets::data &packet) {
         bytes_read = 0;
         for (std::size_t i = 0; i != len; ++i) {
@@ -92,6 +98,9 @@ class parser {
         }
         return false;
     }
+    /// Parse acknowledgment packet from buffer converting all fields to host byte order
+    /// @return if the parsing was successful
+    /// @n If parsing wasn't successful, \p packet remains in valid but unspecified state
     bool parse(std::uint8_t *buffer, std::size_t len, std::size_t &bytes_read, packets::acknowledgment &packet) {
         bytes_read = 0;
         for (std::size_t i = 0; i != len; ++i) {
@@ -127,6 +136,9 @@ class parser {
         }
         return false;
     }
+    /// Parse error packet from buffer converting all fields to host byte order
+    /// @return if the parsing was successful
+    /// @n If parsing wasn't successful, \p packet remains in valid but unspecified state
     bool parse(std::uint8_t *buffer, std::size_t len, std::size_t &bytes_read, packets::error &packet) {
         bytes_read = 0;
         for (std::size_t i = 0; i != len; ++i) {
