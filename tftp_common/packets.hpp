@@ -1,5 +1,3 @@
-#pragma once
-
 #include <arpa/inet.h>
 
 #include <string_view>
@@ -19,12 +17,12 @@ class request {
 public:
 	request() { }
 	request(type type, std::string_view filename, std::string_view mode)
-		: type(type), filename(filename.begin(), filename.end() + 1), mode(mode.begin(), mode.end() + 1) { }
+		: type_(type), filename(filename.begin(), filename.end() + 1), mode(mode.begin(), mode.end() + 1) { }
 	~request() { }
 
 	std::size_t serialize(std::vector<std::uint8_t>& buf) {
-		buf.push_back(htons(type) >> 8);
-		buf.push_back(htons(type) >> 0);
+		buf.push_back(htons(type_) >> 8);
+		buf.push_back(htons(type_) >> 0);
 		for (auto byte: filename) {
 			buf.push_back(byte);
 		}
@@ -35,7 +33,7 @@ public:
 		return sizeof(type) + filename.size() + mode.size();
 	}
 public:
-	std::uint16_t type;
+	std::uint16_t type_;
 	std::vector<std::uint8_t> filename;
 	std::vector<std::uint8_t> mode;
 };

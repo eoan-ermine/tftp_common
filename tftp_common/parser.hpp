@@ -16,13 +16,13 @@ public:
 			switch (step_) {
 			// Opcode (2 bytes)
 			case 0:
-				packet.type = std::uint16_t(byte) << 8;
+				packet.type_ = std::uint16_t(byte) << 8;
 				step_++;
 				break;
 			case 1:
-				packet.type |= std::uint16_t(byte) << 0;
-				packet.type = ntohs(packet.type);
-				if (packet.type != packets::type::read && packet.type != packets::type::write) {
+				packet.type_ |= std::uint16_t(byte) << 0;
+				packet.type_ = ntohs(packet.type_);
+				if (packet.type_ != packets::type::read && packet.type_ != packets::type::write) {
 					step_ = 0;
 					continue;
 				}
@@ -57,13 +57,13 @@ public:
 			switch (step_) {
 			// Opcode (2 bytes)
 			case 0:
-				packet.type = std::uint16_t(byte) << 8;
+				packet.type_ = std::uint16_t(byte) << 8;
 				step_++;
 				break;
 			case 1:
-				packet.type |= std::uint16_t(byte) << 0;
-				packet.type = ntohs(packet.type);
-				if (packet.type != packets::type::data) {
+				packet.type_ |= std::uint16_t(byte) << 0;
+				packet.type_ = ntohs(packet.type_);
+				if (packet.type_ != packets::type::data) {
 					step_ = 0;
 					continue;
 				}
@@ -102,13 +102,13 @@ public:
 			switch (step_) {
 			// Opcode (2 bytes)
 			case 0:
-				packet.type = std::uint16_t(byte) << 8;
+				packet.type_ = std::uint16_t(byte) << 8;
 				step_++;
 				break;
 			case 1:
-				packet.type |= std::uint16_t(byte) << 0;
-				packet.type = ntohs(packet.type);
-				if (packet.type != packets::type::acknowledgment) {
+				packet.type_ |= std::uint16_t(byte) << 0;
+				packet.type_ = ntohs(packet.type_);
+				if (packet.type_ != packets::type::acknowledgment) {
 					step_ = 0;
 					continue;
 				}
@@ -137,13 +137,13 @@ public:
 			switch (step_) {
 			// Opcode (2 bytes)
 			case 0:
-				packet.type = std::uint16_t(byte) << 8;
+				packet.type_ = std::uint16_t(byte) << 8;
 				step_++;
 				break;
 			case 1:
-				packet.type |= std::uint16_t(byte) << 0;
-				packet.type = ntohs(packet.type);
-				if (packet.type != packets::type::error) {
+				packet.type_ |= std::uint16_t(byte) << 0;
+				packet.type_ = ntohs(packet.type_);
+				if (packet.type_ != packets::type::error) {
 					step_ = 0;
 					continue;
 				}
@@ -156,7 +156,7 @@ public:
 				break;
 			case 3:
 				packet.error_code |= std::uint16_t(byte) << 0;
-				packet.error_code = ntohs(packet.type);
+				packet.error_code = ntohs(packet.type_);
 				step_++;
 				break;
 			// ErrorMessage
