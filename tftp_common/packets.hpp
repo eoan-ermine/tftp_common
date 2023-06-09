@@ -11,15 +11,15 @@ namespace tftp_common {
 
 namespace packets {
 
+enum type: std::uint16_t {
+	read = 0x01, write = 0x02, data = 0x03, acknowledgment = 0x04, error = 0x05
+};
+
 class request {
 public:
-	enum type {
-		read = 0x1, write=0x2
-	};
-
 	request() { }
-	request(std::uint16_t type_, std::string_view filename_, std::string_view mode_)
-		: type(type_), filename(filename_.begin(), filename_.end() + 1), mode(mode_.begin(), mode_.end() + 1) { }
+	request(type type, std::string_view filename, std::string_view mode)
+		: type(type), filename(filename.begin(), filename.end() + 1), mode(mode.begin(), mode.end() + 1) { }
 	~request() { }
 
 	std::size_t serialize(std::vector<std::uint8_t>& buf) {
@@ -43,10 +43,10 @@ public:
 class data {
 public:
 	data() { }
-	data(std::uint16_t block_, const std::vector<std::uint8_t>& buffer_)
-		: block(block_), data_(buffer_.begin(), buffer_.end()) { }
-	data(std::uint16_t block_, std::vector<std::uint8_t>&& buffer_)
-		: block(block_), data_(std::move(buffer_)) { }
+	data(std::uint16_t block, const std::vector<std::uint8_t>& buffer)
+		: block(block), data_(buffer.begin(), buffer.end()) { }
+	data(std::uint16_t block, std::vector<std::uint8_t>&& buffer)
+		: block(block), data_(std::move(buffer)) { }
 	~data() { }
 
 	std::size_t serialize(std::vector<std::uint8_t>& buf) {
@@ -61,7 +61,7 @@ public:
 		return sizeof(type) + sizeof(block) + data_.size();
 	}
 public:
-	std::uint16_t type = 0x3;
+	std::uint16_t type = type::data;
 	std::uint16_t block;
 	std::vector<std::uint8_t> data_;
 };
@@ -69,8 +69,8 @@ public:
 class acknowledgment {
 public:
 	acknowledgment() { }
-	acknowledgment(std::uint16_t block_)
-		: block(block_) { }
+	acknowledgment(std::uint16_t block)
+		: block(block) { }
 	~acknowledgment() { }
 
 	std::size_t serialize(std::vector<std::uint8_t>& buf) { 
@@ -82,15 +82,15 @@ public:
 		return sizeof(type) + sizeof(block);
 	}
 public:
-	std::uint16_t type = 0x4;
+	std::uint16_t type = type::acknowledgment;
 	std::uint16_t block;
 };
 
 class error {
 public:
 	error() { }
-	error(std::uint16_t error_code_, std::string_view error_message_)
-		: error_code(error_code_), error_message(error_message_.begin(), error_message_.end() + 1) { }
+	error(std::uint16_t error_code, std::string_view error_message)
+		: error_code(error_code), error_message(error_message.begin(), error_message.end() + 1) { }
 	~error() { }
 
 	std::size_t serialize(std::vector<std::uint8_t>& buf) { 
@@ -105,7 +105,7 @@ public:
 		return sizeof(type) + sizeof(error_code) + error_message.size();
 	}
 public:
-	std::uint16_t type = 0x5;
+	std::uint16_t type = type::error;
 	std::uint16_t error_code;
 	std::vector<std::uint8_t> error_message;
 };
