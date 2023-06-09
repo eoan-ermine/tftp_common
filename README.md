@@ -1,6 +1,6 @@
 # tftp_common
 
-A simple header-only Trivial File Transfer Protocol packets parsing and serializing library
+A simple header-only Trivial File Transfer Protocol (TFTP) packets parsing and serialization library.
 
 ## Supported platforms
 
@@ -11,9 +11,10 @@ A simple header-only Trivial File Transfer Protocol packets parsing and serializ
 
 ## Dependencies
 
-| Package name            | Minimum required version | Ubuntu 22.04                         |
+| Dependency name         | Minimum required version | Ubuntu 22.04                         |
 |-------------------------|--------------------------|--------------------------------------|
 | C++                     | C++17                    | sudo apt-get install build-essential |
+| Doxygen (optional)      | ---                      | sudo apt-get install doxygen         |
 
 ## Quick start
 
