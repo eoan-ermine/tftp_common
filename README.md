@@ -4,7 +4,7 @@
 
 | Package name            | Minimum required version | Ubuntu 22.04                         |
 |-------------------------|--------------------------|--------------------------------------|
-| C++                     | C++11                    | sudo apt-get install build-essential |
+| C++                     | C++17                    | sudo apt-get install build-essential |
 
 ## Installation instructions
 
