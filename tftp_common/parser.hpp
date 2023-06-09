@@ -22,7 +22,7 @@ public:
 			case 1:
 				packet.type |= std::uint16_t(byte) << 0;
 				packet.type = ntohs(packet.type);
-				if (packet.type != 0x01 || packet.type != 0x02) {
+				if (packet.type != packets::type::read && packet.type != packets::type::write) {
 					step_ = 0;
 					continue;
 				}
@@ -63,7 +63,7 @@ public:
 			case 1:
 				packet.type |= std::uint16_t(byte) << 0;
 				packet.type = ntohs(packet.type);
-				if (packet.type != 0x03) {
+				if (packet.type != packets::type::data) {
 					step_ = 0;
 					continue;
 				}
@@ -108,7 +108,7 @@ public:
 			case 1:
 				packet.type |= std::uint16_t(byte) << 0;
 				packet.type = ntohs(packet.type);
-				if (packet.type != 0x04) {
+				if (packet.type != packets::type::acknowledgment) {
 					step_ = 0;
 					continue;
 				}
@@ -143,7 +143,7 @@ public:
 			case 1:
 				packet.type |= std::uint16_t(byte) << 0;
 				packet.type = ntohs(packet.type);
-				if (packet.type != 0x05) {
+				if (packet.type != packets::type::error) {
 					step_ = 0;
 					continue;
 				}
