@@ -3,6 +3,7 @@
 
 using namespace tftp_common::packets;
 
+/// Test that Request packet parsing is going fine
 TEST(Request, Parse) {
 	std::uint8_t packetBytes[] = {
 	  0x00, 0x01, 0x2f, 0x73, 0x72, 0x76, 0x2f, 0x74,
@@ -23,6 +24,7 @@ TEST(Request, Parse) {
 	ASSERT_EQ(bytesRead, length);
 }
 
+/// Test that Data packet parsing is going fine
 TEST(Data, Parse) {
 	std::uint8_t packetBytes[] = {
 	  0x00, 0x03, 0x00, 0x01, 0x53, 0x6f, 0x6d, 0x65,
@@ -47,6 +49,7 @@ TEST(Data, Parse) {
 	ASSERT_EQ(bytesRead, length);
 }
 
+/// Test that Acknowledgment packet parsing is going fine
 TEST(Acknowledgment, Parse) {
 	std::uint8_t packetBytes[] = {
 	  0x00, 0x04, 0x00, 0x01
@@ -63,6 +66,7 @@ TEST(Acknowledgment, Parse) {
 	ASSERT_EQ(bytesRead, length);
 }
 
+/// Test that Error packet parsing is going fine
 TEST(Error, Parse) {
 	std::uint8_t packetBytes[] = {
 		0x00, 0x05, 0x00, 0x01, 0x46, 0x69, 0x6c, 0x65,
