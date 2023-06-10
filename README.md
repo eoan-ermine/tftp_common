@@ -54,6 +54,10 @@ cmake -DVARIABLE=value path/to/tftp_common/source
 
 ## CMake variables
 
-* BUILD_DOCS: BOOL
+* `BUILD_DOCS: BOOL`
 
 Adds doxygen build target as a dependency of the default build target. Defaults to OFF.
+
+* `BUILD_TESTS: BOOL`
+
+Adds test build targets as a dependencies of the default build target. Defaults to OFF.
