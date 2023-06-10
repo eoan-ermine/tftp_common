@@ -38,8 +38,8 @@ class Request {
     /// Use with parsing functions only
     Request() {}
     /// @param[type] Assumptions: The \p type is either ::ReadRequest or ::WriteRequest
-    /// @param[error_message] Assumptions: The \p filename is a **null-terminated string**
-    /// @param[mode] Assumptions: The \p mode is a **null-terminated string**
+    /// @param[error_message] Assumptions: The \p filename is a view to **null-terminated string**
+    /// @param[mode] Assumptions: The \p mode is a view to **null-terminated string**
     Request(Type type, std::string_view filename, std::string_view mode)
         : type_(type), filename(filename.begin(), filename.end() + 1), mode(mode.begin(), mode.end() + 1) {
         assert(type == Type::ReadRequest || type == Type::WriteRequest);
@@ -180,7 +180,7 @@ class Error {
     /// Use with parsing functions only
     Error() {}
     /// @param[error_code] Assumtpions: The \p error_code is equal or greater than zero and less or equal than seven
-    /// @param[error_message] Assumptions: The \p error_message is a **null-terminated string**
+    /// @param[error_message] Assumptions: The \p error_message is a view to **null-terminated string**
     Error(std::uint16_t error_code, std::string_view error_message)
         : error_code(error_code), error_message(error_message.begin(), error_message.end() + 1) {
         // Possible error code values are from zero to seven
