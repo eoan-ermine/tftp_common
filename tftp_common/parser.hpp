@@ -15,8 +15,13 @@ struct ParseResult {
 };
 
 /// Parse read/write request packet from buffer converting all fields to host byte order
+/// @param[buffer] Assumptions: \p buffer is not a nullptr, it's size is greater or equal than \p len
+/// @param[len] Assumptions: \p len is greater than zero
 /// @n If parsing wasn't successful, \p packet remains in valid but unspecified state
 ParseResult parse(std::uint8_t *buffer, std::size_t len, Request &packet) {
+    assert(buffer != nullptr);
+    assert(len > 0);
+
     std::size_t step_ = 0, bytes_read = 0;
     for (std::size_t i = 0; i != len; ++i) {
         const auto byte = buffer[i];
@@ -58,8 +63,13 @@ ParseResult parse(std::uint8_t *buffer, std::size_t len, Request &packet) {
 }
 
 /// Parse data packet from buffer converting all fields to host byte order
+/// @param[buffer] Assumptions: \p buffer is not a nullptr, it's size is greater or equal than \p len
+/// @param[len] Assumptions: \p len is greater than zero
 /// @n If parsing wasn't successful, \p packet remains in valid but unspecified state
 ParseResult parse(std::uint8_t *buffer, std::size_t len, Data &packet) {
+    assert(buffer != nullptr);
+    assert(len > 0);
+
     std::size_t step_ = 0, bytes_read = 0;
     for (std::size_t i = 0; i != len; ++i) {
         const auto byte = buffer[i];
@@ -105,8 +115,13 @@ ParseResult parse(std::uint8_t *buffer, std::size_t len, Data &packet) {
 }
 
 /// Parse acknowledgment packet from buffer converting all fields to host byte order
+/// @param[buffer] Assumptions: \p buffer is not a nullptr, it's size is greater or equal than \p len
+/// @param[len] Assumptions: \p len is greater than zero
 /// @n If parsing wasn't successful, \p packet remains in valid but unspecified state
 ParseResult parse(std::uint8_t *buffer, std::size_t len, Acknowledgment &packet) {
+    assert(buffer != nullptr);
+    assert(len > 0);
+
     std::size_t step_ = 0, bytes_read = 0;
     for (std::size_t i = 0; i != len; ++i) {
         const auto byte = buffer[i];
@@ -142,8 +157,13 @@ ParseResult parse(std::uint8_t *buffer, std::size_t len, Acknowledgment &packet)
 }
 
 /// Parse error packet from buffer converting all fields to host byte order
+/// @param[buffer] Assumptions: \p buffer is not a nullptr, it's size is greater or equal than \p len
+/// @param[len] Assumptions: \p len is greater than zero
 /// @n If parsing wasn't successful, \p packet remains in valid but unspecified state
 ParseResult parse(std::uint8_t *buffer, std::size_t len, Error &packet) {
+    assert(buffer != nullptr);
+    assert(len > 0);
+
     std::size_t step_ = 0, bytes_read = 0;
     for (std::size_t i = 0; i != len; ++i) {
         const auto byte = buffer[i];

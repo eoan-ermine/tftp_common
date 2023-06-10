@@ -6,6 +6,7 @@
 #include <arpa/inet.h>
 #endif
 
+#include <cassert>
 #include <cstdint>
 #include <string>
 #include <string_view>
@@ -36,10 +37,15 @@ class Request {
   public:
     /// Use with parsing functions only
     Request() {}
-    /// @param[error_message] Assumptions: \p The filename is a **null-terminated string**
-    /// @param[mode] Assumptions: \p The mode is a **null-terminated string**
+    /// @param[type] Assumptions: The \p type is either ::ReadRequest or ::WriteRequest
+    /// @param[error_message] Assumptions: The \p filename is a **null-terminated string**
+    /// @param[mode] Assumptions: The \p mode is a **null-terminated string**
     Request(Type type, std::string_view filename, std::string_view mode)
-        : type_(type), filename(filename.begin(), filename.end() + 1), mode(mode.begin(), mode.end() + 1) {}
+        : type_(type), filename(filename.begin(), filename.end() + 1), mode(mode.begin(), mode.end() + 1) {
+        assert(type == Type::ReadRequest || type == Type::WriteRequest);
+        assert(filename[filename.size()] == '\0');
+        assert(mode[mode.size()] == '\0');
+    }
     ~Request() {}
 
     /// Convert packet to network byte order and serialize it into the given buffer
@@ -69,9 +75,21 @@ class Data {
   public:
     /// Use with parsing functions only
     Data() {}
+    /// @param[block] Assumptions: The \p block value is greater than one
+    /// @param[buffer] Assumptions: The \p buffer size is greater or equal than 0 and less or equal than 512
     Data(std::uint16_t block, const std::vector<std::uint8_t> &buffer)
-        : block(block), data_(buffer.begin(), buffer.end()) {}
-    Data(std::uint16_t block, std::vector<std::uint8_t> &&buffer) : block(block), data_(std::move(buffer)) {}
+        : block(block), data_(buffer.begin(), buffer.end()) {
+        // The block numbers on data packets begin with one and increase by one for each new block of data
+        assert(block >= 1);
+        // The data field is from zero to 512 bytes long
+        assert(buffer.size() >= 0 && buffer.size() <= 512);
+    }
+    /// @param[block] Assumptions: The \p block value is greater than one
+    /// @param[buffer] Assumptions: The \p buffer size is greater or equal than 0 and less or equal than 512
+    Data(std::uint16_t block, std::vector<std::uint8_t> &&buffer) : block(block), data_(std::move(buffer)) {
+        assert(block >= 1);
+        assert(buffer.size() >= 0 && buffer.size() <= 512);
+    }
     ~Data() {}
 
     /// Convert packet to network byte order and serialize it into the given buffer
@@ -100,7 +118,11 @@ class Acknowledgment {
   public:
     /// Use with parsing functions only
     Acknowledgment() {}
-    Acknowledgment(std::uint16_t block) : block(block) {}
+    /// @param[block] Assumptions: the \p block is equal or greater than one
+    Acknowledgment(std::uint16_t block) : block(block) {
+        // The block numbers on data packets begin with one and increase by one for each new block of data
+        assert(block >= 1);
+    }
     ~Acknowledgment() {}
 
     /// Convert packet to network byte order and serialize it into the given buffer
@@ -125,9 +147,14 @@ class Error {
   public:
     /// Use with parsing functions only
     Error() {}
-    /// @param[error_message] Assumptions: \p The error message is a **null-terminated string**
+    /// @param[error_code] Assumtpions: The \p error_code is equal or greater than zero and less or equal than seven
+    /// @param[error_message] Assumptions: The \p error_message is a **null-terminated string**
     Error(std::uint16_t error_code, std::string_view error_message)
-        : error_code(error_code), error_message(error_message.begin(), error_message.end() + 1) {}
+        : error_code(error_code), error_message(error_message.begin(), error_message.end() + 1) {
+        // Possible error code values are from zero to seven
+        assert(error_code >= 0 && error_code <= 7);
+        assert(error_message[error_message.size()] == '\0');
+    }
     ~Error() {}
 
     /// Convert packet to network byte order and serialize it into the given buffer
