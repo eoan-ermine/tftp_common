@@ -15,6 +15,8 @@ namespace tftp_common {
 
 namespace packets {
 
+struct ParseResult;
+
 /// Trivial File Transfer Protocol packet type
 enum type : std::uint16_t {
     /// Read request (RRQ) operation code
@@ -55,7 +57,7 @@ class request {
     }
 
   private:
-    friend bool parse(std::uint8_t *buffer, std::size_t len, std::size_t &bytes_read, request &packet);
+    friend ParseResult parse(std::uint8_t *buffer, std::size_t len, request &packet);
 
     std::uint16_t type_;
     std::vector<std::uint8_t> filename;
@@ -86,7 +88,7 @@ class data {
     }
 
   private:
-    friend bool parse(std::uint8_t *buffer, std::size_t len, std::size_t &bytes_read, data &packet);
+    friend ParseResult parse(std::uint8_t *buffer, std::size_t len, data &packet);
 
     std::uint16_t type = type::data_packet;
     std::uint16_t block;
@@ -112,7 +114,7 @@ class acknowledgment {
     }
 
   private:
-    friend bool parse(std::uint8_t *buffer, std::size_t len, std::size_t &bytes_read, acknowledgment &packet);
+    friend ParseResult parse(std::uint8_t *buffer, std::size_t len, acknowledgment &packet);
 
     std::uint16_t type = type::acknowledgment_packet;
     std::uint16_t block;
@@ -142,7 +144,7 @@ class error {
     }
 
   private:
-    friend bool parse(std::uint8_t *buffer, std::size_t len, std::size_t &bytes_read, error &packet);
+    friend ParseResult parse(std::uint8_t *buffer, std::size_t len, error &packet);
 
     std::uint16_t type = type::error_packet;
     std::uint16_t error_code;

@@ -6,9 +6,18 @@ namespace tftp_common {
 
 namespace packets {
 
-bool parse(std::uint8_t *buffer, std::size_t len, std::size_t &bytes_read, packets::request &packet) {
-    std::size_t step_ = 0;
-    bytes_read = 0;
+/// The result of parsing a single packet
+struct ParseResult {
+    /// if the parsing was successful
+    bool success;
+    /// count of bytes read
+    std::size_t bytes_read;
+};
+
+/// Parse read/write request packet from buffer converting all fields to host byte order
+/// @n If parsing wasn't successful, \p packet remains in valid but unspecified state
+ParseResult parse(std::uint8_t *buffer, std::size_t len, request &packet) {
+    std::size_t step_ = 0, bytes_read = 0;
     for (std::size_t i = 0; i != len; ++i) {
         const auto byte = buffer[i];
         bytes_read++;
@@ -40,20 +49,18 @@ bool parse(std::uint8_t *buffer, std::size_t len, std::size_t &bytes_read, packe
             packet.mode.push_back(byte);
 
             if (!byte) {
-                return true;
+                return ParseResult{true, bytes_read};
             }
             break;
         }
     }
-    return false;
+    return ParseResult{false, bytes_read};
 }
 
 /// Parse data packet from buffer converting all fields to host byte order
-/// @return if the parsing was successful
 /// @n If parsing wasn't successful, \p packet remains in valid but unspecified state
-bool parse(std::uint8_t *buffer, std::size_t len, std::size_t &bytes_read, packets::data &packet) {
-    std::size_t step_ = 0;
-    bytes_read = 0;
+ParseResult parse(std::uint8_t *buffer, std::size_t len, data &packet) {
+    std::size_t step_ = 0, bytes_read = 0;
     for (std::size_t i = 0; i != len; ++i) {
         const auto byte = buffer[i];
         bytes_read++;
@@ -88,21 +95,19 @@ bool parse(std::uint8_t *buffer, std::size_t len, std::size_t &bytes_read, packe
             packet.data_.push_back(byte);
 
             if (i == len - 1) {
-                return true;
+                return ParseResult{true, bytes_read};
             }
 
             break;
         }
     }
-    return false;
+    return ParseResult{false, bytes_read};
 }
 
 /// Parse acknowledgment packet from buffer converting all fields to host byte order
-/// @return if the parsing was successful
 /// @n If parsing wasn't successful, \p packet remains in valid but unspecified state
-bool parse(std::uint8_t *buffer, std::size_t len, std::size_t &bytes_read, packets::acknowledgment &packet) {
-    std::size_t step_ = 0;
-    bytes_read = 0;
+ParseResult parse(std::uint8_t *buffer, std::size_t len, acknowledgment &packet) {
+    std::size_t step_ = 0, bytes_read = 0;
     for (std::size_t i = 0; i != len; ++i) {
         const auto byte = buffer[i];
         bytes_read++;
@@ -130,18 +135,16 @@ bool parse(std::uint8_t *buffer, std::size_t len, std::size_t &bytes_read, packe
         case 3:
             packet.block |= std::uint16_t(byte) << 0;
             packet.block = ntohs(packet.block);
-            return true;
+            return ParseResult{true, bytes_read};
         }
     }
-    return false;
+    return ParseResult{false, bytes_read};
 }
 
 /// Parse error packet from buffer converting all fields to host byte order
-/// @return if the parsing was successful
 /// @n If parsing wasn't successful, \p packet remains in valid but unspecified state
-bool parse(std::uint8_t *buffer, std::size_t len, std::size_t &bytes_read, packets::error &packet) {
-    std::size_t step_ = 0;
-    bytes_read = 0;
+ParseResult parse(std::uint8_t *buffer, std::size_t len, error &packet) {
+    std::size_t step_ = 0, bytes_read = 0;
     for (std::size_t i = 0; i != len; ++i) {
         const auto byte = buffer[i];
         bytes_read++;
@@ -176,12 +179,12 @@ bool parse(std::uint8_t *buffer, std::size_t len, std::size_t &bytes_read, packe
             packet.error_message.push_back(byte);
 
             if (!byte) {
-                return true;
+                return ParseResult{true, bytes_read};
             }
             break;
         }
     }
-    return false;
+    return ParseResult{false, bytes_read};
 }
 
 } // namespace packets
