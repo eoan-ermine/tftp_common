@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include <tftp_common/packets.hpp>
+#include "../tftp_common/packets.hpp"
 
 using namespace tftp_common::packets;
 
