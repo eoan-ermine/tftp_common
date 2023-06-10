@@ -30,11 +30,11 @@ ParseResult parse(std::uint8_t *buffer, std::size_t len, Request &packet) {
         switch (step_) {
         // Opcode (2 bytes)
         case 0:
-            packet.type_ = std::uint16_t(byte) << 8;
+            packet.type_ = std::uint16_t(byte) << 0;
             step_++;
             break;
         case 1:
-            packet.type_ |= std::uint16_t(byte) << 0;
+            packet.type_ |= std::uint16_t(byte) << 8;
             packet.type_ = ntohs(packet.type_);
             if (packet.type_ != packets::Type::ReadRequest && packet.type_ != packets::Type::WriteRequest) {
                 step_ = 0;
@@ -78,11 +78,11 @@ ParseResult parse(std::uint8_t *buffer, std::size_t len, Data &packet) {
         switch (step_) {
         // Opcode (2 bytes)
         case 0:
-            packet.type = std::uint16_t(byte) << 8;
+            packet.type = std::uint16_t(byte) << 0;
             step_++;
             break;
         case 1:
-            packet.type |= std::uint16_t(byte) << 0;
+            packet.type |= std::uint16_t(byte) << 8;
             packet.type = ntohs(packet.type);
             if (packet.type != packets::Type::DataPacket) {
                 step_ = 0;
@@ -92,11 +92,11 @@ ParseResult parse(std::uint8_t *buffer, std::size_t len, Data &packet) {
             break;
         // Block # (2 bytes)
         case 2:
-            packet.block = std::uint16_t(byte) << 8;
+            packet.block = std::uint16_t(byte) << 0;
             step_++;
             break;
         case 3:
-            packet.block |= std::uint16_t(byte) << 0;
+            packet.block |= std::uint16_t(byte) << 8;
             packet.block = ntohs(packet.block);
             step_++;
             break;
@@ -130,11 +130,11 @@ ParseResult parse(std::uint8_t *buffer, std::size_t len, Acknowledgment &packet)
         switch (step_) {
         // Opcode (2 bytes)
         case 0:
-            packet.type = std::uint16_t(byte) << 8;
+            packet.type = std::uint16_t(byte) << 0;
             step_++;
             break;
         case 1:
-            packet.type |= std::uint16_t(byte) << 0;
+            packet.type |= std::uint16_t(byte) << 8;
             packet.type = ntohs(packet.type);
             if (packet.type != packets::Type::AcknowledgmentPacket) {
                 step_ = 0;
@@ -144,11 +144,11 @@ ParseResult parse(std::uint8_t *buffer, std::size_t len, Acknowledgment &packet)
             break;
         // Block # (2 bytes)
         case 2:
-            packet.block = std::uint16_t(byte) << 8;
+            packet.block = std::uint16_t(byte) << 0;
             step_++;
             break;
         case 3:
-            packet.block |= std::uint16_t(byte) << 0;
+            packet.block |= std::uint16_t(byte) << 8;
             packet.block = ntohs(packet.block);
             return ParseResult{true, bytes_read};
         }
@@ -172,11 +172,11 @@ ParseResult parse(std::uint8_t *buffer, std::size_t len, Error &packet) {
         switch (step_) {
         // Opcode (2 bytes)
         case 0:
-            packet.type = std::uint16_t(byte) << 8;
+            packet.type = std::uint16_t(byte) << 0;
             step_++;
             break;
         case 1:
-            packet.type |= std::uint16_t(byte) << 0;
+            packet.type |= std::uint16_t(byte) << 8;
             packet.type = ntohs(packet.type);
             if (packet.type != packets::Type::ErrorPacket) {
                 step_ = 0;
@@ -186,12 +186,12 @@ ParseResult parse(std::uint8_t *buffer, std::size_t len, Error &packet) {
             break;
         // ErrorCode (2 bytes)
         case 2:
-            packet.error_code = std::uint16_t(byte) << 8;
+            packet.error_code = std::uint16_t(byte) << 0;
             step_++;
             break;
         case 3:
-            packet.error_code |= std::uint16_t(byte) << 0;
-            packet.error_code = ntohs(packet.type);
+            packet.error_code |= std::uint16_t(byte) << 8;
+            packet.error_code = ntohs(packet.error_code);
             step_++;
             break;
         // ErrorMessage
