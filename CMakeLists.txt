@@ -72,3 +72,10 @@ if (BUILD_DOCS)
       message("Doxygen need to be installed to generate the doxygen documentation")
     endif (DOXYGEN_FOUND)
 endif (BUILD_DOCS)
+
+option(BUILD_TESTS "Build tests" OFF)
+
+if (BUILD_TESTS)
+    enable_testing()
+    add_subdirectory(tests)
+endif (BUILD_TESTS)
