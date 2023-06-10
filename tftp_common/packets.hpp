@@ -17,22 +17,22 @@ namespace packets {
 
 /// Trivial File Transfer Protocol packet type
 enum type : std::uint16_t {
-	/// Read request (RRQ) operation code
-    read_request = 0x01 , 
+    /// Read request (RRQ) operation code
+    read_request = 0x01,
     /// Write request (WRQ) operation code
     write_request = 0x02,
     /// Data (DATA) operation code
     data_packet = 0x03,
     /// Acknowledgment (ACK) operation code
     acknowledgment_packet = 0x04,
-   	/// Error (ERROR) operation code
+    /// Error (ERROR) operation code
     error_packet = 0x05
 };
 
 /// Read/Write Request (RRQ/WRQ) Trivial File Transfer Protocol packet
 class request {
   public:
-  	/// Use with parsing functions only
+    /// Use with parsing functions only
     request() {}
     /// @param[error_message] Assumptions: \p The filename is a **null-terminated string**
     /// @param[mode] Assumptions: \p The mode is a **null-terminated string**
@@ -54,7 +54,9 @@ class request {
         return sizeof(type_) + filename.size() + mode.size();
     }
 
-  public:
+  private:
+    friend bool parse(std::uint8_t *buffer, std::size_t len, std::size_t &bytes_read, request &packet);
+
     std::uint16_t type_;
     std::vector<std::uint8_t> filename;
     std::vector<std::uint8_t> mode;
@@ -63,7 +65,7 @@ class request {
 /// Data Trivial File Transfer Protocol packet
 class data {
   public:
-  	/// Use with parsing functions only
+    /// Use with parsing functions only
     data() {}
     data(std::uint16_t block, const std::vector<std::uint8_t> &buffer)
         : block(block), data_(buffer.begin(), buffer.end()) {}
@@ -83,7 +85,9 @@ class data {
         return sizeof(type) + sizeof(block) + data_.size();
     }
 
-  public:
+  private:
+    friend bool parse(std::uint8_t *buffer, std::size_t len, std::size_t &bytes_read, data &packet);
+
     std::uint16_t type = type::data_packet;
     std::uint16_t block;
     std::vector<std::uint8_t> data_;
@@ -92,7 +96,7 @@ class data {
 /// Acknowledgment Trivial File Transfer Protocol packet
 class acknowledgment {
   public:
-  	/// Use with parsing functions only
+    /// Use with parsing functions only
     acknowledgment() {}
     acknowledgment(std::uint16_t block) : block(block) {}
     ~acknowledgment() {}
@@ -107,7 +111,9 @@ class acknowledgment {
         return sizeof(type) + sizeof(block);
     }
 
-  public:
+  private:
+    friend bool parse(std::uint8_t *buffer, std::size_t len, std::size_t &bytes_read, acknowledgment &packet);
+
     std::uint16_t type = type::acknowledgment_packet;
     std::uint16_t block;
 };
@@ -115,7 +121,7 @@ class acknowledgment {
 /// Error Trivial File Transfer Protocol packet
 class error {
   public:
-  	/// Use with parsing functions only
+    /// Use with parsing functions only
     error() {}
     /// @param[error_message] Assumptions: \p The error message is a **null-terminated string**
     error(std::uint16_t error_code, std::string_view error_message)
@@ -135,7 +141,9 @@ class error {
         return sizeof(type) + sizeof(error_code) + error_message.size();
     }
 
-  public:
+  private:
+    friend bool parse(std::uint8_t *buffer, std::size_t len, std::size_t &bytes_read, error &packet);
+
     std::uint16_t type = type::error_packet;
     std::uint16_t error_code;
     std::vector<std::uint8_t> error_message;
