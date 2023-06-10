@@ -50,8 +50,8 @@ class Request {
 
     /// Convert packet to network byte order and serialize it into the given buffer
     std::size_t serialize(std::vector<std::uint8_t> &buf) {
-        buf.push_back(htons(type_) >> 8);
         buf.push_back(htons(type_) >> 0);
+        buf.push_back(htons(type_) >> 8);
         for (auto byte : filename) {
             buf.push_back(byte);
         }
@@ -106,10 +106,10 @@ class Data {
 
     /// Convert packet to network byte order and serialize it into the given buffer
     std::size_t serialize(std::vector<std::uint8_t> &buf) {
-        buf.push_back(htons(type) >> 8);
         buf.push_back(htons(type) >> 0);
-        buf.push_back(htons(block) >> 8);
+        buf.push_back(htons(type) >> 8);
         buf.push_back(htons(block) >> 0);
+        buf.push_back(htons(block) >> 8);
         for (auto byte : data_) {
             buf.push_back(byte);
         }
@@ -159,10 +159,10 @@ class Acknowledgment {
 
     /// Convert packet to network byte order and serialize it into the given buffer
     std::size_t serialize(std::vector<std::uint8_t> &buf) {
-        buf.push_back(htons(type) >> 8);
         buf.push_back(htons(type) >> 0);
-        buf.push_back(htons(block) >> 8);
+        buf.push_back(htons(type) >> 8);
         buf.push_back(htons(block) >> 0);
+        buf.push_back(htons(block) >> 8);
 
         return sizeof(type) + sizeof(block);
     }
@@ -203,10 +203,10 @@ class Error {
 
     /// Convert packet to network byte order and serialize it into the given buffer
     std::size_t serialize(std::vector<std::uint8_t> &buf) {
-        buf.push_back(htons(type) >> 8);
         buf.push_back(htons(type) >> 0);
-        buf.push_back(htons(error_code) >> 8);
+        buf.push_back(htons(type) >> 8);
         buf.push_back(htons(error_code) >> 0);
+        buf.push_back(htons(error_code) >> 8);
         for (auto byte : error_message) {
             buf.push_back(byte);
         }
