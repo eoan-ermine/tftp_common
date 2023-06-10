@@ -28,8 +28,8 @@ TEST(Request, Serialization) {
 
     // type field
     // check that conversion to big-endian was done
-    EXPECT_EQ(buffer[0], 0x01);
-    EXPECT_EQ(buffer[1], 0x00);
+    EXPECT_EQ(buffer[0], 0x00);
+    EXPECT_EQ(buffer[1], 0x01);
 
     // filename field
     std::size_t base_offset = 2;
@@ -55,12 +55,12 @@ TEST(Data, Serialization) {
     EXPECT_EQ(packetSize, sizeof(std::uint16_t) + sizeof(std::uint16_t) + data.size());
 
     // type field
-    EXPECT_EQ(buffer[0], 0x03);
-    EXPECT_EQ(buffer[1], 0x00);
+    EXPECT_EQ(buffer[0], 0x00);
+    EXPECT_EQ(buffer[1], 0x03);
 
     // block field
-    EXPECT_EQ(buffer[2], 0xFF);
-    EXPECT_EQ(buffer[3], 0x00);
+    EXPECT_EQ(buffer[2], 0x00);
+    EXPECT_EQ(buffer[3], 0xFF);
 
     // data field
     EXPECT_DATA(buffer, 4, data);
@@ -77,12 +77,12 @@ TEST(Acknowledgment, Serialization) {
     EXPECT_EQ(packetSize, sizeof(std::uint16_t) + sizeof(std::uint16_t));
 
     // type field
-    EXPECT_EQ(buffer[0], 0x04);
-    EXPECT_EQ(buffer[1], 0x00);
+    EXPECT_EQ(buffer[0], 0x00);
+    EXPECT_EQ(buffer[1], 0x04);
 
     // block field
-    EXPECT_EQ(buffer[2], 0xFF);
-    EXPECT_EQ(buffer[3], 0x00);
+    EXPECT_EQ(buffer[2], 0x00);
+    EXPECT_EQ(buffer[3], 0xFF);
 
     EXPECT_EQ(buffer.size(), packetSize);
 }
@@ -97,12 +97,12 @@ TEST(Error, Serialization) {
     EXPECT_EQ(packetSize, sizeof(std::uint16_t) + sizeof(std::uint16_t) + errorMessage.size() + 1);
 
     // type field
-    EXPECT_EQ(buffer[0], 0x05);
-    EXPECT_EQ(buffer[1], 0x00);
+    EXPECT_EQ(buffer[0], 0x00);
+    EXPECT_EQ(buffer[1], 0x05);
 
     // errorCode field
-    EXPECT_EQ(buffer[2], 0x01);
-    EXPECT_EQ(buffer[3], 0x00);
+    EXPECT_EQ(buffer[2], 0x00);
+    EXPECT_EQ(buffer[3], 0x01);
 
     // errorMessage field
     EXPECT_DATA(buffer, 4, errorMessage);
