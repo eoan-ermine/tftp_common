@@ -62,6 +62,18 @@ class Request {
         return sizeof(type_) + filename.size() + mode.size();
     }
 
+    std::uint16_t getType() const {
+        return type_;
+    }
+
+    std::string_view getFilename() const {
+        return std::string_view(reinterpret_cast<const char*>(filename.data()), filename.size() - 1);
+    }
+
+    std::string_view getMode() const {
+        return std::string_view(reinterpret_cast<const char*>(mode.data()), mode.size() - 1);
+    }
+
   private:
     friend ParseResult parse(std::uint8_t *buffer, std::size_t len, Request &packet);
 
@@ -105,6 +117,18 @@ class Data {
         return sizeof(type) + sizeof(block) + data_.size();
     }
 
+    std::uint16_t getType() const {
+        return type;
+    }
+
+    std::uint16_t getBlock() const {
+        return block;
+    }
+
+    const std::vector<std::uint8_t>& getData() const {
+        return data_;
+    }
+
   private:
     friend ParseResult parse(std::uint8_t *buffer, std::size_t len, Data &packet);
 
@@ -124,6 +148,14 @@ class Acknowledgment {
         assert(block >= 1);
     }
     ~Acknowledgment() {}
+
+    std::uint16_t getType() const {
+        return type;
+    }
+
+    std::uint16_t getBlock() const {
+        return block;
+    }
 
     /// Convert packet to network byte order and serialize it into the given buffer
     std::size_t serialize(std::vector<std::uint8_t> &buf) {
@@ -156,6 +188,18 @@ class Error {
         assert(error_message[error_message.size()] == '\0');
     }
     ~Error() {}
+
+    std::uint16_t getType() const {
+        return type;
+    }
+
+    std::uint16_t getErrorCode() const {
+        return error_code;
+    }
+
+    std::string_view getErrorMessage() const {
+        return std::string_view(reinterpret_cast<const char*>(error_message.data()), error_message.size() - 1);
+    }
 
     /// Convert packet to network byte order and serialize it into the given buffer
     std::size_t serialize(std::vector<std::uint8_t> &buf) {
