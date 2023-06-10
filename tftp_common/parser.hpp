@@ -16,7 +16,7 @@ struct ParseResult {
 
 /// Parse read/write request packet from buffer converting all fields to host byte order
 /// @n If parsing wasn't successful, \p packet remains in valid but unspecified state
-ParseResult parse(std::uint8_t *buffer, std::size_t len, request &packet) {
+ParseResult parse(std::uint8_t *buffer, std::size_t len, Request &packet) {
     std::size_t step_ = 0, bytes_read = 0;
     for (std::size_t i = 0; i != len; ++i) {
         const auto byte = buffer[i];
@@ -31,7 +31,7 @@ ParseResult parse(std::uint8_t *buffer, std::size_t len, request &packet) {
         case 1:
             packet.type_ |= std::uint16_t(byte) << 0;
             packet.type_ = ntohs(packet.type_);
-            if (packet.type_ != packets::type::read_request && packet.type_ != packets::type::write_request) {
+            if (packet.type_ != packets::Type::ReadRequest && packet.type_ != packets::Type::WriteRequest) {
                 step_ = 0;
                 continue;
             }
@@ -59,7 +59,7 @@ ParseResult parse(std::uint8_t *buffer, std::size_t len, request &packet) {
 
 /// Parse data packet from buffer converting all fields to host byte order
 /// @n If parsing wasn't successful, \p packet remains in valid but unspecified state
-ParseResult parse(std::uint8_t *buffer, std::size_t len, data &packet) {
+ParseResult parse(std::uint8_t *buffer, std::size_t len, Data &packet) {
     std::size_t step_ = 0, bytes_read = 0;
     for (std::size_t i = 0; i != len; ++i) {
         const auto byte = buffer[i];
@@ -74,7 +74,7 @@ ParseResult parse(std::uint8_t *buffer, std::size_t len, data &packet) {
         case 1:
             packet.type |= std::uint16_t(byte) << 0;
             packet.type = ntohs(packet.type);
-            if (packet.type != packets::type::data_packet) {
+            if (packet.type != packets::Type::DataPacket) {
                 step_ = 0;
                 continue;
             }
@@ -106,7 +106,7 @@ ParseResult parse(std::uint8_t *buffer, std::size_t len, data &packet) {
 
 /// Parse acknowledgment packet from buffer converting all fields to host byte order
 /// @n If parsing wasn't successful, \p packet remains in valid but unspecified state
-ParseResult parse(std::uint8_t *buffer, std::size_t len, acknowledgment &packet) {
+ParseResult parse(std::uint8_t *buffer, std::size_t len, Acknowledgment &packet) {
     std::size_t step_ = 0, bytes_read = 0;
     for (std::size_t i = 0; i != len; ++i) {
         const auto byte = buffer[i];
@@ -121,7 +121,7 @@ ParseResult parse(std::uint8_t *buffer, std::size_t len, acknowledgment &packet)
         case 1:
             packet.type |= std::uint16_t(byte) << 0;
             packet.type = ntohs(packet.type);
-            if (packet.type != packets::type::acknowledgment_packet) {
+            if (packet.type != packets::Type::AcknowledgmentPacket) {
                 step_ = 0;
                 continue;
             }
@@ -143,7 +143,7 @@ ParseResult parse(std::uint8_t *buffer, std::size_t len, acknowledgment &packet)
 
 /// Parse error packet from buffer converting all fields to host byte order
 /// @n If parsing wasn't successful, \p packet remains in valid but unspecified state
-ParseResult parse(std::uint8_t *buffer, std::size_t len, error &packet) {
+ParseResult parse(std::uint8_t *buffer, std::size_t len, Error &packet) {
     std::size_t step_ = 0, bytes_read = 0;
     for (std::size_t i = 0; i != len; ++i) {
         const auto byte = buffer[i];
@@ -158,7 +158,7 @@ ParseResult parse(std::uint8_t *buffer, std::size_t len, error &packet) {
         case 1:
             packet.type |= std::uint16_t(byte) << 0;
             packet.type = ntohs(packet.type);
-            if (packet.type != packets::type::error_packet) {
+            if (packet.type != packets::Type::ErrorPacket) {
                 step_ = 0;
                 continue;
             }

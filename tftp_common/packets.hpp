@@ -18,29 +18,29 @@ namespace packets {
 struct ParseResult;
 
 /// Trivial File Transfer Protocol packet type
-enum type : std::uint16_t {
+enum Type : std::uint16_t {
     /// Read request (RRQ) operation code
-    read_request = 0x01,
+    ReadRequest = 0x01,
     /// Write request (WRQ) operation code
-    write_request = 0x02,
+    WriteRequest = 0x02,
     /// Data (DATA) operation code
-    data_packet = 0x03,
+    DataPacket = 0x03,
     /// Acknowledgment (ACK) operation code
-    acknowledgment_packet = 0x04,
+    AcknowledgmentPacket = 0x04,
     /// Error (ERROR) operation code
-    error_packet = 0x05
+    ErrorPacket = 0x05
 };
 
 /// Read/Write Request (RRQ/WRQ) Trivial File Transfer Protocol packet
-class request {
+class Request {
   public:
     /// Use with parsing functions only
-    request() {}
+    Request() {}
     /// @param[error_message] Assumptions: \p The filename is a **null-terminated string**
     /// @param[mode] Assumptions: \p The mode is a **null-terminated string**
-    request(type type, std::string_view filename, std::string_view mode)
+    Request(Type type, std::string_view filename, std::string_view mode)
         : type_(type), filename(filename.begin(), filename.end() + 1), mode(mode.begin(), mode.end() + 1) {}
-    ~request() {}
+    ~Request() {}
 
     /// Convert packet to network byte order and serialize it into the given buffer
     std::size_t serialize(std::vector<std::uint8_t> &buf) {
@@ -57,7 +57,7 @@ class request {
     }
 
   private:
-    friend ParseResult parse(std::uint8_t *buffer, std::size_t len, request &packet);
+    friend ParseResult parse(std::uint8_t *buffer, std::size_t len, Request &packet);
 
     std::uint16_t type_;
     std::vector<std::uint8_t> filename;
@@ -65,14 +65,14 @@ class request {
 };
 
 /// Data Trivial File Transfer Protocol packet
-class data {
+class Data {
   public:
     /// Use with parsing functions only
-    data() {}
-    data(std::uint16_t block, const std::vector<std::uint8_t> &buffer)
+    Data() {}
+    Data(std::uint16_t block, const std::vector<std::uint8_t> &buffer)
         : block(block), data_(buffer.begin(), buffer.end()) {}
-    data(std::uint16_t block, std::vector<std::uint8_t> &&buffer) : block(block), data_(std::move(buffer)) {}
-    ~data() {}
+    Data(std::uint16_t block, std::vector<std::uint8_t> &&buffer) : block(block), data_(std::move(buffer)) {}
+    ~Data() {}
 
     /// Convert packet to network byte order and serialize it into the given buffer
     std::size_t serialize(std::vector<std::uint8_t> &buf) {
@@ -88,20 +88,20 @@ class data {
     }
 
   private:
-    friend ParseResult parse(std::uint8_t *buffer, std::size_t len, data &packet);
+    friend ParseResult parse(std::uint8_t *buffer, std::size_t len, Data &packet);
 
-    std::uint16_t type = type::data_packet;
+    std::uint16_t type = Type::DataPacket;
     std::uint16_t block;
     std::vector<std::uint8_t> data_;
 };
 
 /// Acknowledgment Trivial File Transfer Protocol packet
-class acknowledgment {
+class Acknowledgment {
   public:
     /// Use with parsing functions only
-    acknowledgment() {}
-    acknowledgment(std::uint16_t block) : block(block) {}
-    ~acknowledgment() {}
+    Acknowledgment() {}
+    Acknowledgment(std::uint16_t block) : block(block) {}
+    ~Acknowledgment() {}
 
     /// Convert packet to network byte order and serialize it into the given buffer
     std::size_t serialize(std::vector<std::uint8_t> &buf) {
@@ -114,21 +114,21 @@ class acknowledgment {
     }
 
   private:
-    friend ParseResult parse(std::uint8_t *buffer, std::size_t len, acknowledgment &packet);
+    friend ParseResult parse(std::uint8_t *buffer, std::size_t len, Acknowledgment &packet);
 
-    std::uint16_t type = type::acknowledgment_packet;
+    std::uint16_t type = Type::AcknowledgmentPacket;
     std::uint16_t block;
 };
 
 /// Error Trivial File Transfer Protocol packet
-class error {
+class Error {
   public:
     /// Use with parsing functions only
-    error() {}
+    Error() {}
     /// @param[error_message] Assumptions: \p The error message is a **null-terminated string**
-    error(std::uint16_t error_code, std::string_view error_message)
+    Error(std::uint16_t error_code, std::string_view error_message)
         : error_code(error_code), error_message(error_message.begin(), error_message.end() + 1) {}
-    ~error() {}
+    ~Error() {}
 
     /// Convert packet to network byte order and serialize it into the given buffer
     std::size_t serialize(std::vector<std::uint8_t> &buf) {
@@ -144,9 +144,9 @@ class error {
     }
 
   private:
-    friend ParseResult parse(std::uint8_t *buffer, std::size_t len, error &packet);
+    friend ParseResult parse(std::uint8_t *buffer, std::size_t len, Error &packet);
 
-    std::uint16_t type = type::error_packet;
+    std::uint16_t type = Type::ErrorPacket;
     std::uint16_t error_code;
     std::vector<std::uint8_t> error_message;
 };
