@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['operator_3e_3e_93',['operator&gt;&gt;',['../namespacetftp__client.html#ae1103ce5123a8366086a94b9253ba643',1,'tftp_client']]]
+  ['request_54',['Request',['../classtftp__common_1_1packets_1_1Request.html#a405bcd5aca1026306600458f453a0001',1,'tftp_common::packets::Request::Request()'],['../classtftp__common_1_1packets_1_1Request.html#a75c7dd9bb2492d207a03ccf8a4fbada3',1,'tftp_common::packets::Request::Request(Type type, std::string_view filename, std::string_view mode)']]]
 ];

@@ -1,9 +1,10 @@
 var searchData=
 [
-  ['error_9',['Error',['../classtftp__common_1_1packets_1_1Error.html#a13b1b2fc7266395e377137e872dd1ac0',1,'tftp_common::packets::Error::Error()'],['../classtftp__common_1_1packets_1_1Error.html#aafae5add7afe781cca9262c097974e7e',1,'tftp_common::packets::Error::Error(std::uint16_t error_code, std::string_view error_message)'],['../classtftp__common_1_1packets_1_1Error.html',1,'tftp_common::packets::Error']]],
-  ['errorpacket_10',['ErrorPacket',['../namespacetftp__common_1_1packets.html#a2b58b8a0fcf82f3a4c69feb5078fea4aa383d768e77844fd60401d3170085c489',1,'tftp_common::packets']]],
-  ['expect_5fdata_11',['EXPECT_DATA',['../packets__test_8cpp.html#a3a32a0847f673a14dcdc38019efeedd4',1,'packets_test.cpp']]],
-  ['expect_5fstring_12',['EXPECT_STRING',['../packets__test_8cpp.html#a069ad66fc4c84308cefc914387ec5553',1,'packets_test.cpp']]],
-  ['exports_13',['exports',['../classconanfile_1_1TFTPCommonConan.html#af03d633db8a29bb5113ffe73fb0480b2',1,'conanfile::TFTPCommonConan']]],
-  ['exports_5fsources_14',['exports_sources',['../classconanfile_1_1TFTPCommonConan.html#af8d9b735182ec38deaf547d7338930dd',1,'conanfile::TFTPCommonConan']]]
+  ['getblock_7',['getBlock',['../classtftp__common_1_1packets_1_1Data.html#a814af8e061b2eece66f8fd1dddcf9bd2',1,'tftp_common::packets::Data::getBlock()'],['../classtftp__common_1_1packets_1_1Acknowledgment.html#ae8d665a4e7b0e3f7a8bb4d18fa205210',1,'tftp_common::packets::Acknowledgment::getBlock()']]],
+  ['getdata_8',['getData',['../classtftp__common_1_1packets_1_1Data.html#a7ceea5dd8888277c383af7c3d21a0b09',1,'tftp_common::packets::Data']]],
+  ['geterrorcode_9',['getErrorCode',['../classtftp__common_1_1packets_1_1Error.html#a93e31fd6013f8843c9013ffb16e1cbeb',1,'tftp_common::packets::Error']]],
+  ['geterrormessage_10',['getErrorMessage',['../classtftp__common_1_1packets_1_1Error.html#a62e630ad467b92c66e2efaf5a00bd576',1,'tftp_common::packets::Error']]],
+  ['getfilename_11',['getFilename',['../classtftp__common_1_1packets_1_1Request.html#ab159cae4ff912829bd2ac463dc1f35ba',1,'tftp_common::packets::Request']]],
+  ['getmode_12',['getMode',['../classtftp__common_1_1packets_1_1Request.html#a6eea1ff3dbcf3e122bc8c5ade735b405',1,'tftp_common::packets::Request']]],
+  ['gettype_13',['getType',['../classtftp__common_1_1packets_1_1Request.html#a0f1f13111fe5e12bd28022e75536fd37',1,'tftp_common::packets::Request::getType()'],['../classtftp__common_1_1packets_1_1Data.html#a042c77cbb60f6506f075fa19b1c6bcdd',1,'tftp_common::packets::Data::getType()'],['../classtftp__common_1_1packets_1_1Acknowledgment.html#a6e78e134d0bf296fd599ffb2540236d0',1,'tftp_common::packets::Acknowledgment::getType()'],['../classtftp__common_1_1packets_1_1Error.html#a0d741fcc121a73690734711f9d5d4223',1,'tftp_common::packets::Error::getType()']]]
 ];

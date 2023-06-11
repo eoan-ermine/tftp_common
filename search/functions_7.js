@@ -1,5 +1,7 @@
 var searchData=
 [
-  ['read_96',['read',['../classtftp__client_1_1TFTPClient.html#afdf8a6b66b8e019530d51e84f454b5f7',1,'tftp_client::TFTPClient']]],
-  ['request_97',['Request',['../classtftp__common_1_1packets_1_1Request.html#a405bcd5aca1026306600458f453a0001',1,'tftp_common::packets::Request::Request()'],['../classtftp__common_1_1packets_1_1Request.html#a75c7dd9bb2492d207a03ccf8a4fbada3',1,'tftp_common::packets::Request::Request(Type type, std::string_view filename, std::string_view mode)']]]
+  ['_7eacknowledgment_56',['~Acknowledgment',['../classtftp__common_1_1packets_1_1Acknowledgment.html#a24fff8884cc1909617c61b75731f6524',1,'tftp_common::packets::Acknowledgment']]],
+  ['_7edata_57',['~Data',['../classtftp__common_1_1packets_1_1Data.html#afc9fffd2d87758e1b91fabb15c0b59a6',1,'tftp_common::packets::Data']]],
+  ['_7eerror_58',['~Error',['../classtftp__common_1_1packets_1_1Error.html#a26996125dc086a1491c8b4af9153185f',1,'tftp_common::packets::Error']]],
+  ['_7erequest_59',['~Request',['../classtftp__common_1_1packets_1_1Request.html#a079d84ec9c41c23b4ee15e0aeca8989e',1,'tftp_common::packets::Request']]]
 ];

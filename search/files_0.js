@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['client_2ehpp_73',['client.hpp',['../client_8hpp.html',1,'']]],
-  ['conanfile_2epy_74',['conanfile.py',['../conanfile_8py.html',1,'']]]
+  ['packets_2ehpp_39',['packets.hpp',['../packets_8hpp.html',1,'']]],
+  ['parser_2ehpp_40',['parser.hpp',['../parser_8hpp.html',1,'']]]
 ];

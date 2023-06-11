@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['data_6',['Data',['../classtftp__common_1_1packets_1_1Data.html#a29fdf3aaf06783b71dccc659f8f1ab9c',1,'tftp_common::packets::Data::Data()'],['../classtftp__common_1_1packets_1_1Data.html#a7d715945caddd6312309769c7b68b5a3',1,'tftp_common::packets::Data::Data(std::uint16_t block, const std::vector&lt; std::uint8_t &gt; &amp;buffer)'],['../classtftp__common_1_1packets_1_1Data.html#af827d7e1faad1996054b9fb16dc3b769',1,'tftp_common::packets::Data::Data(std::uint16_t block, std::vector&lt; std::uint8_t &gt; &amp;&amp;buffer)'],['../classtftp__common_1_1packets_1_1Data.html',1,'tftp_common::packets::Data']]],
-  ['datapacket_7',['DataPacket',['../namespacetftp__common_1_1packets.html#a2b58b8a0fcf82f3a4c69feb5078fea4aaf3a9a61532c0ad253021dc3b7ec4a311',1,'tftp_common::packets']]],
-  ['description_8',['description',['../classconanfile_1_1TFTPCommonConan.html#a98aef88eb3a6bf0a10e455381827f13f',1,'conanfile::TFTPCommonConan']]]
+  ['error_5',['Error',['../classtftp__common_1_1packets_1_1Error.html#a13b1b2fc7266395e377137e872dd1ac0',1,'tftp_common::packets::Error::Error()'],['../classtftp__common_1_1packets_1_1Error.html#aafae5add7afe781cca9262c097974e7e',1,'tftp_common::packets::Error::Error(std::uint16_t error_code, std::string_view error_message)'],['../classtftp__common_1_1packets_1_1Error.html',1,'tftp_common::packets::Error']]],
+  ['errorpacket_6',['ErrorPacket',['../namespacetftp__common_1_1packets.html#a2b58b8a0fcf82f3a4c69feb5078fea4aa383d768e77844fd60401d3170085c489',1,'tftp_common::packets']]]
 ];

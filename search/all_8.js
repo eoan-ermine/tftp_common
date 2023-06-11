@@ -1,5 +1,7 @@
 var searchData=
 [
-  ['name_27',['name',['../classconanfile_1_1TFTPCommonConan.html#a395ad62c1f253a78aac79504593c10c7',1,'conanfile::TFTPCommonConan']]],
-  ['no_5fcopy_5fsource_28',['no_copy_source',['../classconanfile_1_1TFTPCommonConan.html#a1fe51ae2bf65beecfb67a9d271c10428',1,'conanfile::TFTPCommonConan']]]
+  ['packets_23',['packets',['../namespacetftp__common_1_1packets.html',1,'tftp_common']]],
+  ['tftp_5fcommon_24',['tftp_common',['../index.html',1,'(Global Namespace)'],['../namespacetftp__common.html',1,'tftp_common']]],
+  ['tftp_5fcommon_2ehpp_25',['tftp_common.hpp',['../tftp__common_8hpp.html',1,'']]],
+  ['type_26',['Type',['../namespacetftp__common_1_1packets.html#a2b58b8a0fcf82f3a4c69feb5078fea4a',1,'tftp_common::packets']]]
 ];
