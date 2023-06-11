@@ -2,6 +2,11 @@
 
 A simple header-only Trivial File Transfer Protocol (TFTP) packets parsing and serialization library.
 
+![C++ Standard](https://img.shields.io/badge/C%2B%2B-17-blue)
+[![Build and test status](https://img.shields.io/github/actions/workflow/status/eoan-ermine/tftp_common/build_and_test.yml)](https://github.com/eoan-ermine/tftp_common/actions/workflows/build_and_test.yml)
+[![Docs build and deployment status](https://img.shields.io/github/actions/workflow/status/eoan-ermine/tftp_common/build_docs.yml?label=docs)](https://github.com/eoan-ermine/tftp_common/actions/workflows/build_docs.yml)
+[![Link to doxygen documentation](https://img.shields.io/badge/-doxygen%20documentation-blue)](https://eoanermine.com/tftp_common/)
+
 ## Supported platforms
 
 |               |                          |               |               |
