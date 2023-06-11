@@ -48,6 +48,11 @@ class Request {
         assert(filename[filename.size()] == '\0');
         assert(mode[mode.size()] == '\0');
     }
+    Request(Type type, std::string_view filename, std::string_view mode, const std::vector<std::string>& optionsNames, const std::vector<std::string>& optionsValues)
+        : Request(type, filename, mode) {
+        this->optionsNames = optionsNames;
+        this->optionsValues = optionsValues;
+    }
     ~Request() {}
 
     /// Convert packet to network byte order and serialize it into the given buffer by the iterator

@@ -22,12 +22,11 @@ ParseResult parse(std::uint8_t *buffer, std::size_t len, Request &packet) {
     assert(buffer != nullptr);
     assert(len > 0);
 
+    std::string name, value;
     std::size_t step_ = 0, bytes_read = 0;
     for (std::size_t i = 0; i != len; ++i) {
         const auto byte = buffer[i];
         bytes_read++;
-
-        std::string name, value;
 
         switch (step_) {
         // Opcode (2 bytes)
@@ -241,7 +240,6 @@ ParseResult parse(std::uint8_t *buffer, std::size_t len, OptionAcknowledgment &p
     assert(len > 0);
 
     std::string name, value;
-
     std::size_t step_ = 0, bytes_read = 0;
     for (std::size_t i = 0; i != len; ++i) {
         const auto byte = buffer[i];
