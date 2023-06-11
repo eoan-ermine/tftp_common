@@ -1,12 +1,12 @@
 <map id="tests/parse_test.cpp" name="tests/parse_test.cpp">
-<area shape="rect" id="node1" title=" " alt="" coords="128,5,281,32"/>
-<area shape="rect" id="node2" title=" " alt="" coords="67,80,171,107"/>
-<area shape="rect" id="node3" href="$parser_8hpp.html" title=" " alt="" coords="195,80,387,107"/>
-<area shape="rect" id="node4" href="$packets_8hpp.html" title=" " alt="" coords="241,155,341,181"/>
-<area shape="rect" id="node5" title=" " alt="" coords="5,229,97,256"/>
-<area shape="rect" id="node6" title=" " alt="" coords="122,229,191,256"/>
-<area shape="rect" id="node7" title=" " alt="" coords="215,229,282,256"/>
-<area shape="rect" id="node8" title=" " alt="" coords="306,229,365,256"/>
-<area shape="rect" id="node9" title=" " alt="" coords="389,229,487,256"/>
-<area shape="rect" id="node10" title=" " alt="" coords="511,229,573,256"/>
+<area shape="rect" id="node1" title=" " alt="" coords="300,5,453,32"/>
+<area shape="rect" id="node2" href="$parser_8hpp.html" title=" " alt="" coords="195,80,387,107"/>
+<area shape="rect" id="node10" title=" " alt="" coords="411,80,515,107"/>
+<area shape="rect" id="node3" href="$packets_8hpp.html" title=" " alt="" coords="241,155,341,181"/>
+<area shape="rect" id="node4" title=" " alt="" coords="5,229,97,256"/>
+<area shape="rect" id="node5" title=" " alt="" coords="122,229,191,256"/>
+<area shape="rect" id="node6" title=" " alt="" coords="215,229,282,256"/>
+<area shape="rect" id="node7" title=" " alt="" coords="306,229,365,256"/>
+<area shape="rect" id="node8" title=" " alt="" coords="389,229,487,256"/>
+<area shape="rect" id="node9" title=" " alt="" coords="511,229,573,256"/>
 </map>
