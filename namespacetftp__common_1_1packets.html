@@ -89,6 +89,9 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtftp__common_1_1packets_1_1Error.html">Error</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classtftp__common_1_1packets_1_1Error.html" title="Error Trivial File Transfer Protocol packet.">Error</a> Trivial File Transfer Protocol packet.  <a href="classtftp__common_1_1packets_1_1Error.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtftp__common_1_1packets_1_1OptionAcknowledgment.html">OptionAcknowledgment</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Option <a class="el" href="classtftp__common_1_1packets_1_1Acknowledgment.html" title="Acknowledgment Trivial File Transfer Protocol packet.">Acknowledgment</a> Trivial File Transfer Protocol packet.  <a href="classtftp__common_1_1packets_1_1OptionAcknowledgment.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structtftp__common_1_1packets_1_1ParseResult.html">ParseResult</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">The result of parsing a single packet.  <a href="structtftp__common_1_1packets_1_1ParseResult.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -102,6 +105,7 @@ Enumerations</h2></td></tr>
 , <a class="el" href="namespacetftp__common_1_1packets.html#a2b58b8a0fcf82f3a4c69feb5078fea4aabdff55c238fc75b9a540daa002f607ef">AcknowledgmentPacket</a> = 0x04
 , <br />
 &#160;&#160;<a class="el" href="namespacetftp__common_1_1packets.html#a2b58b8a0fcf82f3a4c69feb5078fea4aa383d768e77844fd60401d3170085c489">ErrorPacket</a> = 0x05
+, <a class="el" href="namespacetftp__common_1_1packets.html#a2b58b8a0fcf82f3a4c69feb5078fea4aa78543e6b7066c53ccb4ba05a0d4879fd">OptionAcknowledgmentPacket</a> = 0x06
 <br />
  }</td></tr>
 <tr class="memdesc:a2b58b8a0fcf82f3a4c69feb5078fea4a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Trivial File Transfer Protocol packet type.  <a href="namespacetftp__common_1_1packets.html#a2b58b8a0fcf82f3a4c69feb5078fea4a">More...</a><br /></td></tr>
@@ -117,6 +121,8 @@ Functions</h2></td></tr>
 <tr class="separator:a40d2be3cdf8f2c93bd790fd7f54578c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a269cd7ea5106b5cd668df3266223bb8f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structtftp__common_1_1packets_1_1ParseResult.html">ParseResult</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacetftp__common_1_1packets.html#a269cd7ea5106b5cd668df3266223bb8f">parse</a> (std::uint8_t *buffer, std::size_t len, <a class="el" href="classtftp__common_1_1packets_1_1Error.html">Error</a> &amp;packet)</td></tr>
 <tr class="separator:a269cd7ea5106b5cd668df3266223bb8f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adcd45cd89f9ab47e413b4bfa26786bda"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structtftp__common_1_1packets_1_1ParseResult.html">ParseResult</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacetftp__common_1_1packets.html#adcd45cd89f9ab47e413b4bfa26786bda">parse</a> (std::uint8_t *buffer, std::size_t len, <a class="el" href="classtftp__common_1_1packets_1_1OptionAcknowledgment.html">OptionAcknowledgment</a> &amp;packet)</td></tr>
+<tr class="separator:adcd45cd89f9ab47e413b4bfa26786bda"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Enumeration Type Documentation</h2>
 <a id="a2b58b8a0fcf82f3a4c69feb5078fea4a"></a>
@@ -143,13 +149,14 @@ Functions</h2></td></tr>
 </td></tr>
 <tr><td class="fieldname"><a id="a2b58b8a0fcf82f3a4c69feb5078fea4aa383d768e77844fd60401d3170085c489"></a>ErrorPacket&#160;</td><td class="fielddoc"><p><a class="el" href="classtftp__common_1_1packets_1_1Error.html" title="Error Trivial File Transfer Protocol packet.">Error</a> (ERROR) operation code. </p>
 </td></tr>
+<tr><td class="fieldname"><a id="a2b58b8a0fcf82f3a4c69feb5078fea4aa78543e6b7066c53ccb4ba05a0d4879fd"></a>OptionAcknowledgmentPacket&#160;</td><td class="fielddoc"></td></tr>
 </table>
 
 </div>
 </div>
 <h2 class="groupheader">Function Documentation</h2>
 <a id="a40d2be3cdf8f2c93bd790fd7f54578c8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a40d2be3cdf8f2c93bd790fd7f54578c8">&#9670;&nbsp;</a></span>parse() <span class="overload">[1/4]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a40d2be3cdf8f2c93bd790fd7f54578c8">&#9670;&nbsp;</a></span>parse() <span class="overload">[1/5]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -191,7 +198,7 @@ Functions</h2></td></tr>
 </div>
 </div>
 <a id="a5ee3fc592fae43ef5ed0b028096b75b7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5ee3fc592fae43ef5ed0b028096b75b7">&#9670;&nbsp;</a></span>parse() <span class="overload">[2/4]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a5ee3fc592fae43ef5ed0b028096b75b7">&#9670;&nbsp;</a></span>parse() <span class="overload">[2/5]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -233,7 +240,7 @@ Functions</h2></td></tr>
 </div>
 </div>
 <a id="a269cd7ea5106b5cd668df3266223bb8f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a269cd7ea5106b5cd668df3266223bb8f">&#9670;&nbsp;</a></span>parse() <span class="overload">[3/4]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a269cd7ea5106b5cd668df3266223bb8f">&#9670;&nbsp;</a></span>parse() <span class="overload">[3/5]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -274,8 +281,50 @@ Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="adcd45cd89f9ab47e413b4bfa26786bda"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adcd45cd89f9ab47e413b4bfa26786bda">&#9670;&nbsp;</a></span>parse() <span class="overload">[4/5]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structtftp__common_1_1packets_1_1ParseResult.html">ParseResult</a> tftp_common::packets::parse </td>
+          <td>(</td>
+          <td class="paramtype">std::uint8_t *&#160;</td>
+          <td class="paramname"><em>buffer</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::size_t&#160;</td>
+          <td class="paramname"><em>len</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classtftp__common_1_1packets_1_1OptionAcknowledgment.html">OptionAcknowledgment</a> &amp;&#160;</td>
+          <td class="paramname"><em>packet</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Parse error packet from buffer converting all fields to host byte order </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">[buffer]</td><td>Assumptions: <code>buffer</code> is not a nullptr, it's size is greater or equal than <code>len</code> </td></tr>
+    <tr><td class="paramname">[len]</td><td>Assumptions: <code>len</code> is greater than zero <br  />
+ If parsing wasn't successful, <code>packet</code> remains in valid but unspecified state </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a id="a34a76ee5aea35579c7cdb008ad83d77e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a34a76ee5aea35579c7cdb008ad83d77e">&#9670;&nbsp;</a></span>parse() <span class="overload">[4/4]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a34a76ee5aea35579c7cdb008ad83d77e">&#9670;&nbsp;</a></span>parse() <span class="overload">[5/5]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
