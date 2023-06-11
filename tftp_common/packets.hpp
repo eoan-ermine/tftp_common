@@ -29,7 +29,9 @@ enum Type : std::uint16_t {
     /// Acknowledgment (ACK) operation code
     AcknowledgmentPacket = 0x04,
     /// Error (ERROR) operation code
-    ErrorPacket = 0x05
+    ErrorPacket = 0x05,
+    // Option Acknowledgment (OACK) operation code
+    OptionAcknowledgmentPacket = 0x06
 };
 
 /// Read/Write Request (RRQ/WRQ) Trivial File Transfer Protocol packet
@@ -46,14 +48,22 @@ class Request {
         assert(filename[filename.size()] == '\0');
         assert(mode[mode.size()] == '\0');
     }
+    Request(Type type, std::string_view filename, std::string_view mode, const std::vector<std::string>& optionsNames, const std::vector<std::string>& optionsValues)
+        : Request(type, filename, mode) {
+        this->optionsNames = optionsNames;
+        this->optionsValues = optionsValues;
+    }
     ~Request() {}
 
     /// Convert packet to network byte order and serialize it into the given buffer by the iterator
     /// @param[it] Requirements: \p *(it) must be assignable from \p std::uint8_t
     /// @return Size of the packet (in bytes)
     template <class OutputIterator> std::size_t serialize(OutputIterator it) {
+        assert(optionsNames.size() == optionsValues.size());
+
         *(it++) = static_cast<std::uint8_t>(htons(type_) >> 0);
         *(it++) = static_cast<std::uint8_t>(htons(type_) >> 8);
+
         for (auto byte : filename) {
             *(it++) = static_cast<std::uint8_t>(byte);
         }
@@ -61,7 +71,20 @@ class Request {
             *(it++) = static_cast<std::uint8_t>(byte);
         }
 
-        return sizeof(type_) + filename.size() + mode.size();
+        std::size_t optionsSize = 0;
+        for (std::size_t idx = 0; idx != optionsNames.size(); ++idx) {
+            for (auto byte: optionsNames[idx]) {
+                *(it++) = static_cast<std::uint8_t>(byte);
+            }
+            *(it++) = '\0';
+            for (auto byte: optionsValues[idx]) {
+                *(it++) = static_cast<std::uint8_t>(byte);
+            }
+            *(it++) = '\0';
+            optionsSize += optionsNames[idx].size() + optionsValues[idx].size() + 2;
+        }
+
+        return sizeof(type_) + filename.size() + mode.size() + optionsSize;
     }
 
     std::uint16_t getType() const { return type_; }
@@ -74,12 +97,22 @@ class Request {
         return std::string_view(reinterpret_cast<const char *>(mode.data()), mode.size() - 1);
     }
 
+    std::string_view getOptionName(std::size_t idx) const {
+        return std::string_view(reinterpret_cast<const char*>(optionsNames[idx].data()), optionsNames[idx].size());
+    }
+
+    std::string_view getOptionValue(std::size_t idx) const {
+        return std::string_view(reinterpret_cast<const char*>(optionsValues[idx].data()), optionsValues[idx].size());
+    }
+
   private:
     friend ParseResult parse(std::uint8_t *buffer, std::size_t len, Request &packet);
 
     std::uint16_t type_;
     std::vector<std::uint8_t> filename;
     std::vector<std::uint8_t> mode;
+    std::vector<std::string> optionsNames;
+    std::vector<std::string> optionsValues;
 };
 
 /// Data Trivial File Transfer Protocol packet
@@ -173,12 +206,11 @@ class Error {
   public:
     /// Use with parsing functions only
     Error() {}
-    /// @param[error_code] Assumtpions: The \p error_code is equal or greater than zero and less or equal than seven
+    /// @param[error_code] Assumptions: The \p error_code is equal or greater than zero and less or equal than eight
     /// @param[error_message] Assumptions: The \p error_message is a view to **null-terminated string**
     Error(std::uint16_t error_code, std::string_view error_message)
         : error_code(error_code), error_message(error_message.begin(), error_message.end() + 1) {
-        // Possible error code values are from zero to seven
-        assert(error_code >= 0 && error_code <= 7);
+        assert(error_code >= 0 && error_code <= 8);
         assert(error_message[error_message.size()] == '\0');
     }
     ~Error() {}
@@ -212,6 +244,55 @@ class Error {
     std::uint16_t type = Type::ErrorPacket;
     std::uint16_t error_code;
     std::vector<std::uint8_t> error_message;
+};
+
+/// Option Acknowledgment Trivial File Transfer Protocol packet
+class OptionAcknowledgment {
+public:
+    /// Use with parsing functions only
+    OptionAcknowledgment() { }
+    OptionAcknowledgment(const std::vector<std::string>& optionsNames, const std::vector<std::string>& optionsValues)
+        : optionsNames(optionsNames.begin(), optionsNames.end()), optionsValues(optionsValues.begin(), optionsValues.end()) { }
+    ~OptionAcknowledgment() { }
+
+    /// Convert packet to network byte order and serialize it into the given buffer by the iterator
+    /// @param[it] Requirements: \p *(it) must be assignable from \p std::uint8_t
+    /// @return Size of the packet (in bytes)
+    template <class OutputIterator> std::size_t serialize(OutputIterator it) {
+        *(it++) = static_cast<std::uint8_t>(htons(type) >> 0);
+        *(it++) = static_cast<std::uint8_t>(htons(type) >> 8);
+
+        assert(optionsNames.size() == optionsValues.size());
+        std::size_t optionsSize = 0;
+        for (std::size_t idx = 0; idx != optionsNames.size(); ++idx) {
+            for (auto byte: optionsNames[idx]) {
+                *(it++) = static_cast<std::uint8_t>(byte);
+            }
+            *(it++) = '\0';
+            for (auto byte: optionsValues[idx]) {
+                *(it++) = static_cast<std::uint8_t>(byte);
+            }
+            *(it++) = '\0';
+            optionsSize += optionsNames[idx].size() + optionsValues[idx].size() + 2;
+        }
+
+        return sizeof(type) + optionsSize;
+    }
+
+    std::uint16_t getType() const { return type; }
+
+    std::string_view getOptionName(std::size_t idx) const {
+        return std::string_view(reinterpret_cast<const char*>(optionsNames[idx].data()), optionsNames[idx].size());
+    }
+
+    std::string_view getOptionValue(std::size_t idx) const {
+        return std::string_view(reinterpret_cast<const char*>(optionsValues[idx].data()), optionsValues[idx].size());
+    }
+private:
+    friend ParseResult parse(std::uint8_t *buffer, std::size_t len, OptionAcknowledgment &packet);
+
+    std::uint16_t type = Type::OptionAcknowledgmentPacket;
+    std::vector<std::string> optionsNames, optionsValues;
 };
 
 } // namespace packets

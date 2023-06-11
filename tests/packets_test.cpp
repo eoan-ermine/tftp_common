@@ -42,6 +42,51 @@ TEST(Request, Serialization) {
     EXPECT_EQ(buffer.size(), packetSize);
 }
 
+/// Test that Request packet with options serialization is going fine and everything is converting to network byte order
+TEST(Request, OptionSerialization) {
+    std::string filename = "example_filename.cpp";
+    std::string mode = "netascii";
+    std::vector<std::string> optionsNames = {
+        "saveFiles", "discardQualifiers", "secret"
+    };
+    std::vector<std::string> optionsValues = {
+        "true", "false", "Ix0e86yG8YpFzwz1gS0XxJW3"
+    };
+    auto packet = Request{Type::ReadRequest, filename, mode, optionsNames, optionsValues};
+
+    std::size_t optionsSize = 0;
+    for (std::size_t idx = 0; idx != optionsNames.size(); ++idx) {
+        optionsSize += optionsNames[idx].size() + optionsValues[idx].size() + 2;
+    }
+
+    std::vector<std::uint8_t> buffer;
+    auto packetSize = packet.serialize(std::back_inserter(buffer));
+    EXPECT_EQ(packetSize, sizeof(std::uint16_t) + filename.size() + mode.size() + optionsSize + 2);
+
+    // type field
+    EXPECT_EQ(buffer[0], 0x00);
+    EXPECT_EQ(buffer[1], 0x01);
+    std::size_t baseOffset = 2;
+
+    // filename field
+    EXPECT_STRING(buffer, baseOffset, filename);
+    baseOffset += filename.size() + 1;
+
+    // mode field
+    EXPECT_STRING(buffer, baseOffset, mode);
+    baseOffset += mode.size() + 1;
+
+    // option names and values
+    for (std::size_t idx = 0; idx != optionsNames.size(); ++idx) {
+        EXPECT_STRING(buffer, baseOffset, optionsNames[idx]);
+        baseOffset += optionsNames[idx].size() + 1;
+        EXPECT_STRING(buffer, baseOffset, optionsValues[idx]);
+        baseOffset += optionsValues[idx].size() + 1;
+    }
+
+    EXPECT_EQ(buffer.size(), packetSize);
+}
+
 /// Test that Data packet serialization is going fine and everything is converting to network byte order
 TEST(Data, Serialization) {
     std::vector<std::uint8_t> data;
@@ -106,6 +151,37 @@ TEST(Error, Serialization) {
 
     // errorMessage field
     EXPECT_DATA(buffer, 4, errorMessage);
+
+    EXPECT_EQ(buffer.size(), packetSize);
+}
+
+/// Test that Option Acknowledgment packet serialization is going fine and everything is converting to network byte order
+TEST(OptionAcknowledgment, Serialization) {
+    std::vector<std::string> optionsNames = {
+        "saveFiles", "discardQualifiers", "secret"
+    };
+    std::vector<std::string> optionsValues = {
+        "true", "false", "Ix0e86yG8YpFzwz1gS0XxJW3"
+    };
+    auto packet = OptionAcknowledgment { optionsNames, optionsValues };
+
+    std::size_t optionsSize = 0;
+    for (std::size_t idx = 0; idx != optionsNames.size(); ++idx) {
+        optionsSize += optionsNames[idx].size() + optionsValues[idx].size() + 2;
+    }
+
+    std::vector<std::uint8_t> buffer;
+    auto packetSize = packet.serialize(std::back_inserter(buffer));
+    EXPECT_EQ(packetSize, sizeof(std::uint16_t) + optionsSize);
+
+    std::size_t baseOffset = sizeof(std::uint16_t);
+    // option names and values
+    for (std::size_t idx = 0; idx != optionsNames.size(); ++idx) {
+        EXPECT_STRING(buffer, baseOffset, optionsNames[idx]);
+        baseOffset += optionsNames[idx].size() + 1;
+        EXPECT_STRING(buffer, baseOffset, optionsValues[idx]);
+        baseOffset += optionsValues[idx].size() + 1;
+    }
 
     EXPECT_EQ(buffer.size(), packetSize);
 }
