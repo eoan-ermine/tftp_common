@@ -5,29 +5,29 @@ using namespace tftp_common::packets;
 
 /// Test that Request packet parsing is going fine
 TEST(Request, Parse) {
-    std::uint8_t packetBytes[] = {// type
+    std::uint8_t PacketBytes[] = {// type
                                   0x00, 0x01,
                                   // filename
                                   0x2f, 0x73, 0x72, 0x76, 0x2f, 0x74, 0x66, 0x74, 0x70, 0x2f, 0x52, 0x65, 0x61, 0x64,
                                   0x46, 0x69, 0x6c, 0x65, 0x00,
                                   // mode
                                   0x6e, 0x65, 0x74, 0x61, 0x73, 0x63, 0x69, 0x69, 0x00};
-    auto length = sizeof(packetBytes) / sizeof(std::uint8_t);
+    auto Length = sizeof(PacketBytes) / sizeof(std::uint8_t);
 
-    Request packet;
-    auto [success, bytesRead] = parse(packetBytes, length, packet);
+    Request Packet;
+    auto [success, bytesRead] = parse(PacketBytes, Length, Packet);
 
-    ASSERT_EQ(packet.getType(), Type::ReadRequest);
-    ASSERT_EQ(packet.getFilename(), "/srv/tftp/ReadFile");
-    ASSERT_EQ(packet.getMode(), "netascii");
+    ASSERT_EQ(Packet.getType(), Type::ReadRequest);
+    ASSERT_EQ(Packet.getFilename(), "/srv/tftp/ReadFile");
+    ASSERT_EQ(Packet.getMode(), "netascii");
 
     ASSERT_EQ(success, true);
-    ASSERT_EQ(bytesRead, length);
+    ASSERT_EQ(bytesRead, Length);
 }
 
 /// Test that Request packet with options parsing is going fine
 TEST(Request, OptionParse) {
-    std::uint8_t packetBytes[] = {// type
+    std::uint8_t PacketBytes[] = {// type
                                   0x00, 0x01,
                                   // filename
                                   0x2f, 0x73, 0x72, 0x76, 0x2f, 0x74, 0x66, 0x74, 0x70, 0x2f, 0x52, 0x65, 0x61, 0x64,
@@ -48,96 +48,96 @@ TEST(Request, OptionParse) {
                                   // secret option value
                                   0x49, 0x78, 0x30, 0x65, 0x38, 0x36, 0x79, 0x47, 0x38, 0x59, 0x70, 0x46, 0x7A, 0x77,
                                   0x7A, 0x31, 0x67, 0x53, 0x30, 0x58, 0x78, 0x4A, 0x57, 0x33, 0x00};
-    auto length = sizeof(packetBytes) / sizeof(std::uint8_t);
+    auto Length = sizeof(PacketBytes) / sizeof(std::uint8_t);
 
-    Request packet;
-    auto [success, bytesRead] = parse(packetBytes, length, packet);
+    Request Packet;
+    auto [success, bytesRead] = parse(PacketBytes, Length, Packet);
 
-    ASSERT_EQ(packet.getType(), Type::ReadRequest);
-    ASSERT_EQ(packet.getFilename(), "/srv/tftp/ReadFile");
-    ASSERT_EQ(packet.getMode(), "netascii");
+    ASSERT_EQ(Packet.getType(), Type::ReadRequest);
+    ASSERT_EQ(Packet.getFilename(), "/srv/tftp/ReadFile");
+    ASSERT_EQ(Packet.getMode(), "netascii");
 
-    std::vector<std::string> optionsNames = {"saveFiles", "discardQualifiers", "secret"};
-    std::vector<std::string> optionsValues = {"true", "false", "Ix0e86yG8YpFzwz1gS0XxJW3"};
-    for (std::size_t idx = 0; idx != optionsNames.size(); ++idx) {
-        ASSERT_EQ(packet.getOptionName(idx), optionsNames[idx]);
-        ASSERT_EQ(packet.getOptionValue(idx), optionsValues[idx]);
+    std::vector<std::string> OptionsNames = {"saveFiles", "discardQualifiers", "secret"};
+    std::vector<std::string> OptionsValues = {"true", "false", "Ix0e86yG8YpFzwz1gS0XxJW3"};
+    for (std::size_t Idx = 0; Idx != OptionsNames.size(); ++Idx) {
+        ASSERT_EQ(Packet.getOptionName(Idx), OptionsNames[Idx]);
+        ASSERT_EQ(Packet.getOptionValue(Idx), OptionsValues[Idx]);
     }
 
     ASSERT_EQ(success, true);
-    ASSERT_EQ(bytesRead, length);
+    ASSERT_EQ(bytesRead, Length);
 }
 
 /// Test that Data packet parsing is going fine
 TEST(Data, Parse) {
-    std::uint8_t packetBytes[] = {// type
+    std::uint8_t PacketBytes[] = {// type
                                   0x00, 0x03,
                                   // block number
                                   0x00, 0x01,
                                   // data
                                   0x53, 0x6f, 0x6d, 0x65, 0x20, 0x63, 0x6f, 0x6e, 0x74, 0x65, 0x6e, 0x74, 0x73, 0x2e,
                                   0x2e, 0x2e, 0x0d, 0x0a};
-    auto length = sizeof(packetBytes) / sizeof(std::uint8_t);
+    auto Length = sizeof(PacketBytes) / sizeof(std::uint8_t);
 
-    Data packet;
-    auto [success, bytesRead] = parse(packetBytes, length, packet);
+    Data Packet;
+    auto [success, bytesRead] = parse(PacketBytes, Length, Packet);
 
-    ASSERT_EQ(packet.getType(), Type::DataPacket);
-    ASSERT_EQ(packet.getBlock(), 0x01);
-    const auto &data = packet.getData();
+    ASSERT_EQ(Packet.getType(), Type::DataPacket);
+    ASSERT_EQ(Packet.getBlock(), 0x01);
+    const auto &Data = Packet.getData();
 
-    std::size_t baseOffset = 2 * sizeof(std::uint16_t);
-    for (std::size_t i = 0; i != data.size(); ++i) {
-        ASSERT_EQ(data[i], packetBytes[baseOffset + i]);
+    std::size_t BaseOffset = 2 * sizeof(std::uint16_t);
+    for (std::size_t Idx = 0; Idx != Data.size(); ++Idx) {
+        ASSERT_EQ(Data[Idx], PacketBytes[BaseOffset + Idx]);
     }
 
     ASSERT_EQ(success, true);
-    ASSERT_EQ(bytesRead, length);
+    ASSERT_EQ(bytesRead, Length);
 }
 
 /// Test that Acknowledgment packet parsing is going fine
 TEST(Acknowledgment, Parse) {
-    std::uint8_t packetBytes[] = {// type
+    std::uint8_t PacketBytes[] = {// type
                                   0x00, 0x04,
                                   // block number
                                   0x00, 0x01};
-    auto length = sizeof(packetBytes) / sizeof(std::uint8_t);
+    auto Length = sizeof(PacketBytes) / sizeof(std::uint8_t);
 
-    Acknowledgment packet;
-    auto [success, bytesRead] = parse(packetBytes, length, packet);
+    Acknowledgment Packet;
+    auto [success, bytesRead] = parse(PacketBytes, Length, Packet);
 
-    ASSERT_EQ(packet.getType(), Type::AcknowledgmentPacket);
-    ASSERT_EQ(packet.getBlock(), 0x01);
+    ASSERT_EQ(Packet.getType(), Type::AcknowledgmentPacket);
+    ASSERT_EQ(Packet.getBlock(), 0x01);
 
     ASSERT_EQ(success, true);
-    ASSERT_EQ(bytesRead, length);
+    ASSERT_EQ(bytesRead, Length);
 }
 
 /// Test that Error packet parsing is going fine
 TEST(Error, Parse) {
-    std::uint8_t packetBytes[] = {// type
+    std::uint8_t PacketBytes[] = {// type
                                   0x00, 0x05,
                                   // errorCode
                                   0x00, 0x01,
                                   // errorMessage
                                   0x46, 0x69, 0x6c, 0x65, 0x20, 0x6e, 0x6f, 0x74, 0x20, 0x66, 0x6f, 0x75, 0x6e, 0x64,
                                   0x00};
-    auto length = sizeof(packetBytes) / sizeof(std::uint8_t);
+    auto Length = sizeof(PacketBytes) / sizeof(std::uint8_t);
 
-    Error packet;
-    auto [success, bytesRead] = parse(packetBytes, length, packet);
+    Error Packet;
+    auto [success, bytesRead] = parse(PacketBytes, Length, Packet);
 
-    ASSERT_EQ(packet.getType(), Type::ErrorPacket);
-    ASSERT_EQ(packet.getErrorCode(), 0x01);
-    ASSERT_EQ(packet.getErrorMessage(), "File not found");
+    ASSERT_EQ(Packet.getType(), Type::ErrorPacket);
+    ASSERT_EQ(Packet.getErrorCode(), 0x01);
+    ASSERT_EQ(Packet.getErrorMessage(), "File not found");
 
     ASSERT_EQ(success, true);
-    ASSERT_EQ(bytesRead, length);
+    ASSERT_EQ(bytesRead, Length);
 }
 
 /// Test that Option Acknowledgment packet parsing is going fine
 TEST(OptionAcknowledgment, Parse) {
-    std::uint8_t packetBytes[] = {// type
+    std::uint8_t PacketBytes[] = {// type
                                   0x00, 0x06,
                                   // saveFiles option name
                                   0x73, 0x61, 0x76, 0x65, 0x46, 0x69, 0x6C, 0x65, 0x73, 0x00,
@@ -153,22 +153,22 @@ TEST(OptionAcknowledgment, Parse) {
                                   // secret option value
                                   0x49, 0x78, 0x30, 0x65, 0x38, 0x36, 0x79, 0x47, 0x38, 0x59, 0x70, 0x46, 0x7A, 0x77,
                                   0x7A, 0x31, 0x67, 0x53, 0x30, 0x58, 0x78, 0x4A, 0x57, 0x33, 0x00};
-    auto length = sizeof(packetBytes) / sizeof(std::uint8_t);
+    auto Length = sizeof(PacketBytes) / sizeof(std::uint8_t);
 
-    OptionAcknowledgment packet;
-    auto [success, bytesRead] = parse(packetBytes, length, packet);
+    OptionAcknowledgment Packet;
+    auto [success, bytesRead] = parse(PacketBytes, Length, Packet);
 
-    ASSERT_EQ(packet.getType(), Type::OptionAcknowledgmentPacket);
+    ASSERT_EQ(Packet.getType(), Type::OptionAcknowledgmentPacket);
 
-    std::vector<std::string> optionsNames = {"saveFiles", "discardQualifiers", "secret"};
-    std::vector<std::string> optionsValues = {"true", "false", "Ix0e86yG8YpFzwz1gS0XxJW3"};
-    for (std::size_t idx = 0; idx != optionsNames.size(); ++idx) {
-        ASSERT_EQ(packet.getOptionName(idx), optionsNames[idx]);
-        ASSERT_EQ(packet.getOptionValue(idx), optionsValues[idx]);
+    std::vector<std::string> OptionsNames = {"saveFiles", "discardQualifiers", "secret"};
+    std::vector<std::string> OptionsValues = {"true", "false", "Ix0e86yG8YpFzwz1gS0XxJW3"};
+    for (std::size_t Idx = 0; Idx != OptionsNames.size(); ++Idx) {
+        ASSERT_EQ(Packet.getOptionName(Idx), OptionsNames[Idx]);
+        ASSERT_EQ(Packet.getOptionValue(Idx), OptionsValues[Idx]);
     }
 
     ASSERT_EQ(success, true);
-    ASSERT_EQ(bytesRead, length);
+    ASSERT_EQ(bytesRead, Length);
 }
 
 int main(int argc, char **argv) {

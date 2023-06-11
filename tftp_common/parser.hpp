@@ -9,281 +9,296 @@ namespace packets {
 /// The result of parsing a single packet
 struct ParseResult {
     /// if the parsing was successful
-    bool success;
+    bool Success;
     /// count of bytes read
-    std::size_t bytes_read;
+    std::size_t BytesRead;
 };
 
 /// Parse read/write request packet from buffer converting all fields to host byte order
-/// @param[buffer] Assumptions: \p buffer is not a nullptr, it's size is greater or equal than \p len
-/// @param[len] Assumptions: \p len is greater than zero
-/// @n If parsing wasn't successful, \p packet remains in valid but unspecified state
-ParseResult parse(std::uint8_t *buffer, std::size_t len, Request &packet) {
-    assert(buffer != nullptr);
-    assert(len > 0);
+/// @param[Buffer] Assumptions: \p Buffer is not a nullptr, it's size is greater or equal than \p Len
+/// @param[Len] Assumptions: \p Len is greater than zero
+/// @n If parsing wasn't successful, \p Packet remains in valid but unspecified state
+ParseResult parse(const std::uint8_t *Buffer, std::size_t Len, Request &Packet) {
+    assert(Buffer != nullptr);
+    assert(Len > 0);
 
-    std::string name, value;
-    std::size_t step_ = 0, bytes_read = 0;
-    for (std::size_t i = 0; i != len; ++i) {
-        const auto byte = buffer[i];
-        bytes_read++;
+    std::string Name;
+    std::string Value;
+    std::size_t Step = 0;
+    std::size_t BytesRead = 0;
+    for (std::size_t Idx = 0; Idx != Len; ++Idx) {
+        const auto Byte = Buffer[Idx];
+        BytesRead++;
 
-        switch (step_) {
+        switch (Step) {
         // Opcode (2 bytes)
         case 0:
-            packet.type_ = std::uint16_t(byte) << 0;
-            step_++;
+            Packet.Type = std::uint16_t(Byte) << 0;
+            Step++;
             break;
         case 1:
-            packet.type_ |= std::uint16_t(byte) << 8;
-            packet.type_ = ntohs(packet.type_);
-            if (packet.type_ != packets::Type::ReadRequest && packet.type_ != packets::Type::WriteRequest) {
-                step_ = 0;
+            Packet.Type |= std::uint16_t(Byte) << 8;
+            Packet.Type = ntohs(Packet.Type);
+            if (Packet.Type != packets::Type::ReadRequest && Packet.Type != packets::Type::WriteRequest) {
+                Step = 0;
                 continue;
             }
-            step_++;
+            Step++;
             break;
         // Filename
         case 2:
-            packet.filename.push_back(byte);
+            Packet.Filename.push_back(Byte);
 
-            if (!byte)
-                step_++;
+            if (Byte == 0u) {
+                Step++;
+            }
             break;
         // Mode
         case 3:
-            packet.mode.push_back(byte);
+            Packet.Mode.push_back(Byte);
 
-            if (!byte) {
-                if (i == len - 1)
-                    return ParseResult{true, bytes_read};
-                step_++;
+            if (Byte == 0u) {
+                if (Idx == Len - 1) {
+                    return ParseResult{true, BytesRead};
+                }
+                Step++;
             }
             break;
         // Option name
         case 4:
-            if (!byte) {
-                packet.optionsNames.push_back(std::move(name));
-                name.clear();
-                step_++;
-            } else
-                name.push_back(byte);
+            if (Byte == 0u) {
+                Packet.OptionsNames.push_back(std::move(Name));
+                Name.clear();
+                Step++;
+            } else {
+                Name.push_back(Byte);
+            }
             break;
         // Option value
         case 5:
-            if (!byte) {
-                packet.optionsValues.push_back(std::move(value));
-                value.clear();
+            if (Byte == 0u) {
+                Packet.OptionsValues.push_back(std::move(Value));
+                Value.clear();
 
-                if (i == len - 1)
-                    return ParseResult{true, bytes_read};
-                step_--;
-            } else
-                value.push_back(byte);
+                if (Idx == Len - 1) {
+                    return ParseResult{true, BytesRead};
+                }
+                Step--;
+            } else {
+                Value.push_back(Byte);
+            }
             break;
         }
     }
-    return ParseResult{false, bytes_read};
+    return ParseResult{false, BytesRead};
 }
 
 /// Parse data packet from buffer converting all fields to host byte order
-/// @param[buffer] Assumptions: \p buffer is not a nullptr, it's size is greater or equal than \p len
-/// @param[len] Assumptions: \p len is greater than zero
-/// @n If parsing wasn't successful, \p packet remains in valid but unspecified state
-ParseResult parse(std::uint8_t *buffer, std::size_t len, Data &packet) {
-    assert(buffer != nullptr);
-    assert(len > 0);
+/// @param[Buffer] Assumptions: \p Buffer is not a nullptr, it's size is greater or equal than \p Len
+/// @param[Len] Assumptions: \p Len is greater than zero
+/// @n If parsing wasn't successful, \p Packet remains in valid but unspecified state
+ParseResult parse(const std::uint8_t *Buffer, std::size_t Len, Data &Packet) {
+    assert(Buffer != nullptr);
+    assert(Len > 0);
 
-    std::size_t step_ = 0, bytes_read = 0;
-    for (std::size_t i = 0; i != len; ++i) {
-        const auto byte = buffer[i];
-        bytes_read++;
+    std::size_t Step = 0;
+    std::size_t BytesRead = 0;
+    for (std::size_t Idx = 0; Idx != Len; ++Idx) {
+        const auto Byte = Buffer[Idx];
+        BytesRead++;
 
-        switch (step_) {
+        switch (Step) {
         // Opcode (2 bytes)
         case 0:
-            packet.type = std::uint16_t(byte) << 0;
-            step_++;
+            Packet.Type = std::uint16_t(Byte) << 0;
+            Step++;
             break;
         case 1:
-            packet.type |= std::uint16_t(byte) << 8;
-            packet.type = ntohs(packet.type);
-            if (packet.type != packets::Type::DataPacket) {
-                step_ = 0;
+            Packet.Type |= std::uint16_t(Byte) << 8;
+            Packet.Type = ntohs(Packet.Type);
+            if (Packet.Type != packets::Type::DataPacket) {
+                Step = 0;
                 continue;
             }
-            step_++;
+            Step++;
             break;
         // Block # (2 bytes)
         case 2:
-            packet.block = std::uint16_t(byte) << 0;
-            step_++;
+            Packet.Block = std::uint16_t(Byte) << 0;
+            Step++;
             break;
         case 3:
-            packet.block |= std::uint16_t(byte) << 8;
-            packet.block = ntohs(packet.block);
-            step_++;
+            Packet.Block |= std::uint16_t(Byte) << 8;
+            Packet.Block = ntohs(Packet.Block);
+            Step++;
             break;
         // buffer
         case 4:
-            packet.data_.push_back(byte);
+            Packet.DataBuffer.push_back(Byte);
 
-            if (i == len - 1) {
-                return ParseResult{true, bytes_read};
+            if (Idx == Len - 1) {
+                return ParseResult{true, BytesRead};
             }
 
             break;
         }
     }
-    return ParseResult{false, bytes_read};
+    return ParseResult{false, BytesRead};
 }
 
 /// Parse acknowledgment packet from buffer converting all fields to host byte order
-/// @param[buffer] Assumptions: \p buffer is not a nullptr, it's size is greater or equal than \p len
-/// @param[len] Assumptions: \p len is greater than zero
-/// @n If parsing wasn't successful, \p packet remains in valid but unspecified state
-ParseResult parse(std::uint8_t *buffer, std::size_t len, Acknowledgment &packet) {
-    assert(buffer != nullptr);
-    assert(len > 0);
+/// @param[Buffer] Assumptions: \p Buffer is not a nullptr, it's size is greater or equal than \p Len
+/// @param[Len] Assumptions: \p Len is greater than zero
+/// @n If parsing wasn't successful, \p Packet remains in valid but unspecified state
+ParseResult parse(const std::uint8_t *Buffer, std::size_t Len, Acknowledgment &Packet) {
+    assert(Buffer != nullptr);
+    assert(Len > 0);
 
-    std::size_t step_ = 0, bytes_read = 0;
-    for (std::size_t i = 0; i != len; ++i) {
-        const auto byte = buffer[i];
-        bytes_read++;
+    std::size_t Step = 0;
+    std::size_t BytesRead = 0;
+    for (std::size_t Idx = 0; Idx != Len; ++Idx) {
+        const auto Byte = Buffer[Idx];
+        BytesRead++;
 
-        switch (step_) {
+        switch (Step) {
         // Opcode (2 bytes)
         case 0:
-            packet.type = std::uint16_t(byte) << 0;
-            step_++;
+            Packet.Type = std::uint16_t(Byte) << 0;
+            Step++;
             break;
         case 1:
-            packet.type |= std::uint16_t(byte) << 8;
-            packet.type = ntohs(packet.type);
-            if (packet.type != packets::Type::AcknowledgmentPacket) {
-                step_ = 0;
+            Packet.Type |= std::uint16_t(Byte) << 8;
+            Packet.Type = ntohs(Packet.Type);
+            if (Packet.Type != packets::Type::AcknowledgmentPacket) {
+                Step = 0;
                 continue;
             }
-            step_++;
+            Step++;
             break;
         // Block # (2 bytes)
         case 2:
-            packet.block = std::uint16_t(byte) << 0;
-            step_++;
+            Packet.Block = std::uint16_t(Byte) << 0;
+            Step++;
             break;
         case 3:
-            packet.block |= std::uint16_t(byte) << 8;
-            packet.block = ntohs(packet.block);
-            return ParseResult{true, bytes_read};
+            Packet.Block |= std::uint16_t(Byte) << 8;
+            Packet.Block = ntohs(Packet.Block);
+            return ParseResult{true, BytesRead};
         }
     }
-    return ParseResult{false, bytes_read};
+    return ParseResult{false, BytesRead};
 }
 
 /// Parse error packet from buffer converting all fields to host byte order
-/// @param[buffer] Assumptions: \p buffer is not a nullptr, it's size is greater or equal than \p len
-/// @param[len] Assumptions: \p len is greater than zero
-/// @n If parsing wasn't successful, \p packet remains in valid but unspecified state
-ParseResult parse(std::uint8_t *buffer, std::size_t len, Error &packet) {
-    assert(buffer != nullptr);
-    assert(len > 0);
+/// @param[Buffer] Assumptions: \p Buffer is not a nullptr, it's size is greater or equal than \p Len
+/// @param[Len] Assumptions: \p Len is greater than zero
+/// @n If parsing wasn't successful, \p Packet remains in valid but unspecified state
+ParseResult parse(const std::uint8_t *Buffer, std::size_t Len, Error &Packet) {
+    assert(Buffer != nullptr);
+    assert(Len > 0);
 
-    std::size_t step_ = 0, bytes_read = 0;
-    for (std::size_t i = 0; i != len; ++i) {
-        const auto byte = buffer[i];
-        bytes_read++;
+    std::size_t Step = 0;
+    std::size_t BytesRead = 0;
+    for (std::size_t Idx = 0; Idx != Len; ++Idx) {
+        const auto Byte = Buffer[Idx];
+        BytesRead++;
 
-        switch (step_) {
+        switch (Step) {
         // Opcode (2 bytes)
         case 0:
-            packet.type = std::uint16_t(byte) << 0;
-            step_++;
+            Packet.Type = std::uint16_t(Byte) << 0;
+            Step++;
             break;
         case 1:
-            packet.type |= std::uint16_t(byte) << 8;
-            packet.type = ntohs(packet.type);
-            if (packet.type != packets::Type::ErrorPacket) {
-                step_ = 0;
+            Packet.Type |= std::uint16_t(Byte) << 8;
+            Packet.Type = ntohs(Packet.Type);
+            if (Packet.Type != packets::Type::ErrorPacket) {
+                Step = 0;
                 continue;
             }
-            step_++;
+            Step++;
             break;
         // ErrorCode (2 bytes)
         case 2:
-            packet.error_code = std::uint16_t(byte) << 0;
-            step_++;
+            Packet.ErrorCode = std::uint16_t(Byte) << 0;
+            Step++;
             break;
         case 3:
-            packet.error_code |= std::uint16_t(byte) << 8;
-            packet.error_code = ntohs(packet.error_code);
-            step_++;
+            Packet.ErrorCode |= std::uint16_t(Byte) << 8;
+            Packet.ErrorCode = ntohs(Packet.ErrorCode);
+            Step++;
             break;
         // ErrorMessage
         case 4:
-            packet.error_message.push_back(byte);
+            Packet.ErrorMessage.push_back(Byte);
 
-            if (!byte) {
-                return ParseResult{true, bytes_read};
+            if (Byte == 0u) {
+                return ParseResult{true, BytesRead};
             }
             break;
         }
     }
-    return ParseResult{false, bytes_read};
+    return ParseResult{false, BytesRead};
 }
 
 /// Parse error packet from buffer converting all fields to host byte order
-/// @param[buffer] Assumptions: \p buffer is not a nullptr, it's size is greater or equal than \p len
-/// @param[len] Assumptions: \p len is greater than zero
-/// @n If parsing wasn't successful, \p packet remains in valid but unspecified state
-ParseResult parse(std::uint8_t *buffer, std::size_t len, OptionAcknowledgment &packet) {
-    assert(buffer != nullptr);
-    assert(len > 0);
+/// @param[Buffer] Assumptions: \p Buffer is not a nullptr, it's size is greater or equal than \p Len
+/// @param[Len] Assumptions: \p Len is greater than zero
+/// @n If parsing wasn't successful, \p Packet remains in valid but unspecified state
+ParseResult parse(const std::uint8_t *Buffer, std::size_t Len, OptionAcknowledgment &Packet) {
+    assert(Buffer != nullptr);
+    assert(Len > 0);
 
-    std::string name, value;
-    std::size_t step_ = 0, bytes_read = 0;
-    for (std::size_t i = 0; i != len; ++i) {
-        const auto byte = buffer[i];
-        bytes_read++;
+    std::string Name;
+    std::string Value;
+    std::size_t Step = 0;
+    std::size_t BytesRead = 0;
+    for (std::size_t Idx = 0; Idx != Len; ++Idx) {
+        const auto Byte = Buffer[Idx];
+        BytesRead++;
 
-        switch (step_) {
+        switch (Step) {
         // Opcode (2 bytes)
         case 0:
-            packet.type = std::uint16_t(byte) << 0;
-            step_++;
+            Packet.Type = std::uint16_t(Byte) << 0;
+            Step++;
             break;
         case 1:
-            packet.type |= std::uint16_t(byte) << 8;
-            packet.type = ntohs(packet.type);
-            if (packet.type != packets::Type::OptionAcknowledgmentPacket) {
-                step_ = 0;
+            Packet.Type |= std::uint16_t(Byte) << 8;
+            Packet.Type = ntohs(Packet.Type);
+            if (Packet.Type != packets::Type::OptionAcknowledgmentPacket) {
+                Step = 0;
                 continue;
             }
-            step_++;
+            Step++;
             break;
         // Option name
         case 2:
-            if (!byte) {
-                packet.optionsNames.push_back(std::move(name));
-                name.clear();
-                step_++;
-            } else
-                name.push_back(byte);
+            if (Byte == 0u) {
+                Packet.OptionsNames.push_back(std::move(Name));
+                Name.clear();
+                Step++;
+            } else {
+                Name.push_back(Byte);
+            }
             break;
         // Option value
         case 3:
-            if (!byte) {
-                packet.optionsValues.push_back(std::move(value));
-                value.clear();
+            if (Byte == 0u) {
+                Packet.OptionsValues.push_back(std::move(Value));
+                Value.clear();
 
-                if (i == len - 1)
-                    return ParseResult{true, bytes_read};
-                step_--;
-            } else
-                value.push_back(byte);
+                if (Idx == Len - 1) {
+                    return ParseResult{true, BytesRead};
+                }
+                Step--;
+            } else {
+                Value.push_back(Byte);
+            }
             break;
         }
     }
-    return ParseResult{false, bytes_read};
+    return ParseResult{false, BytesRead};
 }
 
 } // namespace packets

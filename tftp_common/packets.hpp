@@ -39,86 +39,86 @@ class Request {
   public:
     /// Use with parsing functions only
     Request() {}
-    /// @param[type] Assumptions: The \p type is either ::ReadRequest or ::WriteRequest
-    /// @param[error_message] Assumptions: The \p filename is a view to **null-terminated string**
-    /// @param[mode] Assumptions: The \p mode is a view to **null-terminated string**
-    Request(Type type, std::string_view filename, std::string_view mode)
-        : type_(type), filename(filename.begin(), filename.end() + 1), mode(mode.begin(), mode.end() + 1) {
-        assert(type == Type::ReadRequest || type == Type::WriteRequest);
-        assert(filename[filename.size()] == '\0');
-        assert(mode[mode.size()] == '\0');
+    /// @param[Type] Assumptions: The \p type is either ::ReadRequest or ::WriteRequest
+    /// @param[Filename] Assumptions: The \p Filename is a view to **null-terminated string**
+    /// @param[Mode] Assumptions: The \p Mode is a view to **null-terminated string**
+    Request(Type Type, std::string_view Filename, std::string_view Mode)
+        : Type(Type), Filename(Filename.begin(), Filename.end() + 1), Mode(Mode.begin(), Mode.end() + 1) {
+        assert(Type == Type::ReadRequest || Type == Type::WriteRequest);
+        assert(Filename[Filename.size()] == '\0');
+        assert(Mode[Mode.size()] == '\0');
     }
-    Request(Type type, std::string_view filename, std::string_view mode, const std::vector<std::string> &optionsNames,
-            const std::vector<std::string> &optionsValues)
-        : Request(type, filename, mode) {
-        this->optionsNames = optionsNames;
-        this->optionsValues = optionsValues;
+    Request(Type Type, std::string_view Filename, std::string_view Mode, const std::vector<std::string> &OptionsNames,
+            const std::vector<std::string> &OptionsValues)
+        : Request(Type, Filename, Mode) {
+        this->OptionsNames = OptionsNames;
+        this->OptionsValues = OptionsValues;
     }
-    Request(Type type, std::string_view filename, std::string_view mode, std::vector<std::string> &&optionsNames,
-            std::vector<std::string> &&optionsValues)
-        : Request(type, filename, mode) {
-        this->optionsNames = std::move(optionsNames);
-        this->optionsValues = std::move(optionsValues);
+    Request(Type Type, std::string_view Filename, std::string_view Mode, std::vector<std::string> &&OptionsNames,
+            std::vector<std::string> &&OptionsValues)
+        : Request(Type, Filename, Mode) {
+        this->OptionsNames = std::move(OptionsNames);
+        this->OptionsValues = std::move(OptionsValues);
     }
 
     /// Convert packet to network byte order and serialize it into the given buffer by the iterator
-    /// @param[it] Requirements: \p *(it) must be assignable from \p std::uint8_t
+    /// @param[It] Requirements: \p *(It) must be assignable from \p std::uint8_t
     /// @return Size of the packet (in bytes)
-    template <class OutputIterator> std::size_t serialize(OutputIterator it) {
-        assert(optionsNames.size() == optionsValues.size());
+    template <class OutputIterator> std::size_t serialize(OutputIterator It) {
+        assert(OptionsNames.size() == OptionsValues.size());
 
-        *(it++) = static_cast<std::uint8_t>(htons(type_) >> 0);
-        *(it++) = static_cast<std::uint8_t>(htons(type_) >> 8);
+        *(It++) = static_cast<std::uint8_t>(htons(Type) >> 0);
+        *(It++) = static_cast<std::uint8_t>(htons(Type) >> 8);
 
-        for (auto byte : filename) {
-            *(it++) = static_cast<std::uint8_t>(byte);
+        for (auto Byte : Filename) {
+            *(It++) = static_cast<std::uint8_t>(Byte);
         }
-        for (auto byte : mode) {
-            *(it++) = static_cast<std::uint8_t>(byte);
+        for (auto Byte : Mode) {
+            *(It++) = static_cast<std::uint8_t>(Byte);
         }
 
-        std::size_t optionsSize = 0;
-        for (std::size_t idx = 0; idx != optionsNames.size(); ++idx) {
-            for (auto byte : optionsNames[idx]) {
-                *(it++) = static_cast<std::uint8_t>(byte);
+        std::size_t OptionsSize = 0;
+        for (std::size_t Idx = 0; Idx != OptionsNames.size(); ++Idx) {
+            for (auto Byte : OptionsNames[Idx]) {
+                *(It++) = static_cast<std::uint8_t>(Byte);
             }
-            *(it++) = '\0';
-            for (auto byte : optionsValues[idx]) {
-                *(it++) = static_cast<std::uint8_t>(byte);
+            *(It++) = '\0';
+            for (auto Byte : OptionsValues[Idx]) {
+                *(It++) = static_cast<std::uint8_t>(Byte);
             }
-            *(it++) = '\0';
-            optionsSize += optionsNames[idx].size() + optionsValues[idx].size() + 2;
+            *(It++) = '\0';
+            OptionsSize += OptionsNames[Idx].size() + OptionsValues[Idx].size() + 2;
         }
 
-        return sizeof(type_) + filename.size() + mode.size() + optionsSize;
+        return sizeof(Type) + Filename.size() + Mode.size() + OptionsSize;
     }
 
-    std::uint16_t getType() const { return type_; }
+    std::uint16_t getType() const { return Type; }
 
     std::string_view getFilename() const {
-        return std::string_view(reinterpret_cast<const char *>(filename.data()), filename.size() - 1);
+        return std::string_view(reinterpret_cast<const char *>(Filename.data()), Filename.size() - 1);
     }
 
     std::string_view getMode() const {
-        return std::string_view(reinterpret_cast<const char *>(mode.data()), mode.size() - 1);
+        return std::string_view(reinterpret_cast<const char *>(Mode.data()), Mode.size() - 1);
     }
 
-    std::string_view getOptionName(std::size_t idx) const {
-        return std::string_view(reinterpret_cast<const char *>(optionsNames[idx].data()), optionsNames[idx].size());
+    std::string_view getOptionName(std::size_t Idx) const {
+        return std::string_view(reinterpret_cast<const char *>(OptionsNames[Idx].data()), OptionsNames[Idx].size());
     }
 
-    std::string_view getOptionValue(std::size_t idx) const {
-        return std::string_view(reinterpret_cast<const char *>(optionsValues[idx].data()), optionsValues[idx].size());
+    std::string_view getOptionValue(std::size_t Idx) const {
+        return std::string_view(reinterpret_cast<const char *>(OptionsValues[Idx].data()), OptionsValues[Idx].size());
     }
 
   private:
-    friend ParseResult parse(std::uint8_t *buffer, std::size_t len, Request &packet);
+    friend ParseResult parse(const std::uint8_t *Buffer, std::size_t Len, Request &Packet);
 
-    std::uint16_t type_;
-    std::vector<std::uint8_t> filename;
-    std::vector<std::uint8_t> mode;
-    std::vector<std::string> optionsNames;
-    std::vector<std::string> optionsValues;
+    std::uint16_t Type;
+    std::vector<std::uint8_t> Filename;
+    std::vector<std::uint8_t> Mode;
+    std::vector<std::string> OptionsNames;
+    std::vector<std::string> OptionsValues;
 };
 
 /// Data Trivial File Transfer Protocol packet
@@ -126,51 +126,52 @@ class Data {
   public:
     /// Use with parsing functions only
     Data() {}
-    /// @param[block] Assumptions: The \p block value is greater than one
-    /// @param[buffer] Assumptions: The \p buffer size is greater or equal than 0 and less or equal than 512
-    Data(std::uint16_t block, const std::vector<std::uint8_t> &buffer)
-        : block(block), data_(buffer.begin(), buffer.end()) {
+    /// @param[Block] Assumptions: The \p Block value is greater than one
+    /// @param[Buffer] Assumptions: The \p Buffer size is greater or equal than 0 and less or equal than 512
+    Data(std::uint16_t Block, const std::vector<std::uint8_t> &Buffer)
+        : Block(Block), DataBuffer(Buffer.begin(), Buffer.end()) {
         // The block numbers on data packets begin with one and increase by one for each new block of data
-        assert(block >= 1);
+        assert(Block >= 1);
         // The data field is from zero to 512 bytes long
-        assert(buffer.size() >= 0 && buffer.size() <= 512);
+        assert(Buffer.size() >= 0 && Buffer.size() <= 512);
     }
-    /// @param[block] Assumptions: The \p block value is greater than one
-    /// @param[buffer] Assumptions: The \p buffer size is greater or equal than 0 and less or equal than 512
-    Data(std::uint16_t block, std::vector<std::uint8_t> &&buffer) : block(block), data_(std::move(buffer)) {
+    /// @param[Block] Assumptions: The \p Block value is greater than one
+    /// @param[Buffer] Assumptions: The \p Buffer size is greater or equal than 0 and less or equal than 512
+    Data(std::uint16_t Block, std::vector<std::uint8_t> &&Buffer) : Block(Block) {
         // The block numbers on data packets begin with one and increase by one for each new block of data
-        assert(block >= 1);
+        assert(Block >= 1);
         // The data field is from zero to 512 bytes long
-        assert(buffer.size() >= 0 && buffer.size() <= 512);
+        assert(Buffer.size() >= 0 && Buffer.size() <= 512);
+        this->DataBuffer = std::move(Buffer);
     }
 
     /// Convert packet to network byte order and serialize it into the given buffer by the iterator
-    /// @param[it] Requirements: \p *(it) must be assignable from \p std::uint8_t
+    /// @param[It] Requirements: \p *(It) must be assignable from \p std::uint8_t
     /// @return Size of the packet (in bytes)
-    template <class OutputIterator> std::size_t serialize(OutputIterator it) {
-        *(it++) = static_cast<std::uint8_t>(htons(type) >> 0);
-        *(it++) = static_cast<std::uint8_t>(htons(type) >> 8);
-        *(it++) = static_cast<std::uint8_t>(htons(block) >> 0);
-        *(it++) = static_cast<std::uint8_t>(htons(block) >> 8);
-        for (auto byte : data_) {
-            *(it++) = static_cast<std::uint8_t>(byte);
+    template <class OutputIterator> std::size_t serialize(OutputIterator It) {
+        *(It++) = static_cast<std::uint8_t>(htons(Type) >> 0);
+        *(It++) = static_cast<std::uint8_t>(htons(Type) >> 8);
+        *(It++) = static_cast<std::uint8_t>(htons(Block) >> 0);
+        *(It++) = static_cast<std::uint8_t>(htons(Block) >> 8);
+        for (auto Byte : DataBuffer) {
+            *(It++) = static_cast<std::uint8_t>(Byte);
         }
 
-        return sizeof(type) + sizeof(block) + data_.size();
+        return sizeof(Type) + sizeof(Block) + DataBuffer.size();
     }
 
-    std::uint16_t getType() const { return type; }
+    std::uint16_t getType() const { return Type; }
 
-    std::uint16_t getBlock() const { return block; }
+    std::uint16_t getBlock() const { return Block; }
 
-    const std::vector<std::uint8_t> &getData() const { return data_; }
+    const std::vector<std::uint8_t> &getData() const { return DataBuffer; }
 
   private:
-    friend ParseResult parse(std::uint8_t *buffer, std::size_t len, Data &packet);
+    friend ParseResult parse(const std::uint8_t *Buffer, std::size_t Len, Data &Packet);
 
-    std::uint16_t type = Type::DataPacket;
-    std::uint16_t block;
-    std::vector<std::uint8_t> data_;
+    std::uint16_t Type = Type::DataPacket;
+    std::uint16_t Block;
+    std::vector<std::uint8_t> DataBuffer;
 };
 
 /// Acknowledgment Trivial File Transfer Protocol packet
@@ -178,33 +179,33 @@ class Acknowledgment {
   public:
     /// Use with parsing functions only
     Acknowledgment() {}
-    /// @param[block] Assumptions: the \p block is equal or greater than one
-    Acknowledgment(std::uint16_t block) : block(block) {
+    /// @param[Block] Assumptions: the \p Block is equal or greater than one
+    Acknowledgment(std::uint16_t Block) : Block(Block) {
         // The block numbers on data packets begin with one and increase by one for each new block of data
-        assert(block >= 1);
+        assert(Block >= 1);
     }
 
-    std::uint16_t getType() const { return type; }
+    std::uint16_t getType() const { return Type; }
 
-    std::uint16_t getBlock() const { return block; }
+    std::uint16_t getBlock() const { return Block; }
 
     /// Convert packet to network byte order and serialize it into the given buffer by the iterator
-    /// @param[it] Requirements: \p *(it) must be assignable from \p std::uint8_t
+    /// @param[It] Requirements: \p *(It) must be assignable from \p std::uint8_t
     /// @return Size of the packet (in bytes)
-    template <class OutputIterator> std::size_t serialize(OutputIterator it) {
-        *(it++) = static_cast<std::uint8_t>(htons(type) >> 0);
-        *(it++) = static_cast<std::uint8_t>(htons(type) >> 8);
-        *(it++) = static_cast<std::uint8_t>(htons(block) >> 0);
-        *(it++) = static_cast<std::uint8_t>(htons(block) >> 8);
+    template <class OutputIterator> std::size_t serialize(OutputIterator It) {
+        *(It++) = static_cast<std::uint8_t>(htons(Type) >> 0);
+        *(It++) = static_cast<std::uint8_t>(htons(Type) >> 8);
+        *(It++) = static_cast<std::uint8_t>(htons(Block) >> 0);
+        *(It++) = static_cast<std::uint8_t>(htons(Block) >> 8);
 
-        return sizeof(type) + sizeof(block);
+        return sizeof(Type) + sizeof(Block);
     }
 
   private:
-    friend ParseResult parse(std::uint8_t *buffer, std::size_t len, Acknowledgment &packet);
+    friend ParseResult parse(const std::uint8_t *Buffer, std::size_t Len, Acknowledgment &Packet);
 
-    std::uint16_t type = Type::AcknowledgmentPacket;
-    std::uint16_t block;
+    std::uint16_t Type = Type::AcknowledgmentPacket;
+    std::uint16_t Block;
 };
 
 /// Error Trivial File Transfer Protocol packet
@@ -212,43 +213,43 @@ class Error {
   public:
     /// Use with parsing functions only
     Error() {}
-    /// @param[error_code] Assumptions: The \p error_code is equal or greater than zero and less or equal than eight
-    /// @param[error_message] Assumptions: The \p error_message is a view to **null-terminated string**
-    Error(std::uint16_t error_code, std::string_view error_message)
-        : error_code(error_code), error_message(error_message.begin(), error_message.end() + 1) {
-        assert(error_code >= 0 && error_code <= 8);
-        assert(error_message[error_message.size()] == '\0');
+    /// @param[ErrorCode] Assumptions: The \p ErrorCode is equal or greater than zero and less or equal than eight
+    /// @param[ErrorMessage] Assumptions: The \p ErrorMessage is a view to **null-terminated string**
+    Error(std::uint16_t ErrorCode, std::string_view ErrorMessage)
+        : ErrorCode(ErrorCode), ErrorMessage(ErrorMessage.begin(), ErrorMessage.end() + 1) {
+        assert(ErrorCode >= 0 && ErrorCode <= 8);
+        assert(ErrorMessage[ErrorMessage.size()] == '\0');
     }
 
-    std::uint16_t getType() const { return type; }
+    std::uint16_t getType() const { return Type; }
 
-    std::uint16_t getErrorCode() const { return error_code; }
+    std::uint16_t getErrorCode() const { return ErrorCode; }
 
     std::string_view getErrorMessage() const {
-        return std::string_view(reinterpret_cast<const char *>(error_message.data()), error_message.size() - 1);
+        return std::string_view(reinterpret_cast<const char *>(ErrorMessage.data()), ErrorMessage.size() - 1);
     }
 
     /// Convert packet to network byte order and serialize it into the given buffer by the iterator
-    /// @param[it] Requirements: \p *(it) must be assignable from \p std::uint8_t
+    /// @param[It] Requirements: \p *(It) must be assignable from \p std::uint8_t
     /// @return Size of the packet (in bytes)
-    template <class OutputIterator> std::size_t serialize(OutputIterator it) {
-        *(it++) = static_cast<std::uint8_t>(htons(type) >> 0);
-        *(it++) = static_cast<std::uint8_t>(htons(type) >> 8);
-        *(it++) = static_cast<std::uint8_t>(htons(error_code) >> 0);
-        *(it++) = static_cast<std::uint8_t>(htons(error_code) >> 8);
-        for (auto byte : error_message) {
-            *(it++) = static_cast<std::uint8_t>(byte);
+    template <class OutputIterator> std::size_t serialize(OutputIterator It) {
+        *(It++) = static_cast<std::uint8_t>(htons(Type) >> 0);
+        *(It++) = static_cast<std::uint8_t>(htons(Type) >> 8);
+        *(It++) = static_cast<std::uint8_t>(htons(ErrorCode) >> 0);
+        *(It++) = static_cast<std::uint8_t>(htons(ErrorCode) >> 8);
+        for (auto Byte : ErrorMessage) {
+            *(It++) = static_cast<std::uint8_t>(Byte);
         }
 
-        return sizeof(type) + sizeof(error_code) + error_message.size();
+        return sizeof(Type) + sizeof(ErrorCode) + ErrorMessage.size();
     }
 
   private:
-    friend ParseResult parse(std::uint8_t *buffer, std::size_t len, Error &packet);
+    friend ParseResult parse(const std::uint8_t *Buffer, std::size_t Len, Error &Packet);
 
-    std::uint16_t type = Type::ErrorPacket;
-    std::uint16_t error_code;
-    std::vector<std::uint8_t> error_message;
+    std::uint16_t Type = Type::ErrorPacket;
+    std::uint16_t ErrorCode;
+    std::vector<std::uint8_t> ErrorMessage;
 };
 
 /// Option Acknowledgment Trivial File Transfer Protocol packet
@@ -256,51 +257,51 @@ class OptionAcknowledgment {
   public:
     /// Use with parsing functions only
     OptionAcknowledgment() {}
-    OptionAcknowledgment(const std::vector<std::string> &optionsNames, const std::vector<std::string> &optionsValues)
-        : optionsNames(optionsNames.begin(), optionsNames.end()),
-          optionsValues(optionsValues.begin(), optionsValues.end()) {}
-    OptionAcknowledgment(std::vector<std::string> &&optionsNames, std::vector<std::string> &&optionsValues)
-        : optionsNames(std::move(optionsNames)), optionsValues(std::move(optionsValues)) {}
+    OptionAcknowledgment(const std::vector<std::string> &OptionsNames, const std::vector<std::string> &OptionsValues)
+        : OptionsNames(OptionsNames.begin(), OptionsNames.end()),
+          OptionsValues(OptionsValues.begin(), OptionsValues.end()) {}
+    OptionAcknowledgment(std::vector<std::string> &&OptionsNames, std::vector<std::string> &&OptionsValues)
+        : OptionsNames(std::move(OptionsNames)), OptionsValues(std::move(OptionsValues)) {}
 
     /// Convert packet to network byte order and serialize it into the given buffer by the iterator
-    /// @param[it] Requirements: \p *(it) must be assignable from \p std::uint8_t
+    /// @param[It] Requirements: \p *(It) must be assignable from \p std::uint8_t
     /// @return Size of the packet (in bytes)
-    template <class OutputIterator> std::size_t serialize(OutputIterator it) {
-        *(it++) = static_cast<std::uint8_t>(htons(type) >> 0);
-        *(it++) = static_cast<std::uint8_t>(htons(type) >> 8);
+    template <class OutputIterator> std::size_t serialize(OutputIterator It) {
+        *(It++) = static_cast<std::uint8_t>(htons(Type) >> 0);
+        *(It++) = static_cast<std::uint8_t>(htons(Type) >> 8);
 
-        assert(optionsNames.size() == optionsValues.size());
-        std::size_t optionsSize = 0;
-        for (std::size_t idx = 0; idx != optionsNames.size(); ++idx) {
-            for (auto byte : optionsNames[idx]) {
-                *(it++) = static_cast<std::uint8_t>(byte);
+        assert(OptionsNames.size() == OptionsValues.size());
+        std::size_t OptionsSize = 0;
+        for (std::size_t Idx = 0; Idx != OptionsNames.size(); ++Idx) {
+            for (auto Byte : OptionsNames[Idx]) {
+                *(It++) = static_cast<std::uint8_t>(Byte);
             }
-            *(it++) = '\0';
-            for (auto byte : optionsValues[idx]) {
-                *(it++) = static_cast<std::uint8_t>(byte);
+            *(It++) = '\0';
+            for (auto Byte : OptionsValues[Idx]) {
+                *(It++) = static_cast<std::uint8_t>(Byte);
             }
-            *(it++) = '\0';
-            optionsSize += optionsNames[idx].size() + optionsValues[idx].size() + 2;
+            *(It++) = '\0';
+            OptionsSize += OptionsNames[Idx].size() + OptionsValues[Idx].size() + 2;
         }
 
-        return sizeof(type) + optionsSize;
+        return sizeof(Type) + OptionsSize;
     }
 
-    std::uint16_t getType() const { return type; }
+    std::uint16_t getType() const { return Type; }
 
-    std::string_view getOptionName(std::size_t idx) const {
-        return std::string_view(reinterpret_cast<const char *>(optionsNames[idx].data()), optionsNames[idx].size());
+    std::string_view getOptionName(std::size_t Idx) const {
+        return std::string_view(reinterpret_cast<const char *>(OptionsNames[Idx].data()), OptionsNames[Idx].size());
     }
 
-    std::string_view getOptionValue(std::size_t idx) const {
-        return std::string_view(reinterpret_cast<const char *>(optionsValues[idx].data()), optionsValues[idx].size());
+    std::string_view getOptionValue(std::size_t Idx) const {
+        return std::string_view(reinterpret_cast<const char *>(OptionsValues[Idx].data()), OptionsValues[Idx].size());
     }
 
   private:
-    friend ParseResult parse(std::uint8_t *buffer, std::size_t len, OptionAcknowledgment &packet);
+    friend ParseResult parse(const std::uint8_t *Buffer, std::size_t Len, OptionAcknowledgment &Packet);
 
-    std::uint16_t type = Type::OptionAcknowledgmentPacket;
-    std::vector<std::string> optionsNames, optionsValues;
+    std::uint16_t Type = Type::OptionAcknowledgmentPacket;
+    std::vector<std::string> OptionsNames, OptionsValues;
 };
 
 } // namespace packets

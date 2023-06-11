@@ -3,180 +3,180 @@
 
 using namespace tftp_common::packets;
 
-#define EXPECT_DATA(buffer, base_offset, data)                                                                         \
+#define EXPECT_DATA(Buffer, BaseOffset, Data)                                                                          \
     {                                                                                                                  \
-        for (std::size_t i = 0, size = data.size(); i != size; ++i) {                                                  \
-            EXPECT_EQ(buffer[base_offset + i], data[i]);                                                               \
+        for (std::size_t Idx_ = 0, Size = Data.size(); Idx_ != Size; ++Idx_) {                                         \
+            EXPECT_EQ(Buffer[BaseOffset + Idx_], Data[Idx_]);                                                          \
         }                                                                                                              \
     }
 
-#define EXPECT_STRING(buffer, base_offset, string)                                                                     \
+#define EXPECT_STRING(Buffer, BaseOffset, String)                                                                      \
     {                                                                                                                  \
-        EXPECT_DATA(buffer, base_offset, string);                                                                      \
-        EXPECT_EQ(buffer[base_offset + string.size()], 0x00);                                                          \
+        EXPECT_DATA(Buffer, BaseOffset, String);                                                                       \
+        EXPECT_EQ(Buffer[BaseOffset + String.size()], 0x00);                                                           \
     }
 
 /// Test that Request packet serialization is going fine and everything is converting to network byte order
 TEST(Request, Serialization) {
-    std::string filename = "example_filename.cpp";
-    std::string mode = "netascii";
-    auto packet = Request{Type::ReadRequest, filename, mode};
+    std::string Filename = "example_filename.cpp";
+    std::string Mode = "netascii";
+    auto Packet = Request{Type::ReadRequest, Filename, Mode};
 
-    std::vector<std::uint8_t> buffer;
-    auto packetSize = packet.serialize(std::back_inserter(buffer));
-    EXPECT_EQ(packetSize, sizeof(std::uint16_t) + filename.size() + mode.size() + 2);
+    std::vector<std::uint8_t> Buffer;
+    auto PacketSize = Packet.serialize(std::back_inserter(Buffer));
+    EXPECT_EQ(PacketSize, sizeof(std::uint16_t) + Filename.size() + Mode.size() + 2);
 
     // type field
     // check that conversion to big-endian was done
-    EXPECT_EQ(buffer[0], 0x00);
-    EXPECT_EQ(buffer[1], 0x01);
+    EXPECT_EQ(Buffer[0], 0x00);
+    EXPECT_EQ(Buffer[1], 0x01);
 
     // filename field
-    std::size_t base_offset = 2;
-    EXPECT_STRING(buffer, base_offset, filename);
+    std::size_t BaseOffset = 2;
+    EXPECT_STRING(Buffer, BaseOffset, Filename);
 
     // mode field
-    base_offset += filename.size() + 1;
-    EXPECT_STRING(buffer, base_offset, mode);
+    BaseOffset += Filename.size() + 1;
+    EXPECT_STRING(Buffer, BaseOffset, Mode);
 
-    EXPECT_EQ(buffer.size(), packetSize);
+    EXPECT_EQ(Buffer.size(), PacketSize);
 }
 
 /// Test that Request packet with options serialization is going fine and everything is converting to network byte order
 TEST(Request, OptionSerialization) {
-    std::string filename = "example_filename.cpp";
-    std::string mode = "netascii";
-    std::vector<std::string> optionsNames = {"saveFiles", "discardQualifiers", "secret"};
-    std::vector<std::string> optionsValues = {"true", "false", "Ix0e86yG8YpFzwz1gS0XxJW3"};
-    auto packet = Request{Type::ReadRequest, filename, mode, optionsNames, optionsValues};
+    std::string Filename = "example_filename.cpp";
+    std::string Mode = "netascii";
+    std::vector<std::string> OptionsNames = {"saveFiles", "discardQualifiers", "secret"};
+    std::vector<std::string> OptionsValues = {"true", "false", "Ix0e86yG8YpFzwz1gS0XxJW3"};
+    auto Packet = Request{Type::ReadRequest, Filename, Mode, OptionsNames, OptionsValues};
 
-    std::size_t optionsSize = 0;
-    for (std::size_t idx = 0; idx != optionsNames.size(); ++idx) {
-        optionsSize += optionsNames[idx].size() + optionsValues[idx].size() + 2;
+    std::size_t OptionsSize = 0;
+    for (std::size_t Idx = 0; Idx != OptionsNames.size(); ++Idx) {
+        OptionsSize += OptionsNames[Idx].size() + OptionsValues[Idx].size() + 2;
     }
 
-    std::vector<std::uint8_t> buffer;
-    auto packetSize = packet.serialize(std::back_inserter(buffer));
-    EXPECT_EQ(packetSize, sizeof(std::uint16_t) + filename.size() + mode.size() + optionsSize + 2);
+    std::vector<std::uint8_t> Buffer;
+    auto PacketSize = Packet.serialize(std::back_inserter(Buffer));
+    EXPECT_EQ(PacketSize, sizeof(std::uint16_t) + Filename.size() + Mode.size() + OptionsSize + 2);
 
     // type field
-    EXPECT_EQ(buffer[0], 0x00);
-    EXPECT_EQ(buffer[1], 0x01);
-    std::size_t baseOffset = 2;
+    EXPECT_EQ(Buffer[0], 0x00);
+    EXPECT_EQ(Buffer[1], 0x01);
+    std::size_t BaseOffset = 2;
 
     // filename field
-    EXPECT_STRING(buffer, baseOffset, filename);
-    baseOffset += filename.size() + 1;
+    EXPECT_STRING(Buffer, BaseOffset, Filename);
+    BaseOffset += Filename.size() + 1;
 
     // mode field
-    EXPECT_STRING(buffer, baseOffset, mode);
-    baseOffset += mode.size() + 1;
+    EXPECT_STRING(Buffer, BaseOffset, Mode);
+    BaseOffset += Mode.size() + 1;
 
     // option names and values
-    for (std::size_t idx = 0; idx != optionsNames.size(); ++idx) {
-        EXPECT_STRING(buffer, baseOffset, optionsNames[idx]);
-        baseOffset += optionsNames[idx].size() + 1;
-        EXPECT_STRING(buffer, baseOffset, optionsValues[idx]);
-        baseOffset += optionsValues[idx].size() + 1;
+    for (std::size_t Idx = 0; Idx != OptionsNames.size(); ++Idx) {
+        EXPECT_STRING(Buffer, BaseOffset, OptionsNames[Idx]);
+        BaseOffset += OptionsNames[Idx].size() + 1;
+        EXPECT_STRING(Buffer, BaseOffset, OptionsValues[Idx]);
+        BaseOffset += OptionsValues[Idx].size() + 1;
     }
 
-    EXPECT_EQ(buffer.size(), packetSize);
+    EXPECT_EQ(Buffer.size(), PacketSize);
 }
 
 /// Test that Data packet serialization is going fine and everything is converting to network byte order
 TEST(Data, Serialization) {
-    std::vector<std::uint8_t> data;
-    for (auto i = 0; i != 255; ++i) {
-        data.push_back(i);
+    std::vector<std::uint8_t> DataBuffer;
+    for (auto I = 0; I != 255; ++I) {
+        DataBuffer.push_back(I);
     }
-    auto packet = Data{static_cast<std::uint16_t>(data.size()), data};
+    auto Packet = Data{static_cast<std::uint16_t>(DataBuffer.size()), DataBuffer};
 
-    std::vector<std::uint8_t> buffer;
-    auto packetSize = packet.serialize(std::back_inserter(buffer));
-    EXPECT_EQ(packetSize, sizeof(std::uint16_t) + sizeof(std::uint16_t) + data.size());
+    std::vector<std::uint8_t> Buffer;
+    auto PacketSize = Packet.serialize(std::back_inserter(Buffer));
+    EXPECT_EQ(PacketSize, sizeof(std::uint16_t) + sizeof(std::uint16_t) + DataBuffer.size());
 
     // type field
-    EXPECT_EQ(buffer[0], 0x00);
-    EXPECT_EQ(buffer[1], 0x03);
+    EXPECT_EQ(Buffer[0], 0x00);
+    EXPECT_EQ(Buffer[1], 0x03);
 
     // block field
-    EXPECT_EQ(buffer[2], 0x00);
-    EXPECT_EQ(buffer[3], 0xFF);
+    EXPECT_EQ(Buffer[2], 0x00);
+    EXPECT_EQ(Buffer[3], 0xFF);
 
     // data field
-    EXPECT_DATA(buffer, 4, data);
+    EXPECT_DATA(Buffer, 4, DataBuffer);
 
-    EXPECT_EQ(buffer.size(), packetSize);
+    EXPECT_EQ(Buffer.size(), PacketSize);
 }
 
 /// Test that Acknowledgment packet serialization is going fine and everything is converting to network byte order
 TEST(Acknowledgment, Serialization) {
-    auto packet = Acknowledgment{255};
+    auto Packet = Acknowledgment{255};
 
-    std::vector<std::uint8_t> buffer;
-    auto packetSize = packet.serialize(std::back_inserter(buffer));
-    EXPECT_EQ(packetSize, sizeof(std::uint16_t) + sizeof(std::uint16_t));
+    std::vector<std::uint8_t> Buffer;
+    auto PacketSize = Packet.serialize(std::back_inserter(Buffer));
+    EXPECT_EQ(PacketSize, sizeof(std::uint16_t) + sizeof(std::uint16_t));
 
     // type field
-    EXPECT_EQ(buffer[0], 0x00);
-    EXPECT_EQ(buffer[1], 0x04);
+    EXPECT_EQ(Buffer[0], 0x00);
+    EXPECT_EQ(Buffer[1], 0x04);
 
     // block field
-    EXPECT_EQ(buffer[2], 0x00);
-    EXPECT_EQ(buffer[3], 0xFF);
+    EXPECT_EQ(Buffer[2], 0x00);
+    EXPECT_EQ(Buffer[3], 0xFF);
 
-    EXPECT_EQ(buffer.size(), packetSize);
+    EXPECT_EQ(Buffer.size(), PacketSize);
 }
 
 /// Test that Error packet serialization is going fine and everything is converting to network byte order
 TEST(Error, Serialization) {
-    std::string errorMessage = "Something went wrong...";
-    auto packet = Error{0x01, errorMessage};
+    std::string ErrorMessage = "Something went wrong...";
+    auto Packet = Error{0x01, ErrorMessage};
 
-    std::vector<std::uint8_t> buffer;
-    auto packetSize = packet.serialize(std::back_inserter(buffer));
-    EXPECT_EQ(packetSize, sizeof(std::uint16_t) + sizeof(std::uint16_t) + errorMessage.size() + 1);
+    std::vector<std::uint8_t> Buffer;
+    auto PacketSize = Packet.serialize(std::back_inserter(Buffer));
+    EXPECT_EQ(PacketSize, sizeof(std::uint16_t) + sizeof(std::uint16_t) + ErrorMessage.size() + 1);
 
     // type field
-    EXPECT_EQ(buffer[0], 0x00);
-    EXPECT_EQ(buffer[1], 0x05);
+    EXPECT_EQ(Buffer[0], 0x00);
+    EXPECT_EQ(Buffer[1], 0x05);
 
     // errorCode field
-    EXPECT_EQ(buffer[2], 0x00);
-    EXPECT_EQ(buffer[3], 0x01);
+    EXPECT_EQ(Buffer[2], 0x00);
+    EXPECT_EQ(Buffer[3], 0x01);
 
     // errorMessage field
-    EXPECT_DATA(buffer, 4, errorMessage);
+    EXPECT_DATA(Buffer, 4, ErrorMessage);
 
-    EXPECT_EQ(buffer.size(), packetSize);
+    EXPECT_EQ(Buffer.size(), PacketSize);
 }
 
 /// Test that Option Acknowledgment packet serialization is going fine and everything is converting to network byte
 /// order
 TEST(OptionAcknowledgment, Serialization) {
-    std::vector<std::string> optionsNames = {"saveFiles", "discardQualifiers", "secret"};
-    std::vector<std::string> optionsValues = {"true", "false", "Ix0e86yG8YpFzwz1gS0XxJW3"};
-    auto packet = OptionAcknowledgment{optionsNames, optionsValues};
+    std::vector<std::string> OptionsNames = {"saveFiles", "discardQualifiers", "secret"};
+    std::vector<std::string> OptionsValues = {"true", "false", "Ix0e86yG8YpFzwz1gS0XxJW3"};
+    auto Packet = OptionAcknowledgment{OptionsNames, OptionsValues};
 
-    std::size_t optionsSize = 0;
-    for (std::size_t idx = 0; idx != optionsNames.size(); ++idx) {
-        optionsSize += optionsNames[idx].size() + optionsValues[idx].size() + 2;
+    std::size_t OptionsSize = 0;
+    for (std::size_t Idx = 0; Idx != OptionsNames.size(); ++Idx) {
+        OptionsSize += OptionsNames[Idx].size() + OptionsValues[Idx].size() + 2;
     }
 
-    std::vector<std::uint8_t> buffer;
-    auto packetSize = packet.serialize(std::back_inserter(buffer));
-    EXPECT_EQ(packetSize, sizeof(std::uint16_t) + optionsSize);
+    std::vector<std::uint8_t> Buffer;
+    auto PacketSize = Packet.serialize(std::back_inserter(Buffer));
+    EXPECT_EQ(PacketSize, sizeof(std::uint16_t) + OptionsSize);
 
-    std::size_t baseOffset = sizeof(std::uint16_t);
+    std::size_t BaseOffset = sizeof(std::uint16_t);
     // option names and values
-    for (std::size_t idx = 0; idx != optionsNames.size(); ++idx) {
-        EXPECT_STRING(buffer, baseOffset, optionsNames[idx]);
-        baseOffset += optionsNames[idx].size() + 1;
-        EXPECT_STRING(buffer, baseOffset, optionsValues[idx]);
-        baseOffset += optionsValues[idx].size() + 1;
+    for (std::size_t Idx = 0; Idx != OptionsNames.size(); ++Idx) {
+        EXPECT_STRING(Buffer, BaseOffset, OptionsNames[Idx]);
+        BaseOffset += OptionsNames[Idx].size() + 1;
+        EXPECT_STRING(Buffer, BaseOffset, OptionsValues[Idx]);
+        BaseOffset += OptionsValues[Idx].size() + 1;
     }
 
-    EXPECT_EQ(buffer.size(), packetSize);
+    EXPECT_EQ(Buffer.size(), PacketSize);
 }
 
 int main(int argc, char **argv) {
