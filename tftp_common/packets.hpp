@@ -71,10 +71,12 @@ class Request {
             for (auto byte: optionsNames[idx]) {
                 *(it++) = static_cast<std::uint8_t>(byte);
             }
+            *(it++) = '\0';
             for (auto byte: optionsValues[idx]) {
                 *(it++) = static_cast<std::uint8_t>(byte);
             }
-            optionsSize += optionsNames[idx].size() + optionsValues[idx].size();
+            *(it++) = '\0';
+            optionsSize += optionsNames[idx].size() + optionsValues[idx].size() + 2;
         }
 
         return sizeof(type_) + filename.size() + mode.size() + optionsSize;
@@ -261,14 +263,18 @@ public:
             for (auto byte: optionsNames[idx]) {
                 *(it++) = static_cast<std::uint8_t>(byte);
             }
+            *(it++) = '\0';
             for (auto byte: optionsValues[idx]) {
                 *(it++) = static_cast<std::uint8_t>(byte);
             }
-            optionsSize += optionsNames[idx].size() + optionsValues[idx].size();
+            *(it++) = '\0';
+            optionsSize += optionsNames[idx].size() + optionsValues[idx].size() + 2;
         }
 
         return sizeof(type) + optionsSize;
     }
+
+    std::uint16_t getType() const { return type; }
 
     std::string_view getOptionName(std::size_t idx) const {
         return std::string_view(reinterpret_cast<const char*>(optionsNames[idx].data()), optionsNames[idx].size() - 1);
