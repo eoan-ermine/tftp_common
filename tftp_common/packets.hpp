@@ -48,7 +48,8 @@ class Request {
         assert(filename[filename.size()] == '\0');
         assert(mode[mode.size()] == '\0');
     }
-    Request(Type type, std::string_view filename, std::string_view mode, const std::vector<std::string>& optionsNames, const std::vector<std::string>& optionsValues)
+    Request(Type type, std::string_view filename, std::string_view mode, const std::vector<std::string> &optionsNames,
+            const std::vector<std::string> &optionsValues)
         : Request(type, filename, mode) {
         this->optionsNames = optionsNames;
         this->optionsValues = optionsValues;
@@ -73,11 +74,11 @@ class Request {
 
         std::size_t optionsSize = 0;
         for (std::size_t idx = 0; idx != optionsNames.size(); ++idx) {
-            for (auto byte: optionsNames[idx]) {
+            for (auto byte : optionsNames[idx]) {
                 *(it++) = static_cast<std::uint8_t>(byte);
             }
             *(it++) = '\0';
-            for (auto byte: optionsValues[idx]) {
+            for (auto byte : optionsValues[idx]) {
                 *(it++) = static_cast<std::uint8_t>(byte);
             }
             *(it++) = '\0';
@@ -98,11 +99,11 @@ class Request {
     }
 
     std::string_view getOptionName(std::size_t idx) const {
-        return std::string_view(reinterpret_cast<const char*>(optionsNames[idx].data()), optionsNames[idx].size());
+        return std::string_view(reinterpret_cast<const char *>(optionsNames[idx].data()), optionsNames[idx].size());
     }
 
     std::string_view getOptionValue(std::size_t idx) const {
-        return std::string_view(reinterpret_cast<const char*>(optionsValues[idx].data()), optionsValues[idx].size());
+        return std::string_view(reinterpret_cast<const char *>(optionsValues[idx].data()), optionsValues[idx].size());
     }
 
   private:
@@ -248,12 +249,13 @@ class Error {
 
 /// Option Acknowledgment Trivial File Transfer Protocol packet
 class OptionAcknowledgment {
-public:
+  public:
     /// Use with parsing functions only
-    OptionAcknowledgment() { }
-    OptionAcknowledgment(const std::vector<std::string>& optionsNames, const std::vector<std::string>& optionsValues)
-        : optionsNames(optionsNames.begin(), optionsNames.end()), optionsValues(optionsValues.begin(), optionsValues.end()) { }
-    ~OptionAcknowledgment() { }
+    OptionAcknowledgment() {}
+    OptionAcknowledgment(const std::vector<std::string> &optionsNames, const std::vector<std::string> &optionsValues)
+        : optionsNames(optionsNames.begin(), optionsNames.end()),
+          optionsValues(optionsValues.begin(), optionsValues.end()) {}
+    ~OptionAcknowledgment() {}
 
     /// Convert packet to network byte order and serialize it into the given buffer by the iterator
     /// @param[it] Requirements: \p *(it) must be assignable from \p std::uint8_t
@@ -265,11 +267,11 @@ public:
         assert(optionsNames.size() == optionsValues.size());
         std::size_t optionsSize = 0;
         for (std::size_t idx = 0; idx != optionsNames.size(); ++idx) {
-            for (auto byte: optionsNames[idx]) {
+            for (auto byte : optionsNames[idx]) {
                 *(it++) = static_cast<std::uint8_t>(byte);
             }
             *(it++) = '\0';
-            for (auto byte: optionsValues[idx]) {
+            for (auto byte : optionsValues[idx]) {
                 *(it++) = static_cast<std::uint8_t>(byte);
             }
             *(it++) = '\0';
@@ -282,13 +284,14 @@ public:
     std::uint16_t getType() const { return type; }
 
     std::string_view getOptionName(std::size_t idx) const {
-        return std::string_view(reinterpret_cast<const char*>(optionsNames[idx].data()), optionsNames[idx].size());
+        return std::string_view(reinterpret_cast<const char *>(optionsNames[idx].data()), optionsNames[idx].size());
     }
 
     std::string_view getOptionValue(std::size_t idx) const {
-        return std::string_view(reinterpret_cast<const char*>(optionsValues[idx].data()), optionsValues[idx].size());
+        return std::string_view(reinterpret_cast<const char *>(optionsValues[idx].data()), optionsValues[idx].size());
     }
-private:
+
+  private:
     friend ParseResult parse(std::uint8_t *buffer, std::size_t len, OptionAcknowledgment &packet);
 
     std::uint16_t type = Type::OptionAcknowledgmentPacket;

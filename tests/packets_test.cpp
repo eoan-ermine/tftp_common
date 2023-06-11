@@ -46,12 +46,8 @@ TEST(Request, Serialization) {
 TEST(Request, OptionSerialization) {
     std::string filename = "example_filename.cpp";
     std::string mode = "netascii";
-    std::vector<std::string> optionsNames = {
-        "saveFiles", "discardQualifiers", "secret"
-    };
-    std::vector<std::string> optionsValues = {
-        "true", "false", "Ix0e86yG8YpFzwz1gS0XxJW3"
-    };
+    std::vector<std::string> optionsNames = {"saveFiles", "discardQualifiers", "secret"};
+    std::vector<std::string> optionsValues = {"true", "false", "Ix0e86yG8YpFzwz1gS0XxJW3"};
     auto packet = Request{Type::ReadRequest, filename, mode, optionsNames, optionsValues};
 
     std::size_t optionsSize = 0;
@@ -155,15 +151,12 @@ TEST(Error, Serialization) {
     EXPECT_EQ(buffer.size(), packetSize);
 }
 
-/// Test that Option Acknowledgment packet serialization is going fine and everything is converting to network byte order
+/// Test that Option Acknowledgment packet serialization is going fine and everything is converting to network byte
+/// order
 TEST(OptionAcknowledgment, Serialization) {
-    std::vector<std::string> optionsNames = {
-        "saveFiles", "discardQualifiers", "secret"
-    };
-    std::vector<std::string> optionsValues = {
-        "true", "false", "Ix0e86yG8YpFzwz1gS0XxJW3"
-    };
-    auto packet = OptionAcknowledgment { optionsNames, optionsValues };
+    std::vector<std::string> optionsNames = {"saveFiles", "discardQualifiers", "secret"};
+    std::vector<std::string> optionsValues = {"true", "false", "Ix0e86yG8YpFzwz1gS0XxJW3"};
+    auto packet = OptionAcknowledgment{optionsNames, optionsValues};
 
     std::size_t optionsSize = 0;
     for (std::size_t idx = 0; idx != optionsNames.size(); ++idx) {
