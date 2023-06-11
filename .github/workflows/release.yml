@@ -39,6 +39,6 @@ jobs:
       run: ctest -C ${{env.BUILD_TYPE}}
     
     - name: Build and deploy documentation
-    - uses: DenverCoder1/doxygen-github-pages-action@v1.3.0
+      uses: DenverCoder1/doxygen-github-pages-action@v1.3.0
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
