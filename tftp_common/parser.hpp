@@ -61,7 +61,6 @@ ParseResult parse(std::uint8_t *buffer, std::size_t len, Request &packet) {
                 step_++;
             }
             break;
-        #ifdef ENABLE_OPTION_EXTENSION
         // Option name
         case 4:
             name.push_back(byte);
@@ -85,7 +84,6 @@ ParseResult parse(std::uint8_t *buffer, std::size_t len, Request &packet) {
                 step_--;
             }
             break;
-        #endif
         }
     }
     return ParseResult{false, bytes_read};
@@ -236,7 +234,6 @@ ParseResult parse(std::uint8_t *buffer, std::size_t len, Error &packet) {
     return ParseResult{false, bytes_read};
 }
 
-#ifdef ENABLE_OPTION_EXTENSION
 /// Parse error packet from buffer converting all fields to host byte order
 /// @param[buffer] Assumptions: \p buffer is not a nullptr, it's size is greater or equal than \p len
 /// @param[len] Assumptions: \p len is greater than zero
@@ -294,7 +291,6 @@ ParseResult parse(std::uint8_t *buffer, std::size_t len, OptionAcknowledgment &p
     }
     return ParseResult{false, bytes_read};
 }
-#endif
 
 } // namespace packets
 
