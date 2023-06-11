@@ -54,7 +54,12 @@ class Request {
         this->optionsNames = optionsNames;
         this->optionsValues = optionsValues;
     }
-    ~Request() {}
+    Request(Type type, std::string_view filename, std::string_view mode, std::vector<std::string> &&optionsNames,
+            std::vector<std::string> &&optionsValues)
+        : Request(type, filename, mode) {
+        this->optionsNames = std::move(optionsNames);
+        this->optionsValues = std::move(optionsValues);
+    }
 
     /// Convert packet to network byte order and serialize it into the given buffer by the iterator
     /// @param[it] Requirements: \p *(it) must be assignable from \p std::uint8_t
@@ -133,10 +138,11 @@ class Data {
     /// @param[block] Assumptions: The \p block value is greater than one
     /// @param[buffer] Assumptions: The \p buffer size is greater or equal than 0 and less or equal than 512
     Data(std::uint16_t block, std::vector<std::uint8_t> &&buffer) : block(block), data_(std::move(buffer)) {
+        // The block numbers on data packets begin with one and increase by one for each new block of data
         assert(block >= 1);
+        // The data field is from zero to 512 bytes long
         assert(buffer.size() >= 0 && buffer.size() <= 512);
     }
-    ~Data() {}
 
     /// Convert packet to network byte order and serialize it into the given buffer by the iterator
     /// @param[it] Requirements: \p *(it) must be assignable from \p std::uint8_t
@@ -177,7 +183,6 @@ class Acknowledgment {
         // The block numbers on data packets begin with one and increase by one for each new block of data
         assert(block >= 1);
     }
-    ~Acknowledgment() {}
 
     std::uint16_t getType() const { return type; }
 
@@ -214,7 +219,6 @@ class Error {
         assert(error_code >= 0 && error_code <= 8);
         assert(error_message[error_message.size()] == '\0');
     }
-    ~Error() {}
 
     std::uint16_t getType() const { return type; }
 
@@ -255,7 +259,8 @@ class OptionAcknowledgment {
     OptionAcknowledgment(const std::vector<std::string> &optionsNames, const std::vector<std::string> &optionsValues)
         : optionsNames(optionsNames.begin(), optionsNames.end()),
           optionsValues(optionsValues.begin(), optionsValues.end()) {}
-    ~OptionAcknowledgment() {}
+    OptionAcknowledgment(std::vector<std::string> &&optionsNames, std::vector<std::string> &&optionsValues)
+        : optionsNames(std::move(optionsNames)), optionsValues(std::move(optionsValues)) {}
 
     /// Convert packet to network byte order and serialize it into the given buffer by the iterator
     /// @param[it] Requirements: \p *(it) must be assignable from \p std::uint8_t
