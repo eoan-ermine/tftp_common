@@ -1,6 +1,8 @@
 # tftp_common
 
-A simple header-only Trivial File Transfer Protocol (TFTP) packets parsing and serialization library.
+A simple header-only Trivial File Transfer Protocol (*TFTP*) packets parsing and serialization library.
+
+[RFC 1350](https://datatracker.ietf.org/doc/html/rfc1350) (*TFTP Protocol Revision 2*) compilant, [RFC 2347](https://datatracker.ietf.org/doc/html/rfc2347) (*TFTP Option Extension*) support.
 
 ![C++ Standard](https://img.shields.io/badge/C%2B%2B-17-blue)
 [![Build and test status](https://img.shields.io/github/actions/workflow/status/eoan-ermine/tftp_common/build_and_test.yml)](https://github.com/eoan-ermine/tftp_common/actions/workflows/build_and_test.yml)
