@@ -75,6 +75,45 @@ TEST(Error, Parse) {
     ASSERT_EQ(bytesRead, length);
 }
 
+/// Test that Option Acknowledgment packet parsing is going fine
+TEST(OptionAcknowledgment, Parse) {
+    std::uint8_t packetBytes[] = {
+        0x00, 0x06,
+        // saveFiles option name
+        0x73, 0x61, 0x76, 0x65, 0x46, 0x69, 0x6C, 0x65, 0x73, 0x00,
+        // saveFiles option value
+        0x74, 0x72, 0x75, 0x65, 0x00,
+        // discardQualifiers option name
+        0x64, 0x69, 0x73, 0x63, 0x61, 0x72, 0x64, 0x51, 0x75, 0x61, 0x6C, 0x69, 0x66, 0x69, 0x65, 0x72, 0x73, 0x00,
+        // discardQualifiers option value
+        0x66, 0x61, 0x6C, 0x73, 0x65, 0x00,
+        // secret option name
+        0x73, 0x65, 0x63, 0x72, 0x65, 0x74, 0x00,
+        // secret option value
+        0x49, 0x78, 0x30, 0x65, 0x38, 0x36, 0x79, 0x47, 0x38, 0x59, 0x70, 0x46, 0x7A, 0x77, 0x7A, 0x31, 0x67, 0x53, 0x30, 0x58, 0x78, 0x4A, 0x57, 0x33, 0x00
+    };
+    auto length = sizeof(packetBytes) / sizeof(std::uint8_t);
+
+    OptionAcknowledgment packet;
+    auto [success, bytesRead] = parse(packetBytes, length, packet);
+
+    ASSERT_EQ(packet.getType(), Type::OptionAcknowledgmentPacket);
+
+    std::vector<std::string> optionsNames = {
+        "saveFiles", "discardQualifiers", "secret"
+    };
+    std::vector<std::string> optionsValues = {
+        "true", "false", "Ix0e86yG8YpFzwz1gS0XxJW3"
+    };
+    for (std::size_t idx = 0; idx != optionsNames.size(); ++idx) {
+        ASSERT_EQ(packet.getOptionName(idx), optionsNames[idx]);
+        ASSERT_EQ(packet.getOptionValue(idx), optionsValues[idx]);
+    }
+
+    ASSERT_EQ(success, true);
+    ASSERT_EQ(bytesRead, length);
+}
+
 int main(int argc, char **argv) {
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();

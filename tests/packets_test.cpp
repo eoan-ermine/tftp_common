@@ -110,6 +110,35 @@ TEST(Error, Serialization) {
     EXPECT_EQ(buffer.size(), packetSize);
 }
 
+TEST(OptionAcknowledgment, Serialization) {
+    std::vector<std::string> optionsNames = {
+        "saveFiles", "discardQualifiers", "secret"
+    };
+    std::vector<std::string> optionsValues = {
+        "true", "false", "Ix0e86yG8YpFzwz1gS0XxJW3"
+    };
+    auto packet = OptionAcknowledgment { optionsNames, optionsValues };
+
+    std::size_t optionsSize = 0;
+    for (std::size_t idx = 0; idx != optionsNames.size(); ++idx) {
+        optionsSize += optionsNames[idx].size() + optionsValues[idx].size() + 2;
+    }
+
+    std::vector<std::uint8_t> buffer;
+    auto packetSize = packet.serialize(std::back_inserter(buffer));
+    EXPECT_EQ(packetSize, sizeof(std::uint16_t) + optionsSize);
+
+    std::size_t baseOffset = sizeof(std::uint16_t);
+    for (std::size_t idx = 0; idx != optionsNames.size(); ++idx) {
+        EXPECT_STRING(buffer, baseOffset, optionsNames[idx]);
+        baseOffset += optionsNames[idx].size() + 1;
+        EXPECT_STRING(buffer, baseOffset, optionsValues[idx]);
+        baseOffset += optionsValues[idx].size() + 1;
+    }
+
+    EXPECT_EQ(buffer.size(), packetSize);
+}
+
 int main(int argc, char **argv) {
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
