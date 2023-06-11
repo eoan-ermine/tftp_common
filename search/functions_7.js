@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['serialize_80',['serialize',['../classtftp__common_1_1packets_1_1Request.html#a0b3de04504c307d12f1054007ddb1a1e',1,'tftp_common::packets::Request::serialize()'],['../classtftp__common_1_1packets_1_1Data.html#ad95893209aea25f47074166944b1efaa',1,'tftp_common::packets::Data::serialize()'],['../classtftp__common_1_1packets_1_1Acknowledgment.html#a2af5f3beaea2f8488f638feee3fa85ce',1,'tftp_common::packets::Acknowledgment::serialize()'],['../classtftp__common_1_1packets_1_1Error.html#a7c4522486b1de2b58899b389d0a8a36e',1,'tftp_common::packets::Error::serialize()']]]
+  ['read_96',['read',['../classtftp__client_1_1TFTPClient.html#afdf8a6b66b8e019530d51e84f454b5f7',1,'tftp_client::TFTPClient']]],
+  ['request_97',['Request',['../classtftp__common_1_1packets_1_1Request.html#a405bcd5aca1026306600458f453a0001',1,'tftp_common::packets::Request::Request()'],['../classtftp__common_1_1packets_1_1Request.html#a75c7dd9bb2492d207a03ccf8a4fbada3',1,'tftp_common::packets::Request::Request(Type type, std::string_view filename, std::string_view mode)']]]
 ];

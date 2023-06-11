@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>TFTP Common: tftp_common</title>
+<title>TFTP Common: TFTP Client</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -63,64 +63,51 @@ $(function() {
 
 <div class="PageDoc"><div class="header">
   <div class="headertitle">
-<div class="title"><a class="el" href="namespacetftp__common.html">tftp_common</a> </div>  </div>
+<div class="title">TFTP Client </div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p><a class="anchor" id="md_README"></a> A simple header-only Trivial File Transfer Protocol (TFTP) packets parsing and serialization library.</p>
-<p><img src="https://img.shields.io/badge/C%2B%2B-17-blue" alt="C++ Standard" class="inline"/> <a href="https://github.com/eoan-ermine/tftp_common/actions/workflows/build_and_test.yml"><img src="https://img.shields.io/github/actions/workflow/status/eoan-ermine/tftp_common/build_and_test.yml" alt="Build and test status" class="inline"/></a> <a href="https://github.com/eoan-ermine/tftp_common/actions/workflows/build_docs.yml"><img src="https://img.shields.io/github/actions/workflow/status/eoan-ermine/tftp_common/build_docs.yml?label=docs" alt="Docs build and deployment status" class="inline"/></a> <a href="https://eoanermine.com/tftp_common/"><img src="https://img.shields.io/badge/-doxygen%20documentation-blue" alt="Link to doxygen documentation" class="inline"/></a></p>
+<div class="textblock"><p><a class="anchor" id="md_examples_tftp_client_README"></a> </p>
 <h1><a class="anchor" id="autotoc_md1"></a>
-Supported platforms</h1>
-<table class="markdownTable">
+Использование</h1>
+<div class="fragment"><div class="line">tftp_client host [GET | PUT] source [destination]</div>
+</div><!-- fragment --><table class="markdownTable">
 <tr class="markdownTableHead">
-<th class="markdownTableHeadNone"></th><th class="markdownTableHeadNone"></th><th class="markdownTableHeadNone"></th><th class="markdownTableHeadNone"></th></tr>
+<th class="markdownTableHeadNone"></th><th class="markdownTableHeadNone"></th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><b>Platform name</b>   </td><td class="markdownTableBodyNone">Windows   </td><td class="markdownTableBodyNone">Linux   </td><td class="markdownTableBodyNone">MacOS    </td></tr>
+<td class="markdownTableBodyNone">host   </td><td class="markdownTableBodyNone">Specifies the local or remote host    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><b>Minimum required version</b>   </td><td class="markdownTableBodyNone">98   </td><td class="markdownTableBodyNone">&mdash;   </td><td class="markdownTableBodyNone">&mdash;   </td></tr>
+<td class="markdownTableBodyNone">GET   </td><td class="markdownTableBodyNone">Transfers the file source on the remote host to the file destination on the local host    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">PUT   </td><td class="markdownTableBodyNone">Transfers the file source on the local host to the file destination on the remote host    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">source   </td><td class="markdownTableBodyNone">Specifies the file to transfer    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">destination   </td><td class="markdownTableBodyNone">Specifies where to transfer the file   </td></tr>
 </table>
 <h1><a class="anchor" id="autotoc_md2"></a>
-Dependencies</h1>
+Реализованные возможности (&lt;a href="https://tools.ietf.org/html/rfc1350"&gt;RFC 1350&lt;/a&gt;)</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
-<th class="markdownTableHeadNone">Dependency name   </th><th class="markdownTableHeadNone">Minimum required version   </th><th class="markdownTableHeadNone">Ubuntu 22.04    </th></tr>
+<th class="markdownTableHeadNone">Возможность   </th><th class="markdownTableHeadNone">Статус реализации    </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">C++   </td><td class="markdownTableBodyNone">C++17   </td><td class="markdownTableBodyNone">sudo apt-get install build-essential    </td></tr>
+<td class="markdownTableBodyNone">READ запросы   </td><td class="markdownTableBodyNone">${\color{green}\text{Реализовано}}$ (<a href="#примечания">см. прим. 1</a>)    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">Doxygen (optional)   </td><td class="markdownTableBodyNone">&mdash;   </td><td class="markdownTableBodyNone">sudo apt-get install doxygen   </td></tr>
+<td class="markdownTableBodyNone">WRITE запросы   </td><td class="markdownTableBodyNone">${\color{green}\text{Реализовано}}$ (<a href="#примечания">см. прим. 1</a>)   </td></tr>
 </table>
 <h1><a class="anchor" id="autotoc_md3"></a>
-Quick start</h1>
-<ol type="1">
-<li>Download and install CMake. Version 3.12.0 is the minimum required.</li>
-<li>Open a shell. Your development tools must be reachable from this shell through the PATH environment variable.</li>
-<li>Create a build directory, go to this directory: <div class="fragment"><div class="line">mkdir build</div>
-<div class="line">cd build</div>
-</div><!-- fragment --></li>
-<li>Execute this command in the shell replacing <code>path/to/tftp_common/source/root</code> with the path to the root of your <a class="el" href="namespacetftp__common.html">tftp_common</a> source tree: <div class="fragment"><div class="line">cmake path/to/tftp_common/source/root</div>
-</div><!-- fragment --></li>
-<li>After CMake has finished running, proceed to use IDE project files, or start the build from the build directory: <div class="fragment"><div class="line">cmake --build .</div>
-</div><!-- fragment --> The &ndash;build option tells cmake to invoke the underlying build tool (make, ninja, xcodebuild, msbuild, etc.)</li>
-</ol>
-<p>The underlying build tool can be invoked directly, of course, but the &ndash;build option is portable.</p>
-<ol type="1">
-<li>After <a class="el" href="namespacetftp__common.html">tftp_common</a> has finished building, install it from the build directory: <div class="fragment"><div class="line">cmake --build . --target install</div>
-</div><!-- fragment --></li>
-</ol>
-<p>The &ndash;target option with install parameter in addition to the &ndash;build option tells cmake to build the install target.</p>
-<h1><a class="anchor" id="autotoc_md4"></a>
-Options and variables</h1>
-<p>Variables customize how the build will be generated. Options are boolean variables, with possible values ON/OFF. Options and variables are defined on the CMake command line like this:</p>
-<div class="fragment"><div class="line">cmake -DVARIABLE=value path/to/tftp_common/source</div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md5"></a>
-CMake variables</h1>
-<ul>
-<li><code>BUILD_DOCS: BOOL</code></li>
-</ul>
-<p>Adds doxygen build target as a dependency of the default build target. Defaults to OFF.</p>
-<ul>
-<li><code>BUILD_TESTS: BOOL</code></li>
-</ul>
-<p>Adds test build targets as a dependencies of the default build target. Defaults to OFF. </p>
+Поддержка расширений</h1>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">Расширение   </th><th class="markdownTableHeadNone">Статус реализации    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><a href="https://www.rfc-editor.org/rfc/rfc2347">RFC 2347: TFTP Option Extension</a>   </td><td class="markdownTableBodyNone">${\color{red}\text{Не реализовано}}$    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><a href="https://www.rfc-editor.org/rfc/rfc2347">RFC 2348: TFTP Blocksize Option</a>   </td><td class="markdownTableBodyNone">${\color{red}\text{Не реализовано}}$    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><a href="https://www.rfc-editor.org/rfc/rfc2347">RFC 2349: TFTP Timeout Interval and Transfer Size Options</a>   </td><td class="markdownTableBodyNone">${\color{red}\text{Не реализовано}}$    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><a href="https://www.rfc-editor.org/rfc/rfc7440">RFC 7440: TFTP Windowsize Option</a>   </td><td class="markdownTableBodyNone">${\color{red}\text{Не реализовано}}$   </td></tr>
+</table>
 </div></div><!-- PageDoc -->
 </div><!-- contents -->
 <!-- start footer part -->

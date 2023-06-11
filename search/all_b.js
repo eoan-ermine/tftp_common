@@ -1,5 +1,7 @@
 var searchData=
 [
-  ['serialize_35',['serialize',['../classtftp__common_1_1packets_1_1Request.html#a0b3de04504c307d12f1054007ddb1a1e',1,'tftp_common::packets::Request::serialize()'],['../classtftp__common_1_1packets_1_1Data.html#ad95893209aea25f47074166944b1efaa',1,'tftp_common::packets::Data::serialize()'],['../classtftp__common_1_1packets_1_1Acknowledgment.html#a2af5f3beaea2f8488f638feee3fa85ce',1,'tftp_common::packets::Acknowledgment::serialize()'],['../classtftp__common_1_1packets_1_1Error.html#a7c4522486b1de2b58899b389d0a8a36e',1,'tftp_common::packets::Error::serialize()']]],
-  ['success_36',['success',['../structtftp__common_1_1packets_1_1ParseResult.html#a471836bfeef4c0b982d1361edb4d6294',1,'tftp_common::packets::ParseResult']]]
+  ['read_38',['read',['../classtftp__client_1_1TFTPClient.html#afdf8a6b66b8e019530d51e84f454b5f7',1,'tftp_client::TFTPClient']]],
+  ['readme_2emd_39',['README.md',['../examples_2tftp__client_2README_8md.html',1,'(Global Namespace)'],['../README_8md.html',1,'(Global Namespace)']]],
+  ['readrequest_40',['ReadRequest',['../namespacetftp__common_1_1packets.html#a2b58b8a0fcf82f3a4c69feb5078fea4aa2874473104c401d6085a1315201d27a0',1,'tftp_common::packets']]],
+  ['request_41',['Request',['../classtftp__common_1_1packets_1_1Request.html#a405bcd5aca1026306600458f453a0001',1,'tftp_common::packets::Request::Request()'],['../classtftp__common_1_1packets_1_1Request.html#a75c7dd9bb2492d207a03ccf8a4fbada3',1,'tftp_common::packets::Request::Request(Type type, std::string_view filename, std::string_view mode)'],['../classtftp__common_1_1packets_1_1Request.html',1,'tftp_common::packets::Request']]]
 ];
