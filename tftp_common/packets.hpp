@@ -54,12 +54,29 @@ class Request {
     template <class OutputIterator> std::size_t serialize(OutputIterator it) {
         *(it++) = static_cast<std::uint8_t>(htons(type_) >> 0);
         *(it++) = static_cast<std::uint8_t>(htons(type_) >> 8);
+
         for (auto byte : filename) {
             *(it++) = static_cast<std::uint8_t>(byte);
         }
         for (auto byte : mode) {
             *(it++) = static_cast<std::uint8_t>(byte);
         }
+
+        #ifdef ENABLE_OPTION_EXTENSION
+        assert(optionsNames.size() == optionsValues.size());
+        std::size_t optionsSize;
+        for (std::size_t idx = 0; idx != optionsNames.size(); ++idx) {
+            for (auto byte: optionsNames[idx]) {
+                *(it++) = static_cast<std::uint8_t>(byte);
+            }
+            for (auto byte: optionsValues[idx]) {
+                *(it++) = static_cast<std::uint8_t>(byte);
+            }
+            optionsSize += optionsNames[idx].size() + optionsValues[idx].size();
+        }
+
+        return sizeof(type_) + filename.size() + mode.size() + optionsSize;
+        #endif
 
         return sizeof(type_) + filename.size() + mode.size();
     }
@@ -74,12 +91,26 @@ class Request {
         return std::string_view(reinterpret_cast<const char *>(mode.data()), mode.size() - 1);
     }
 
+    #ifdef ENABLE_OPTION_EXTENSION
+    std::string_view getOptionName(std::size_t idx) const {
+        return std::string_view(reinterpret_cast<const char*>(optionsNames[idx].data()), optionsNames[idx].size() - 1);
+    }
+
+    std::string_view getOptionValue(std::size_t idx) const {
+        return std::string_view(reinterpret_cast<const char*>(optionsValues[idx].data()), optionsValues[idx].size() - 1);
+    }
+    #endif
+
   private:
     friend ParseResult parse(std::uint8_t *buffer, std::size_t len, Request &packet);
 
     std::uint16_t type_;
     std::vector<std::uint8_t> filename;
     std::vector<std::uint8_t> mode;
+    #ifdef ENABLE_OPTION_EXTENSION
+    std::vector<std::string> optionsNames;
+    std::vector<std::string> optionsValues;
+    #endif
 };
 
 /// Data Trivial File Transfer Protocol packet

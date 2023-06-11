@@ -27,6 +27,8 @@ ParseResult parse(std::uint8_t *buffer, std::size_t len, Request &packet) {
         const auto byte = buffer[i];
         bytes_read++;
 
+        std::string name, value;
+
         switch (step_) {
         // Opcode (2 bytes)
         case 0:
@@ -54,9 +56,36 @@ ParseResult parse(std::uint8_t *buffer, std::size_t len, Request &packet) {
             packet.mode.push_back(byte);
 
             if (!byte) {
-                return ParseResult{true, bytes_read};
+                if (i == len - 1)
+                    return ParseResult{true, bytes_read};
+                step_++;
             }
             break;
+        #ifdef ENABLE_OPTION_EXTENSION
+        // Option name
+        case 4:
+            name.push_back(byte);
+
+            if (!byte) {
+                packet.optionsNames.push_back(std::move(name));
+                name.clear();
+                step_++;
+            }
+            break;
+        // Option value
+        case 5:
+            value.push_back(byte);
+
+            if (!byte) {
+                packet.optionsValues.push_back(std::move(value));
+                value.clear();
+
+                if (i == len - 1)
+                    return ParseResult{true, bytes_read};
+                step_--;
+            }
+            break;
+        #endif
         }
     }
     return ParseResult{false, bytes_read};
