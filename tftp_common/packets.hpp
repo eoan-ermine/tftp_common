@@ -48,30 +48,30 @@ class Request {
     }
     ~Request() {}
 
-    /// Convert packet to network byte order and serialize it into the given buffer
-    std::size_t serialize(std::vector<std::uint8_t> &buf) {
-        buf.push_back(htons(type_) >> 0);
-        buf.push_back(htons(type_) >> 8);
+    /// Convert packet to network byte order and serialize it into the given buffer by the iterator
+    /// @param[it] Requirements: \p *(it) must be assignable from \p std::uint8_t
+    /// @return Size of the packet (in bytes)
+    template <class OutputIterator> std::size_t serialize(OutputIterator it) {
+        *(it++) = static_cast<std::uint8_t>(htons(type_) >> 0);
+        *(it++) = static_cast<std::uint8_t>(htons(type_) >> 8);
         for (auto byte : filename) {
-            buf.push_back(byte);
+            *(it++) = static_cast<std::uint8_t>(byte);
         }
         for (auto byte : mode) {
-            buf.push_back(byte);
+            *(it++) = static_cast<std::uint8_t>(byte);
         }
 
         return sizeof(type_) + filename.size() + mode.size();
     }
 
-    std::uint16_t getType() const {
-        return type_;
-    }
+    std::uint16_t getType() const { return type_; }
 
     std::string_view getFilename() const {
-        return std::string_view(reinterpret_cast<const char*>(filename.data()), filename.size() - 1);
+        return std::string_view(reinterpret_cast<const char *>(filename.data()), filename.size() - 1);
     }
 
     std::string_view getMode() const {
-        return std::string_view(reinterpret_cast<const char*>(mode.data()), mode.size() - 1);
+        return std::string_view(reinterpret_cast<const char *>(mode.data()), mode.size() - 1);
     }
 
   private:
@@ -104,30 +104,26 @@ class Data {
     }
     ~Data() {}
 
-    /// Convert packet to network byte order and serialize it into the given buffer
-    std::size_t serialize(std::vector<std::uint8_t> &buf) {
-        buf.push_back(htons(type) >> 0);
-        buf.push_back(htons(type) >> 8);
-        buf.push_back(htons(block) >> 0);
-        buf.push_back(htons(block) >> 8);
+    /// Convert packet to network byte order and serialize it into the given buffer by the iterator
+    /// @param[it] Requirements: \p *(it) must be assignable from \p std::uint8_t
+    /// @return Size of the packet (in bytes)
+    template <class OutputIterator> std::size_t serialize(OutputIterator it) {
+        *(it++) = static_cast<std::uint8_t>(htons(type) >> 0);
+        *(it++) = static_cast<std::uint8_t>(htons(type) >> 8);
+        *(it++) = static_cast<std::uint8_t>(htons(block) >> 0);
+        *(it++) = static_cast<std::uint8_t>(htons(block) >> 8);
         for (auto byte : data_) {
-            buf.push_back(byte);
+            *(it++) = static_cast<std::uint8_t>(byte);
         }
 
         return sizeof(type) + sizeof(block) + data_.size();
     }
 
-    std::uint16_t getType() const {
-        return type;
-    }
+    std::uint16_t getType() const { return type; }
 
-    std::uint16_t getBlock() const {
-        return block;
-    }
+    std::uint16_t getBlock() const { return block; }
 
-    const std::vector<std::uint8_t>& getData() const {
-        return data_;
-    }
+    const std::vector<std::uint8_t> &getData() const { return data_; }
 
   private:
     friend ParseResult parse(std::uint8_t *buffer, std::size_t len, Data &packet);
@@ -149,20 +145,18 @@ class Acknowledgment {
     }
     ~Acknowledgment() {}
 
-    std::uint16_t getType() const {
-        return type;
-    }
+    std::uint16_t getType() const { return type; }
 
-    std::uint16_t getBlock() const {
-        return block;
-    }
+    std::uint16_t getBlock() const { return block; }
 
-    /// Convert packet to network byte order and serialize it into the given buffer
-    std::size_t serialize(std::vector<std::uint8_t> &buf) {
-        buf.push_back(htons(type) >> 0);
-        buf.push_back(htons(type) >> 8);
-        buf.push_back(htons(block) >> 0);
-        buf.push_back(htons(block) >> 8);
+    /// Convert packet to network byte order and serialize it into the given buffer by the iterator
+    /// @param[it] Requirements: \p *(it) must be assignable from \p std::uint8_t
+    /// @return Size of the packet (in bytes)
+    template <class OutputIterator> std::size_t serialize(OutputIterator it) {
+        *(it++) = static_cast<std::uint8_t>(htons(type) >> 0);
+        *(it++) = static_cast<std::uint8_t>(htons(type) >> 8);
+        *(it++) = static_cast<std::uint8_t>(htons(block) >> 0);
+        *(it++) = static_cast<std::uint8_t>(htons(block) >> 8);
 
         return sizeof(type) + sizeof(block);
     }
@@ -189,26 +183,24 @@ class Error {
     }
     ~Error() {}
 
-    std::uint16_t getType() const {
-        return type;
-    }
+    std::uint16_t getType() const { return type; }
 
-    std::uint16_t getErrorCode() const {
-        return error_code;
-    }
+    std::uint16_t getErrorCode() const { return error_code; }
 
     std::string_view getErrorMessage() const {
-        return std::string_view(reinterpret_cast<const char*>(error_message.data()), error_message.size() - 1);
+        return std::string_view(reinterpret_cast<const char *>(error_message.data()), error_message.size() - 1);
     }
 
-    /// Convert packet to network byte order and serialize it into the given buffer
-    std::size_t serialize(std::vector<std::uint8_t> &buf) {
-        buf.push_back(htons(type) >> 0);
-        buf.push_back(htons(type) >> 8);
-        buf.push_back(htons(error_code) >> 0);
-        buf.push_back(htons(error_code) >> 8);
+    /// Convert packet to network byte order and serialize it into the given buffer by the iterator
+    /// @param[it] Requirements: \p *(it) must be assignable from \p std::uint8_t
+    /// @return Size of the packet (in bytes)
+    template <class OutputIterator> std::size_t serialize(OutputIterator it) {
+        *(it++) = static_cast<std::uint8_t>(htons(type) >> 0);
+        *(it++) = static_cast<std::uint8_t>(htons(type) >> 8);
+        *(it++) = static_cast<std::uint8_t>(htons(error_code) >> 0);
+        *(it++) = static_cast<std::uint8_t>(htons(error_code) >> 8);
         for (auto byte : error_message) {
-            buf.push_back(byte);
+            *(it++) = static_cast<std::uint8_t>(byte);
         }
 
         return sizeof(type) + sizeof(error_code) + error_message.size();
