@@ -66,3 +66,7 @@ Adds doxygen build target as a dependency of the default build target. Defaults 
 * `BUILD_TESTS: BOOL`
 
 Adds test build targets as a dependencies of the default build target. Defaults to OFF.
+
+* `BUILD_EXAMPLES: BOOL`
+
+Adds examples build targets as a dependencies of the default build target. Defaults to OFF.
