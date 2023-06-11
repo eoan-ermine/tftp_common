@@ -23,7 +23,7 @@ TEST(Request, Serialization) {
     auto packet = Request{Type::ReadRequest, filename, mode};
 
     std::vector<std::uint8_t> buffer;
-    auto packetSize = packet.serialize(buffer);
+    auto packetSize = packet.serialize(std::back_inserter(buffer));
     EXPECT_EQ(packetSize, sizeof(std::uint16_t) + filename.size() + mode.size() + 2);
 
     // type field
@@ -51,7 +51,7 @@ TEST(Data, Serialization) {
     auto packet = Data{static_cast<std::uint16_t>(data.size()), data};
 
     std::vector<std::uint8_t> buffer;
-    auto packetSize = packet.serialize(buffer);
+    auto packetSize = packet.serialize(std::back_inserter(buffer));
     EXPECT_EQ(packetSize, sizeof(std::uint16_t) + sizeof(std::uint16_t) + data.size());
 
     // type field
@@ -73,7 +73,7 @@ TEST(Acknowledgment, Serialization) {
     auto packet = Acknowledgment{255};
 
     std::vector<std::uint8_t> buffer;
-    auto packetSize = packet.serialize(buffer);
+    auto packetSize = packet.serialize(std::back_inserter(buffer));
     EXPECT_EQ(packetSize, sizeof(std::uint16_t) + sizeof(std::uint16_t));
 
     // type field
@@ -93,7 +93,7 @@ TEST(Error, Serialization) {
     auto packet = Error{0x01, errorMessage};
 
     std::vector<std::uint8_t> buffer;
-    auto packetSize = packet.serialize(buffer);
+    auto packetSize = packet.serialize(std::back_inserter(buffer));
     EXPECT_EQ(packetSize, sizeof(std::uint16_t) + sizeof(std::uint16_t) + errorMessage.size() + 1);
 
     // type field
