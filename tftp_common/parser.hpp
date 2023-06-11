@@ -236,6 +236,66 @@ ParseResult parse(std::uint8_t *buffer, std::size_t len, Error &packet) {
     return ParseResult{false, bytes_read};
 }
 
+#ifdef ENABLE_OPTION_EXTENSION
+/// Parse error packet from buffer converting all fields to host byte order
+/// @param[buffer] Assumptions: \p buffer is not a nullptr, it's size is greater or equal than \p len
+/// @param[len] Assumptions: \p len is greater than zero
+/// @n If parsing wasn't successful, \p packet remains in valid but unspecified state
+ParseResult parse(std::uint8_t *buffer, std::size_t len, OptionAcknowledgment &packet) {
+    assert(buffer != nullptr);
+    assert(len > 0);
+
+    std::string name, value;
+
+    std::size_t step_ = 0, bytes_read = 0;
+    for (std::size_t i = 0; i != len; ++i) {
+        const auto byte = buffer[i];
+        bytes_read++;
+
+        switch (step_) {
+        // Opcode (2 bytes)
+        case 0:
+            packet.type = std::uint16_t(byte) << 0;
+            step_++;
+            break;
+        case 1:
+            packet.type |= std::uint16_t(byte) << 8;
+            packet.type = ntohs(packet.type);
+            if (packet.type != packets::Type::OptionAcknowledgmentPacket) {
+                step_ = 0;
+                continue;
+            }
+            step_++;
+            break;
+        // Option name
+        case 2:
+            name.push_back(byte);
+
+            if (!byte) {
+                packet.optionsNames.push_back(std::move(name));
+                name.clear();
+                step_++;
+            }
+            break;
+        // Option value
+        case 3:
+            value.push_back(byte);
+
+            if (!byte) {
+                packet.optionsValues.push_back(std::move(value));
+                value.clear();
+
+                if (i == len - 1)
+                    return ParseResult{true, bytes_read};
+                step_--;
+            }
+            break;
+        }
+    }
+    return ParseResult{false, bytes_read};
+}
+#endif
+
 } // namespace packets
 
 } // namespace tftp_common
