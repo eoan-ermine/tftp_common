@@ -1,0 +1,19 @@
+name: Build and deploy documentation
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Build and deploy documentation
+      uses: DenverCoder1/doxygen-github-pages-action@v1.3.0
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
