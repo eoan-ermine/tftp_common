@@ -1,6 +1,9 @@
 cmake_minimum_required(VERSION 3.12)
 
-project(tftp_common VERSION 1.0.0 LANGUAGES CXX)
+project(tftp_common
+    VERSION 1.0.0 LANGUAGES CXX
+    HOMEPAGE_URL "https://github.com/eoan-ermine/tftp_common"
+)
 
 include(GNUInstallDirs)
 
@@ -85,3 +88,6 @@ option(BUILD_EXAMPLES "Build examples" OFF)
 if (BUILD_EXAMPLES)
     add_subdirectory(examples)
 endif (BUILD_EXAMPLES)
+
+set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+include(Packing)
