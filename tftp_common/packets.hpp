@@ -93,11 +93,11 @@ class Request {
     }
 
     std::string_view getOptionName(std::size_t idx) const {
-        return std::string_view(reinterpret_cast<const char*>(optionsNames[idx].data()), optionsNames[idx].size() - 1);
+        return std::string_view(reinterpret_cast<const char*>(optionsNames[idx].data()), optionsNames[idx].size());
     }
 
     std::string_view getOptionValue(std::size_t idx) const {
-        return std::string_view(reinterpret_cast<const char*>(optionsValues[idx].data()), optionsValues[idx].size() - 1);
+        return std::string_view(reinterpret_cast<const char*>(optionsValues[idx].data()), optionsValues[idx].size());
     }
 
   private:
@@ -277,11 +277,11 @@ public:
     std::uint16_t getType() const { return type; }
 
     std::string_view getOptionName(std::size_t idx) const {
-        return std::string_view(reinterpret_cast<const char*>(optionsNames[idx].data()), optionsNames[idx].size() - 1);
+        return std::string_view(reinterpret_cast<const char*>(optionsNames[idx].data()), optionsNames[idx].size());
     }
 
     std::string_view getOptionValue(std::size_t idx) const {
-        return std::string_view(reinterpret_cast<const char*>(optionsValues[idx].data()), optionsValues[idx].size() - 1);
+        return std::string_view(reinterpret_cast<const char*>(optionsValues[idx].data()), optionsValues[idx].size());
     }
 private:
     friend ParseResult parse(std::uint8_t *buffer, std::size_t len, OptionAcknowledgment &packet);

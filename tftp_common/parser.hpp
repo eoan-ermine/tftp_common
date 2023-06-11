@@ -63,18 +63,15 @@ ParseResult parse(std::uint8_t *buffer, std::size_t len, Request &packet) {
             break;
         // Option name
         case 4:
-            name.push_back(byte);
-
             if (!byte) {
                 packet.optionsNames.push_back(std::move(name));
                 name.clear();
                 step_++;
-            }
+            } else
+                name.push_back(byte);
             break;
         // Option value
         case 5:
-            value.push_back(byte);
-
             if (!byte) {
                 packet.optionsValues.push_back(std::move(value));
                 value.clear();
@@ -82,7 +79,8 @@ ParseResult parse(std::uint8_t *buffer, std::size_t len, Request &packet) {
                 if (i == len - 1)
                     return ParseResult{true, bytes_read};
                 step_--;
-            }
+            } else
+                value.push_back(byte);
             break;
         }
     }
@@ -266,18 +264,15 @@ ParseResult parse(std::uint8_t *buffer, std::size_t len, OptionAcknowledgment &p
             break;
         // Option name
         case 2:
-            name.push_back(byte);
-
             if (!byte) {
                 packet.optionsNames.push_back(std::move(name));
                 name.clear();
                 step_++;
-            }
+            } else
+                name.push_back(byte);
             break;
         // Option value
         case 3:
-            value.push_back(byte);
-
             if (!byte) {
                 packet.optionsValues.push_back(std::move(value));
                 value.clear();
@@ -285,7 +280,8 @@ ParseResult parse(std::uint8_t *buffer, std::size_t len, OptionAcknowledgment &p
                 if (i == len - 1)
                     return ParseResult{true, bytes_read};
                 step_--;
-            }
+            } else
+                value.push_back(byte);
             break;
         }
     }
