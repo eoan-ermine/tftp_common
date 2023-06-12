@@ -2,9 +2,7 @@
 
 #include "packets.hpp"
 
-namespace tftp_common {
-
-namespace packets {
+namespace tftp_common::packets {
 
 /// The result of parsing a single packet
 struct ParseResult {
@@ -88,6 +86,8 @@ ParseResult parse(const std::uint8_t *Buffer, std::size_t Len, Request &Packet) 
                 Value.push_back(Byte);
             }
             break;
+        default:
+            assert(false);
         }
     }
     return ParseResult{false, BytesRead};
@@ -141,6 +141,8 @@ ParseResult parse(const std::uint8_t *Buffer, std::size_t Len, Data &Packet) {
             }
 
             break;
+        default:
+            assert(false);
         }
     }
     return ParseResult{false, BytesRead};
@@ -184,6 +186,8 @@ ParseResult parse(const std::uint8_t *Buffer, std::size_t Len, Acknowledgment &P
             Packet.Block |= std::uint16_t(Byte) << 8;
             Packet.Block = ntohs(Packet.Block);
             return ParseResult{true, BytesRead};
+        default:
+            assert(false);
         }
     }
     return ParseResult{false, BytesRead};
@@ -236,6 +240,8 @@ ParseResult parse(const std::uint8_t *Buffer, std::size_t Len, Error &Packet) {
                 return ParseResult{true, BytesRead};
             }
             break;
+        default:
+            assert(false);
         }
     }
     return ParseResult{false, BytesRead};
@@ -296,11 +302,11 @@ ParseResult parse(const std::uint8_t *Buffer, std::size_t Len, OptionAcknowledgm
                 Value.push_back(Byte);
             }
             break;
+        default:
+            assert(false);
         }
     }
     return ParseResult{false, BytesRead};
 }
 
-} // namespace packets
-
-} // namespace tftp_common
+} // namespace tftp_common::packets
