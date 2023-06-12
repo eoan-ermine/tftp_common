@@ -33,13 +33,13 @@ ParseResult parse(const std::uint8_t *Buffer, std::size_t Len, Request &Packet) 
         switch (Step) {
         // Opcode (2 bytes)
         case 0:
-            Packet.Type = std::uint16_t(Byte) << 0;
+            Packet.Type_ = std::uint16_t(Byte) << 0;
             Step++;
             break;
         case 1:
-            Packet.Type |= std::uint16_t(Byte) << 8;
-            Packet.Type = ntohs(Packet.Type);
-            if (Packet.Type != packets::Type::ReadRequest && Packet.Type != packets::Type::WriteRequest) {
+            Packet.Type_ |= std::uint16_t(Byte) << 8;
+            Packet.Type_ = ntohs(Packet.Type_);
+            if (Packet.Type_ != packets::Type::ReadRequest && Packet.Type_ != packets::Type::WriteRequest) {
                 Step = 0;
                 continue;
             }
@@ -110,13 +110,13 @@ ParseResult parse(const std::uint8_t *Buffer, std::size_t Len, Data &Packet) {
         switch (Step) {
         // Opcode (2 bytes)
         case 0:
-            Packet.Type = std::uint16_t(Byte) << 0;
+            Packet.Type_ = std::uint16_t(Byte) << 0;
             Step++;
             break;
         case 1:
-            Packet.Type |= std::uint16_t(Byte) << 8;
-            Packet.Type = ntohs(Packet.Type);
-            if (Packet.Type != packets::Type::DataPacket) {
+            Packet.Type_ |= std::uint16_t(Byte) << 8;
+            Packet.Type_ = ntohs(Packet.Type_);
+            if (Packet.Type_ != packets::Type::DataPacket) {
                 Step = 0;
                 continue;
             }
@@ -163,13 +163,13 @@ ParseResult parse(const std::uint8_t *Buffer, std::size_t Len, Acknowledgment &P
         switch (Step) {
         // Opcode (2 bytes)
         case 0:
-            Packet.Type = std::uint16_t(Byte) << 0;
+            Packet.Type_ = std::uint16_t(Byte) << 0;
             Step++;
             break;
         case 1:
-            Packet.Type |= std::uint16_t(Byte) << 8;
-            Packet.Type = ntohs(Packet.Type);
-            if (Packet.Type != packets::Type::AcknowledgmentPacket) {
+            Packet.Type_ |= std::uint16_t(Byte) << 8;
+            Packet.Type_ = ntohs(Packet.Type_);
+            if (Packet.Type_ != packets::Type::AcknowledgmentPacket) {
                 Step = 0;
                 continue;
             }
@@ -206,13 +206,13 @@ ParseResult parse(const std::uint8_t *Buffer, std::size_t Len, Error &Packet) {
         switch (Step) {
         // Opcode (2 bytes)
         case 0:
-            Packet.Type = std::uint16_t(Byte) << 0;
+            Packet.Type_ = std::uint16_t(Byte) << 0;
             Step++;
             break;
         case 1:
-            Packet.Type |= std::uint16_t(Byte) << 8;
-            Packet.Type = ntohs(Packet.Type);
-            if (Packet.Type != packets::Type::ErrorPacket) {
+            Packet.Type_ |= std::uint16_t(Byte) << 8;
+            Packet.Type_ = ntohs(Packet.Type_);
+            if (Packet.Type_ != packets::Type::ErrorPacket) {
                 Step = 0;
                 continue;
             }
@@ -260,13 +260,13 @@ ParseResult parse(const std::uint8_t *Buffer, std::size_t Len, OptionAcknowledgm
         switch (Step) {
         // Opcode (2 bytes)
         case 0:
-            Packet.Type = std::uint16_t(Byte) << 0;
+            Packet.Type_ = std::uint16_t(Byte) << 0;
             Step++;
             break;
         case 1:
-            Packet.Type |= std::uint16_t(Byte) << 8;
-            Packet.Type = ntohs(Packet.Type);
-            if (Packet.Type != packets::Type::OptionAcknowledgmentPacket) {
+            Packet.Type_ |= std::uint16_t(Byte) << 8;
+            Packet.Type_ = ntohs(Packet.Type_);
+            if (Packet.Type_ != packets::Type::OptionAcknowledgmentPacket) {
                 Step = 0;
                 continue;
             }
