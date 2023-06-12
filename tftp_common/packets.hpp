@@ -52,12 +52,11 @@ class Request {
         this->OptionsNames = OptionsNames;
         this->OptionsValues = OptionsValues;
     }
-    Request(Type Type, std::string_view Filename, std::string_view Mode, std::vector<std::string> &&OptionsNames,
+    Request(Type Type, std::string &&Filename, std::string &&Mode, std::vector<std::string> &&OptionsNames,
             std::vector<std::string> &&OptionsValues)
-        : Request(Type, Filename, Mode) {
-        this->OptionsNames = std::move(OptionsNames);
-        this->OptionsValues = std::move(OptionsValues);
-    }
+        : Type_(Type), Filename(std::make_move_iterator(Filename.begin()), std::make_move_iterator(Filename.end())),
+          Mode(std::make_move_iterator(Mode.begin()), std::make_move_iterator(Mode.end())),
+          OptionsNames(std::move(OptionsNames)), OptionsValues(std::move(OptionsValues)) {}
 
     /// Convert packet to network byte order and serialize it into the given buffer by the iterator
     /// @param[It] Requirements: \p *(It) must be assignable from \p std::uint8_t
