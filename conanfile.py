@@ -5,7 +5,7 @@ from conan.tools.files import copy
 
 class TFTPCommonConan(ConanFile):
 	name = "tftp_common"
-	version = "1.0.0"
+	version = "1.1.0"
 	url = "https://github.com/eoan-ermine/tftp_common"
 	description = " A simple header-only Trivial File Transfer Protocol packets parsing and serializing library"
 	license = "Unlicense"
