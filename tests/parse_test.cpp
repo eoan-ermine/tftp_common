@@ -164,8 +164,8 @@ TEST(OptionAcknowledgment, Parse) {
         {"saveFiles", "true"}, {"discardQualifiers", "false"},
         {"secret", "Ix0e86yG8YpFzwz1gS0XxJW3"}
     };
-    for (auto It = Options.cbegin(), End = Options.cend(); It != End; ++It) {
-        ASSERT_EQ(Packet.getOptionValue(It->first), It->second);
+    for (const auto& [Key, Value]: Options) {
+        ASSERT_EQ(Packet.getOptionValue(Key), Value);
     }
 
     ASSERT_EQ(success, true);

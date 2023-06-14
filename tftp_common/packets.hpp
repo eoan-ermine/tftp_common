@@ -266,16 +266,16 @@ class OptionAcknowledgment {
         *(It++) = static_cast<std::uint8_t>(htons(Type_) >> 8);
 
         std::size_t OptionsSize = 0;
-        for (auto OIt = Options.cbegin(), OEnd = Options.cend(); OIt != OEnd; ++OIt) {
-            for (auto Byte: OIt->first) {
+        for (const auto& [Key, Value]: Options) {
+            for (auto Byte: Key) {
                 *(It++) = static_cast<std::uint8_t>(Byte);
             }
             *(It++) = '\0';
-            for (auto Byte : OIt->second) {
+            for (auto Byte : Value) {
                 *(It++) = static_cast<std::uint8_t>(Byte);
             }
             *(It++) = '\0';
-            OptionsSize += OIt->first.size() + OIt->second.size() + 2;
+            OptionsSize += Key.size() + Value.size() + 2;
         }
 
         return sizeof(Type) + OptionsSize;

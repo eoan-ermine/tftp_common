@@ -171,11 +171,11 @@ TEST(OptionAcknowledgment, Serialization) {
 
     std::size_t BaseOffset = sizeof(std::uint16_t);
     // option names and values
-    for (auto It = Options.cbegin(), End = Options.cend(); It != End; ++It) {
-        EXPECT_STRING(Buffer, BaseOffset, It->first);
-        BaseOffset += It->first.size() + 1;
-        EXPECT_STRING(Buffer, BaseOffset, It->second);
-        BaseOffset += It->second.size() + 1;
+    for (const auto& [Key, Value]: Options) {
+        EXPECT_STRING(Buffer, BaseOffset, Key);
+        BaseOffset += Key.size() + 1;
+        EXPECT_STRING(Buffer, BaseOffset, Value);
+        BaseOffset += Value.size() + 1;
     }
 
     EXPECT_EQ(Buffer.size(), PacketSize);
