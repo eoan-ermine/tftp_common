@@ -160,11 +160,12 @@ TEST(OptionAcknowledgment, Parse) {
 
     ASSERT_EQ(Packet.getType(), Type::OptionAcknowledgmentPacket);
 
-    std::vector<std::string> OptionsNames = {"saveFiles", "discardQualifiers", "secret"};
-    std::vector<std::string> OptionsValues = {"true", "false", "Ix0e86yG8YpFzwz1gS0XxJW3"};
-    for (std::size_t Idx = 0; Idx != OptionsNames.size(); ++Idx) {
-        ASSERT_EQ(Packet.getOptionName(Idx), OptionsNames[Idx]);
-        ASSERT_EQ(Packet.getOptionValue(Idx), OptionsValues[Idx]);
+    std::unordered_map<std::string, std::string> Options = {
+        {"saveFiles", "true"}, {"discardQualifiers", "false"},
+        {"secret", "Ix0e86yG8YpFzwz1gS0XxJW3"}
+    };
+    for (auto It = Options.cbegin(), End = Options.cend(); It != End; ++It) {
+        ASSERT_EQ(Packet.getOptionValue(It->first), It->second);
     }
 
     ASSERT_EQ(success, true);

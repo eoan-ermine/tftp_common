@@ -280,18 +280,17 @@ ParseResult parse(const std::uint8_t *Buffer, std::size_t Len, OptionAcknowledgm
             break;
         // Option name
         case 2:
-            if (Byte == 0u) {
-                Packet.OptionsNames.push_back(std::move(Name));
-                Name.clear();
+            if (Byte == 0u)
                 Step++;
-            } else {
+            else
                 Name.push_back(Byte);
-            }
             break;
         // Option value
         case 3:
             if (Byte == 0u) {
-                Packet.OptionsValues.push_back(std::move(Value));
+                Packet.Options.emplace(std::move(Name), std::move(Value));
+
+                Name.clear();
                 Value.clear();
 
                 if (Idx == Len - 1) {

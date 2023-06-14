@@ -11,6 +11,7 @@
 #include <string>
 #include <string_view>
 #include <vector>
+#include <unordered_map>
 
 namespace tftp_common::packets {
 
@@ -254,11 +255,8 @@ class OptionAcknowledgment {
   public:
     /// Use with parsing functions only
     OptionAcknowledgment() = default;
-    OptionAcknowledgment(const std::vector<std::string> &OptionsNames, const std::vector<std::string> &OptionsValues)
-        : OptionsNames(OptionsNames.begin(), OptionsNames.end()),
-          OptionsValues(OptionsValues.begin(), OptionsValues.end()) {}
-    OptionAcknowledgment(std::vector<std::string> &&OptionsNames, std::vector<std::string> &&OptionsValues)
-        : OptionsNames(std::move(OptionsNames)), OptionsValues(std::move(OptionsValues)) {}
+    OptionAcknowledgment(std::unordered_map<std::string, std::string> Options)
+        : Options(std::move(Options)) { }
 
     /// Convert packet to network byte order and serialize it into the given buffer by the iterator
     /// @param[It] Requirements: \p *(It) must be assignable from \p std::uint8_t
@@ -267,18 +265,17 @@ class OptionAcknowledgment {
         *(It++) = static_cast<std::uint8_t>(htons(Type_) >> 0);
         *(It++) = static_cast<std::uint8_t>(htons(Type_) >> 8);
 
-        assert(OptionsNames.size() == OptionsValues.size());
         std::size_t OptionsSize = 0;
-        for (std::size_t Idx = 0; Idx != OptionsNames.size(); ++Idx) {
-            for (auto Byte : OptionsNames[Idx]) {
+        for (auto OIt = Options.cbegin(), OEnd = Options.cend(); OIt != OEnd; ++OIt) {
+            for (auto Byte: OIt->first) {
                 *(It++) = static_cast<std::uint8_t>(Byte);
             }
             *(It++) = '\0';
-            for (auto Byte : OptionsValues[Idx]) {
+            for (auto Byte : OIt->second) {
                 *(It++) = static_cast<std::uint8_t>(Byte);
             }
             *(It++) = '\0';
-            OptionsSize += OptionsNames[Idx].size() + OptionsValues[Idx].size() + 2;
+            OptionsSize += OIt->first.size() + OIt->second.size() + 2;
         }
 
         return sizeof(Type) + OptionsSize;
@@ -286,20 +283,23 @@ class OptionAcknowledgment {
 
     std::uint16_t getType() const { return Type_; }
 
-    std::string_view getOptionName(std::size_t Idx) const {
-        return std::string_view(OptionsNames[Idx].data(), OptionsNames[Idx].size());
+    /// Get all options
+    const std::unordered_map<std::string, std::string>& getOptions() const {
+        return Options;
     }
 
-    std::string_view getOptionValue(std::size_t Idx) const {
-        return std::string_view(OptionsValues[Idx].data(), OptionsValues[Idx].size());
+    /// Get option value by its name
+    /// @throws std::out_of_range if there's no option with the specified name
+    std::string_view getOptionValue(const std::string& OptionName) const {
+        return Options.at(OptionName);
     }
 
   private:
     friend ParseResult parse(const std::uint8_t *Buffer, std::size_t Len, OptionAcknowledgment &Packet);
 
     std::uint16_t Type_ = Type::OptionAcknowledgmentPacket;
-    std::vector<std::string> OptionsNames;
-    std::vector<std::string> OptionsValues;
+    // According to the RFC, the order in which options are specified is not significant, so it's fine
+    std::unordered_map<std::string, std::string> Options;
 };
 
 } // namespace tftp_common::packets

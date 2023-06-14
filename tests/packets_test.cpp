@@ -154,13 +154,15 @@ TEST(Error, Serialization) {
 /// Test that Option Acknowledgment packet serialization is going fine and everything is converting to network byte
 /// order
 TEST(OptionAcknowledgment, Serialization) {
-    std::vector<std::string> OptionsNames = {"saveFiles", "discardQualifiers", "secret"};
-    std::vector<std::string> OptionsValues = {"true", "false", "Ix0e86yG8YpFzwz1gS0XxJW3"};
-    auto Packet = OptionAcknowledgment{OptionsNames, OptionsValues};
+    std::unordered_map<std::string, std::string> Options = {
+        {"saveFiles", "true"}, {"discardQualifiers", "false"},
+        {"secret", "Ix0e86yG8YpFzwz1gS0XxJW3"}
+    };
+    auto Packet = OptionAcknowledgment{Options};
 
     std::size_t OptionsSize = 0;
-    for (std::size_t Idx = 0; Idx != OptionsNames.size(); ++Idx) {
-        OptionsSize += OptionsNames[Idx].size() + OptionsValues[Idx].size() + 2;
+    for (auto It = Options.cbegin(), End = Options.cend(); It != End; ++It) {
+        OptionsSize += It->first.size() + It->second.size() + 2;
     }
 
     std::vector<std::uint8_t> Buffer;
@@ -169,11 +171,11 @@ TEST(OptionAcknowledgment, Serialization) {
 
     std::size_t BaseOffset = sizeof(std::uint16_t);
     // option names and values
-    for (std::size_t Idx = 0; Idx != OptionsNames.size(); ++Idx) {
-        EXPECT_STRING(Buffer, BaseOffset, OptionsNames[Idx]);
-        BaseOffset += OptionsNames[Idx].size() + 1;
-        EXPECT_STRING(Buffer, BaseOffset, OptionsValues[Idx]);
-        BaseOffset += OptionsValues[Idx].size() + 1;
+    for (auto It = Options.cbegin(), End = Options.cend(); It != End; ++It) {
+        EXPECT_STRING(Buffer, BaseOffset, It->first);
+        BaseOffset += It->first.size() + 1;
+        EXPECT_STRING(Buffer, BaseOffset, It->second);
+        BaseOffset += It->second.size() + 1;
     }
 
     EXPECT_EQ(Buffer.size(), PacketSize);
