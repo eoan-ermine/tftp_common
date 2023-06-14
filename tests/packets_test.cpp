@@ -155,9 +155,7 @@ TEST(Error, Serialization) {
 /// order
 TEST(OptionAcknowledgment, Serialization) {
     std::unordered_map<std::string, std::string> Options = {
-        {"saveFiles", "true"}, {"discardQualifiers", "false"},
-        {"secret", "Ix0e86yG8YpFzwz1gS0XxJW3"}
-    };
+        {"saveFiles", "true"}, {"discardQualifiers", "false"}, {"secret", "Ix0e86yG8YpFzwz1gS0XxJW3"}};
     auto Packet = OptionAcknowledgment{Options};
 
     std::size_t OptionsSize = 0;
@@ -171,7 +169,7 @@ TEST(OptionAcknowledgment, Serialization) {
 
     std::size_t BaseOffset = sizeof(std::uint16_t);
     // option names and values
-    for (const auto& [Key, Value]: Options) {
+    for (const auto &[Key, Value] : Options) {
         EXPECT_STRING(Buffer, BaseOffset, Key);
         BaseOffset += Key.size() + 1;
         EXPECT_STRING(Buffer, BaseOffset, Value);

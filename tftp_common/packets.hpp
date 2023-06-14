@@ -10,8 +10,8 @@
 #include <cstdint>
 #include <string>
 #include <string_view>
-#include <vector>
 #include <unordered_map>
+#include <vector>
 
 namespace tftp_common::packets {
 
@@ -255,8 +255,7 @@ class OptionAcknowledgment {
   public:
     /// Use with parsing functions only
     OptionAcknowledgment() = default;
-    OptionAcknowledgment(std::unordered_map<std::string, std::string> Options)
-        : Options(std::move(Options)) { }
+    OptionAcknowledgment(std::unordered_map<std::string, std::string> Options) : Options(std::move(Options)) {}
 
     /// Convert packet to network byte order and serialize it into the given buffer by the iterator
     /// @param[It] Requirements: \p *(It) must be assignable from \p std::uint8_t
@@ -266,8 +265,8 @@ class OptionAcknowledgment {
         *(It++) = static_cast<std::uint8_t>(htons(Type_) >> 8);
 
         std::size_t OptionsSize = 0;
-        for (const auto& [Key, Value]: Options) {
-            for (auto Byte: Key) {
+        for (const auto &[Key, Value] : Options) {
+            for (auto Byte : Key) {
                 *(It++) = static_cast<std::uint8_t>(Byte);
             }
             *(It++) = '\0';
@@ -284,15 +283,11 @@ class OptionAcknowledgment {
     std::uint16_t getType() const { return Type_; }
 
     /// Get all options
-    const std::unordered_map<std::string, std::string>& getOptions() const {
-        return Options;
-    }
+    const std::unordered_map<std::string, std::string> &getOptions() const { return Options; }
 
     /// Get option value by its name
     /// @throws std::out_of_range if there's no option with the specified name
-    std::string_view getOptionValue(const std::string& OptionName) const {
-        return Options.at(OptionName);
-    }
+    std::string_view getOptionValue(const std::string &OptionName) const { return Options.at(OptionName); }
 
   private:
     friend ParseResult parse(const std::uint8_t *Buffer, std::size_t Len, OptionAcknowledgment &Packet);

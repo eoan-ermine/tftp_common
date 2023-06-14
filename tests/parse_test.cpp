@@ -161,10 +161,8 @@ TEST(OptionAcknowledgment, Parse) {
     ASSERT_EQ(Packet.getType(), Type::OptionAcknowledgmentPacket);
 
     std::unordered_map<std::string, std::string> Options = {
-        {"saveFiles", "true"}, {"discardQualifiers", "false"},
-        {"secret", "Ix0e86yG8YpFzwz1gS0XxJW3"}
-    };
-    for (const auto& [Key, Value]: Options) {
+        {"saveFiles", "true"}, {"discardQualifiers", "false"}, {"secret", "Ix0e86yG8YpFzwz1gS0XxJW3"}};
+    for (const auto &[Key, Value] : Options) {
         ASSERT_EQ(Packet.getOptionValue(Key), Value);
     }
 
