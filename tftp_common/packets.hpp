@@ -224,6 +224,11 @@ class Error final {
         : ErrorCode(ErrorCode), ErrorMessage(ErrorMessage) {
         assert(ErrorCode >= 0 && ErrorCode <= 8);
     }
+    /// @param[ErrorCode] Assumptions: The \p ErrorCode is equal or greater than zero and less or equal than eight
+    Error(std::uint16_t ErrorCode, std::string &&ErrorMessage)
+        : ErrorCode(ErrorCode), ErrorMessage(std::move(ErrorMessage)) {
+        assert(ErrorCode >= 0 && ErrorCode <= 8);
+    }
 
     std::uint16_t getType() const noexcept { return Type_; }
 
