@@ -292,8 +292,35 @@ class OptionAcknowledgment final {
 
     std::uint16_t getType() const noexcept { return Type_; }
 
-    /// Get all options
-    const std::unordered_map<std::string, std::string> &getOptions() const noexcept { return Options; }
+    /// @return Iterator to the first option (name and value) pair
+    auto begin() noexcept {
+        return Options.begin();
+    }
+
+    /// @return Constant iterator to the first option (name and value) pair
+    auto begin() const noexcept {
+        return Options.begin();
+    }
+
+    /// @return Constant iterator to the first option (name and value) pair
+    auto cbegin() const noexcept {
+        return Options.cbegin();
+    }
+
+    /// @return Iterator to the element following the last option (name and value) pair
+    auto end() noexcept {
+        return Options.end();
+    }
+
+    /// @return Constant iterator to the element following the last option (name and value) pair
+    auto end() const noexcept {
+        return Options.end();
+    }
+
+    /// @return Constant iterator to the element following the last option (name and value) pair
+    auto cend() const noexcept {
+        return Options.cend();
+    }
 
     /// Get option value by its name
     /// @throws std::out_of_range if there's no option with the specified name
