@@ -47,17 +47,37 @@ class Request {
         assert(Filename[Filename.size()] == '\0');
         assert(Mode[Mode.size()] == '\0');
     }
+    /// @param[Type] Assumptions: The \p type is either ::ReadRequest or ::WriteRequest
+    /// @param[Filename] Assumptions: The \p Filename is a view to **null-terminated string**
+    /// @param[Mode] Assumptions: The \p Mode is a view to **null-terminated string**
+    Request(Type Type, std::string &&Filename, std::string &&Mode)
+        : Type_(Type), Filename(std::make_move_iterator(Filename.begin()), std::make_move_iterator(Filename.end())),
+          Mode(std::make_move_iterator(Mode.begin()), std::make_move_iterator(Mode.end())) {
+        assert(Type == Type::ReadRequest || Type == Type::WriteRequest);
+        assert(this->Filename[this->Filename.size()] == '\0');
+        assert(this->Mode[this->Mode.size()] == '\0');
+    }
+    /// @param[Type] Assumptions: The \p type is either ::ReadRequest or ::WriteRequest
+    /// @param[Filename] Assumptions: The \p Filename is a view to **null-terminated string**
+    /// @param[Mode] Assumptions: The \p Mode is a view to **null-terminated string**
     Request(Type Type, std::string_view Filename, std::string_view Mode, const std::vector<std::string> &OptionsNames,
             const std::vector<std::string> &OptionsValues)
         : Request(Type, Filename, Mode) {
         this->OptionsNames = OptionsNames;
         this->OptionsValues = OptionsValues;
     }
+    /// @param[Type] Assumptions: The \p type is either ::ReadRequest or ::WriteRequest
+    /// @param[Filename] Assumptions: The \p Filename is a view to **null-terminated string**
+    /// @param[Mode] Assumptions: The \p Mode is a view to **null-terminated string**
     Request(Type Type, std::string &&Filename, std::string &&Mode, std::vector<std::string> &&OptionsNames,
             std::vector<std::string> &&OptionsValues)
         : Type_(Type), Filename(std::make_move_iterator(Filename.begin()), std::make_move_iterator(Filename.end())),
           Mode(std::make_move_iterator(Mode.begin()), std::make_move_iterator(Mode.end())),
-          OptionsNames(std::move(OptionsNames)), OptionsValues(std::move(OptionsValues)) {}
+          OptionsNames(std::move(OptionsNames)), OptionsValues(std::move(OptionsValues)) {
+        assert(Type == Type::ReadRequest || Type == Type::WriteRequest);
+        assert(this->Filename[this->Filename.size()] == '\0');
+        assert(this->Mode[this->Mode.size()] == '\0');
+    }
 
     /// Convert packet to network byte order and serialize it into the given buffer by the iterator
     /// @param[It] Requirements: \p *(It) must be assignable from \p std::uint8_t
