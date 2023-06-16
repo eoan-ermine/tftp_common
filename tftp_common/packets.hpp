@@ -66,9 +66,9 @@ namespace modes {
 /// Trivial File Transfer Protocol transfer mode
 enum TransferMode {
     /// netascii transfer mode
-    netascii,
+    NetAscii,
     /// octet (binary) transfer mode
-    octet
+    Octet
 };
 
 } // namespace modes
