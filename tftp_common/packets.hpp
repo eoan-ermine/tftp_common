@@ -61,6 +61,18 @@ enum Error : std::uint16_t {
 
 }
 
+namespace modes {
+
+/// Trivial File Transfer Protocol transfer mode
+enum TransferMode {
+    /// netascii transfer mode
+    netascii,
+    /// octet (binary) transfer mode
+    octet
+};
+
+}
+
 /// Read/Write Request (RRQ/WRQ) Trivial File Transfer Protocol packet
 class Request final {
   public:
