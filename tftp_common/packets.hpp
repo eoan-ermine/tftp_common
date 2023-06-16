@@ -35,7 +35,7 @@ enum Type : std::uint16_t {
 };
 
 /// Read/Write Request (RRQ/WRQ) Trivial File Transfer Protocol packet
-class Request {
+class Request final{
   public:
     /// Use with parsing functions only
     Request() = default;
@@ -45,7 +45,7 @@ class Request {
         assert(Type == Type::ReadRequest || Type == Type::WriteRequest);
     }
     /// @param[Type] Assumptions: The \p type is either ::ReadRequest or ::WriteRequest
-    Request(Type Type, std::string &&Filename, std::string &&Mode)
+    Request(Type Type, std::string &&Filename, std::string &&Mode) noexcept
         : Type_(Type), Filename(std::move(Filename)), Mode(std::move(Mode)) {
         assert(Type == Type::ReadRequest || Type == Type::WriteRequest);
     }
@@ -58,7 +58,7 @@ class Request {
     }
     /// @param[Type] Assumptions: The \p type is either ::ReadRequest or ::WriteRequest
     Request(Type Type, std::string &&Filename, std::string &&Mode, std::vector<std::string> &&OptionsNames,
-            std::vector<std::string> &&OptionsValues)
+            std::vector<std::string> &&OptionsValues) noexcept
         : Type_(Type), Filename(std::move(Filename)), Mode(std::move(Mode)),
           OptionsNames(std::move(OptionsNames)), OptionsValues(std::move(OptionsValues)) {
         assert(Type == Type::ReadRequest || Type == Type::WriteRequest);
@@ -67,7 +67,7 @@ class Request {
     /// Convert packet to network byte order and serialize it into the given buffer by the iterator
     /// @param[It] Requirements: \p *(It) must be assignable from \p std::uint8_t
     /// @return Size of the packet (in bytes)
-    template <class OutputIterator> std::size_t serialize(OutputIterator It) {
+    template <class OutputIterator> std::size_t serialize(OutputIterator It) const noexcept {
         assert(OptionsNames.size() == OptionsValues.size());
 
         *(It++) = static_cast<std::uint8_t>(htons(Type_) >> 0);
@@ -99,21 +99,21 @@ class Request {
         return sizeof(Type) + Filename.size() + Mode.size() + OptionsSize + 2;
     }
 
-    std::uint16_t getType() const { return Type_; }
+    std::uint16_t getType() const noexcept { return Type_; }
 
-    std::string_view getFilename() const {
+    std::string_view getFilename() const noexcept {
         return std::string_view(Filename.data(), Filename.size());
     }
 
-    std::string_view getMode() const {
+    std::string_view getMode() const noexcept {
         return std::string_view(Mode.data(), Mode.size());
     }
 
-    std::string_view getOptionName(std::size_t Idx) const {
+    std::string_view getOptionName(std::size_t Idx) const noexcept {
         return std::string_view(OptionsNames[Idx].data(), OptionsNames[Idx].size());
     }
 
-    std::string_view getOptionValue(std::size_t Idx) const {
+    std::string_view getOptionValue(std::size_t Idx) const noexcept {
         return std::string_view(OptionsValues[Idx].data(), OptionsValues[Idx].size());
     }
 
@@ -128,7 +128,7 @@ class Request {
 };
 
 /// Data Trivial File Transfer Protocol packet
-class Data {
+class Data final{
   public:
     /// Use with parsing functions only
     Data() = default;
@@ -143,7 +143,7 @@ class Data {
     }
     /// @param[Block] Assumptions: The \p Block value is greater than one
     /// @param[Buffer] Assumptions: The \p Buffer size is greater or equal than 0 and less or equal than 512
-    Data(std::uint16_t Block, std::vector<std::uint8_t> &&Buffer) : Block(Block) {
+    Data(std::uint16_t Block, std::vector<std::uint8_t> &&Buffer) noexcept : Block(Block) {
         // The block numbers on data packets begin with one and increase by one for each new block of data
         assert(Block >= 1);
         // The data field is from zero to 512 bytes long
@@ -154,7 +154,7 @@ class Data {
     /// Convert packet to network byte order and serialize it into the given buffer by the iterator
     /// @param[It] Requirements: \p *(It) must be assignable from \p std::uint8_t
     /// @return Size of the packet (in bytes)
-    template <class OutputIterator> std::size_t serialize(OutputIterator It) const {
+    template <class OutputIterator> std::size_t serialize(OutputIterator It) const noexcept {
         *(It++) = static_cast<std::uint8_t>(htons(Type_) >> 0);
         *(It++) = static_cast<std::uint8_t>(htons(Type_) >> 8);
         *(It++) = static_cast<std::uint8_t>(htons(Block) >> 0);
@@ -166,11 +166,11 @@ class Data {
         return sizeof(Type) + sizeof(Block) + DataBuffer.size();
     }
 
-    std::uint16_t getType() const { return Type_; }
+    std::uint16_t getType() const noexcept { return Type_; }
 
-    std::uint16_t getBlock() const { return Block; }
+    std::uint16_t getBlock() const noexcept { return Block; }
 
-    const std::vector<std::uint8_t> &getData() const { return DataBuffer; }
+    const std::vector<std::uint8_t> &getData() const noexcept { return DataBuffer; }
 
   private:
     friend ParseResult parse(const std::uint8_t *Buffer, std::size_t Len, Data &Packet);
@@ -181,24 +181,24 @@ class Data {
 };
 
 /// Acknowledgment Trivial File Transfer Protocol packet
-class Acknowledgment {
+class Acknowledgment final {
   public:
     /// Use with parsing functions only
     Acknowledgment() = default;
     /// @param[Block] Assumptions: the \p Block is equal or greater than one
-    explicit Acknowledgment(std::uint16_t Block) : Block(Block) {
+    explicit Acknowledgment(std::uint16_t Block) noexcept : Block(Block) {
         // The block numbers on data packets begin with one and increase by one for each new block of data
         assert(Block >= 1);
     }
 
-    std::uint16_t getType() const { return Type_; }
+    std::uint16_t getType() const noexcept { return Type_; }
 
-    std::uint16_t getBlock() const { return Block; }
+    std::uint16_t getBlock() const noexcept { return Block; }
 
     /// Convert packet to network byte order and serialize it into the given buffer by the iterator
     /// @param[It] Requirements: \p *(It) must be assignable from \p std::uint8_t
     /// @return Size of the packet (in bytes)
-    template <class OutputIterator> std::size_t serialize(OutputIterator It) const {
+    template <class OutputIterator> std::size_t serialize(OutputIterator It) const noexcept {
         *(It++) = static_cast<std::uint8_t>(htons(Type_) >> 0);
         *(It++) = static_cast<std::uint8_t>(htons(Type_) >> 8);
         *(It++) = static_cast<std::uint8_t>(htons(Block) >> 0);
@@ -215,7 +215,7 @@ class Acknowledgment {
 };
 
 /// Error Trivial File Transfer Protocol packet
-class Error {
+class Error final {
   public:
     /// Use with parsing functions only
     Error() = default;
@@ -225,18 +225,18 @@ class Error {
         assert(ErrorCode >= 0 && ErrorCode <= 8);
     }
 
-    std::uint16_t getType() const { return Type_; }
+    std::uint16_t getType() const noexcept { return Type_; }
 
-    std::uint16_t getErrorCode() const { return ErrorCode; }
+    std::uint16_t getErrorCode() const noexcept { return ErrorCode; }
 
-    std::string_view getErrorMessage() const {
+    std::string_view getErrorMessage() const noexcept {
         return std::string_view(ErrorMessage.data(), ErrorMessage.size());
     }
 
     /// Convert packet to network byte order and serialize it into the given buffer by the iterator
     /// @param[It] Requirements: \p *(It) must be assignable from \p std::uint8_t
     /// @return Size of the packet (in bytes)
-    template <class OutputIterator> std::size_t serialize(OutputIterator It) const {
+    template <class OutputIterator> std::size_t serialize(OutputIterator It) const noexcept {
         *(It++) = static_cast<std::uint8_t>(htons(Type_) >> 0);
         *(It++) = static_cast<std::uint8_t>(htons(Type_) >> 8);
         *(It++) = static_cast<std::uint8_t>(htons(ErrorCode) >> 0);
@@ -259,7 +259,7 @@ class Error {
 };
 
 /// Option Acknowledgment Trivial File Transfer Protocol packet
-class OptionAcknowledgment {
+class OptionAcknowledgment final {
   public:
     /// Use with parsing functions only
     OptionAcknowledgment() = default;
@@ -268,7 +268,7 @@ class OptionAcknowledgment {
     /// Convert packet to network byte order and serialize it into the given buffer by the iterator
     /// @param[It] Requirements: \p *(It) must be assignable from \p std::uint8_t
     /// @return Size of the packet (in bytes)
-    template <class OutputIterator> std::size_t serialize(OutputIterator It) {
+    template <class OutputIterator> std::size_t serialize(OutputIterator It) const noexcept {
         *(It++) = static_cast<std::uint8_t>(htons(Type_) >> 0);
         *(It++) = static_cast<std::uint8_t>(htons(Type_) >> 8);
 
@@ -288,14 +288,14 @@ class OptionAcknowledgment {
         return sizeof(Type) + OptionsSize;
     }
 
-    std::uint16_t getType() const { return Type_; }
+    std::uint16_t getType() const noexcept { return Type_; }
 
     /// Get all options
-    const std::unordered_map<std::string, std::string> &getOptions() const { return Options; }
+    const std::unordered_map<std::string, std::string> &getOptions() const noexcept { return Options; }
 
     /// Get option value by its name
     /// @throws std::out_of_range if there's no option with the specified name
-    std::string_view getOptionValue(const std::string &OptionName) const { return Options.at(OptionName); }
+    std::string_view getOptionValue(const std::string &OptionName) const noexcept { return Options.at(OptionName); }
 
   private:
     friend ParseResult parse(const std::uint8_t *Buffer, std::size_t Len, OptionAcknowledgment &Packet);
