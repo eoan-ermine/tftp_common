@@ -20,7 +20,7 @@ using namespace tftp_common::packets;
 TEST(Request, Serialization) {
     std::string Filename = "example_filename.cpp";
     std::string Mode = "netascii";
-    auto Packet = Request{Type::ReadRequest, Filename, Mode};
+    auto Packet = Request{types::ReadRequest, Filename, Mode};
 
     std::vector<std::uint8_t> Buffer;
     auto PacketSize = Packet.serialize(std::back_inserter(Buffer));
@@ -48,7 +48,7 @@ TEST(Request, OptionSerialization) {
     std::string Mode = "netascii";
     std::vector<std::string> OptionsNames = {"saveFiles", "discardQualifiers", "secret"};
     std::vector<std::string> OptionsValues = {"true", "false", "Ix0e86yG8YpFzwz1gS0XxJW3"};
-    auto Packet = Request{Type::ReadRequest, Filename, Mode, OptionsNames, OptionsValues};
+    auto Packet = Request{types::ReadRequest, Filename, Mode, OptionsNames, OptionsValues};
 
     std::size_t OptionsSize = 0;
     for (std::size_t Idx = 0; Idx != OptionsNames.size(); ++Idx) {

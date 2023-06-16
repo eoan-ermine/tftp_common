@@ -37,7 +37,7 @@ ParseResult parse(const std::uint8_t *Buffer, std::size_t Len, Request &Packet) 
         case 1:
             Packet.Type_ |= std::uint16_t(Byte) << 8;
             Packet.Type_ = ntohs(Packet.Type_);
-            if (Packet.Type_ != packets::Type::ReadRequest && Packet.Type_ != packets::Type::WriteRequest) {
+            if (Packet.Type_ != types::ReadRequest && Packet.Type_ != types::WriteRequest) {
                 Step = 0;
                 continue;
             }
@@ -116,7 +116,7 @@ ParseResult parse(const std::uint8_t *Buffer, std::size_t Len, Data &Packet) {
         case 1:
             Packet.Type_ |= std::uint16_t(Byte) << 8;
             Packet.Type_ = ntohs(Packet.Type_);
-            if (Packet.Type_ != packets::Type::DataPacket) {
+            if (Packet.Type_ != types::DataPacket) {
                 Step = 0;
                 continue;
             }
@@ -171,7 +171,7 @@ ParseResult parse(const std::uint8_t *Buffer, std::size_t Len, Acknowledgment &P
         case 1:
             Packet.Type_ |= std::uint16_t(Byte) << 8;
             Packet.Type_ = ntohs(Packet.Type_);
-            if (Packet.Type_ != packets::Type::AcknowledgmentPacket) {
+            if (Packet.Type_ != types::AcknowledgmentPacket) {
                 Step = 0;
                 continue;
             }
@@ -216,7 +216,7 @@ ParseResult parse(const std::uint8_t *Buffer, std::size_t Len, Error &Packet) {
         case 1:
             Packet.Type_ |= std::uint16_t(Byte) << 8;
             Packet.Type_ = ntohs(Packet.Type_);
-            if (Packet.Type_ != packets::Type::ErrorPacket) {
+            if (Packet.Type_ != types::ErrorPacket) {
                 Step = 0;
                 continue;
             }
@@ -272,7 +272,7 @@ ParseResult parse(const std::uint8_t *Buffer, std::size_t Len, OptionAcknowledgm
         case 1:
             Packet.Type_ |= std::uint16_t(Byte) << 8;
             Packet.Type_ = ntohs(Packet.Type_);
-            if (Packet.Type_ != packets::Type::OptionAcknowledgmentPacket) {
+            if (Packet.Type_ != types::OptionAcknowledgmentPacket) {
                 Step = 0;
                 continue;
             }

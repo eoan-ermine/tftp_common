@@ -17,6 +17,8 @@ namespace tftp_common::packets {
 
 struct ParseResult;
 
+namespace types {
+
 /// Trivial File Transfer Protocol packet type
 enum Type : std::uint16_t {
     /// Read request (RRQ) operation code
@@ -33,33 +35,35 @@ enum Type : std::uint16_t {
     OptionAcknowledgmentPacket = 0x06
 };
 
+}
+
 /// Read/Write Request (RRQ/WRQ) Trivial File Transfer Protocol packet
 class Request final {
   public:
     /// Use with parsing functions only
     Request() = default;
     /// @param[Type] Assumptions: The \p type is either ::ReadRequest or ::WriteRequest
-    Request(Type Type, std::string_view Filename, std::string_view Mode) : Type_(Type), Filename(Filename), Mode(Mode) {
-        assert(Type == Type::ReadRequest || Type == Type::WriteRequest);
+    Request(types::Type Type, std::string_view Filename, std::string_view Mode) : Type_(Type), Filename(Filename), Mode(Mode) {
+        assert(Type == types::ReadRequest || Type == types::WriteRequest);
     }
     /// @param[Type] Assumptions: The \p type is either ::ReadRequest or ::WriteRequest
-    Request(Type Type, std::string &&Filename, std::string &&Mode) noexcept
+    Request(types::Type Type, std::string &&Filename, std::string &&Mode) noexcept
         : Type_(Type), Filename(std::move(Filename)), Mode(std::move(Mode)) {
-        assert(Type == Type::ReadRequest || Type == Type::WriteRequest);
+        assert(Type == types::ReadRequest || Type == types::WriteRequest);
     }
     /// @param[Type] Assumptions: The \p type is either ::ReadRequest or ::WriteRequest
-    Request(Type Type, std::string_view Filename, std::string_view Mode, const std::vector<std::string> &OptionsNames,
+    Request(types::Type Type, std::string_view Filename, std::string_view Mode, const std::vector<std::string> &OptionsNames,
             const std::vector<std::string> &OptionsValues)
         : Request(Type, Filename, Mode) {
         this->OptionsNames = OptionsNames;
         this->OptionsValues = OptionsValues;
     }
     /// @param[Type] Assumptions: The \p type is either ::ReadRequest or ::WriteRequest
-    Request(Type Type, std::string &&Filename, std::string &&Mode, std::vector<std::string> &&OptionsNames,
+    Request(types::Type Type, std::string &&Filename, std::string &&Mode, std::vector<std::string> &&OptionsNames,
             std::vector<std::string> &&OptionsValues) noexcept
         : Type_(Type), Filename(std::move(Filename)), Mode(std::move(Mode)), OptionsNames(std::move(OptionsNames)),
           OptionsValues(std::move(OptionsValues)) {
-        assert(Type == Type::ReadRequest || Type == Type::WriteRequest);
+        assert(Type == types::ReadRequest || Type == types::WriteRequest);
     }
 
     /// Convert packet to network byte order and serialize it into the given buffer by the iterator
@@ -94,7 +98,7 @@ class Request final {
             OptionsSize += OptionsNames[Idx].size() + OptionsValues[Idx].size() + 2;
         }
 
-        return sizeof(Type) + Filename.size() + Mode.size() + OptionsSize + 2;
+        return sizeof(Type_) + Filename.size() + Mode.size() + OptionsSize + 2;
     }
 
     std::uint16_t getType() const noexcept { return Type_; }
@@ -157,7 +161,7 @@ class Data final {
             *(It++) = Byte;
         }
 
-        return sizeof(Type) + sizeof(Block) + DataBuffer.size();
+        return sizeof(Type_) + sizeof(Block) + DataBuffer.size();
     }
 
     std::uint16_t getType() const noexcept { return Type_; }
@@ -169,7 +173,7 @@ class Data final {
   private:
     friend ParseResult parse(const std::uint8_t *Buffer, std::size_t Len, Data &Packet);
 
-    std::uint16_t Type_ = Type::DataPacket;
+    std::uint16_t Type_ = types::DataPacket;
     std::uint16_t Block;
     std::vector<std::uint8_t> DataBuffer;
 };
@@ -198,13 +202,13 @@ class Acknowledgment final {
         *(It++) = static_cast<std::uint8_t>(htons(Block) >> 0);
         *(It++) = static_cast<std::uint8_t>(htons(Block) >> 8);
 
-        return sizeof(Type) + sizeof(Block);
+        return sizeof(Type_) + sizeof(Block);
     }
 
   private:
     friend ParseResult parse(const std::uint8_t *Buffer, std::size_t Len, Acknowledgment &Packet);
 
-    std::uint16_t Type_ = Type::AcknowledgmentPacket;
+    std::uint16_t Type_ = types::AcknowledgmentPacket;
     std::uint16_t Block;
 };
 
@@ -245,13 +249,13 @@ class Error final {
         }
         *(It++) = '\0';
 
-        return sizeof(Type) + sizeof(ErrorCode) + ErrorMessage.size() + 1;
+        return sizeof(Type_) + sizeof(ErrorCode) + ErrorMessage.size() + 1;
     }
 
   private:
     friend ParseResult parse(const std::uint8_t *Buffer, std::size_t Len, Error &Packet);
 
-    std::uint16_t Type_ = Type::ErrorPacket;
+    std::uint16_t Type_ = types::ErrorPacket;
     std::uint16_t ErrorCode;
     std::string ErrorMessage;
 };
@@ -283,7 +287,7 @@ class OptionAcknowledgment final {
             OptionsSize += Key.size() + Value.size() + 2;
         }
 
-        return sizeof(Type) + OptionsSize;
+        return sizeof(Type_) + OptionsSize;
     }
 
     std::uint16_t getType() const noexcept { return Type_; }
@@ -298,7 +302,7 @@ class OptionAcknowledgment final {
   private:
     friend ParseResult parse(const std::uint8_t *Buffer, std::size_t Len, OptionAcknowledgment &Packet);
 
-    std::uint16_t Type_ = Type::OptionAcknowledgmentPacket;
+    std::uint16_t Type_ = types::OptionAcknowledgmentPacket;
     // According to the RFC, the order in which options are specified is not significant, so it's fine
     std::unordered_map<std::string, std::string> Options;
 };

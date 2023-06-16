@@ -1,4 +1,4 @@
-#include "../tftp_common/parser.hpp"
+#include "../tftp_common/parsers.hpp"
 #include <gtest/gtest.h>
 
 using namespace tftp_common::packets;
@@ -17,7 +17,7 @@ TEST(Request, Parse) {
     Request Packet;
     auto [success, bytesRead] = parse(PacketBytes, Length, Packet);
 
-    ASSERT_EQ(Packet.getType(), Type::ReadRequest);
+    ASSERT_EQ(Packet.getType(), types::ReadRequest);
     ASSERT_EQ(Packet.getFilename(), "/srv/tftp/ReadFile");
     ASSERT_EQ(Packet.getMode(), "netascii");
 
@@ -53,7 +53,7 @@ TEST(Request, OptionParse) {
     Request Packet;
     auto [success, bytesRead] = parse(PacketBytes, Length, Packet);
 
-    ASSERT_EQ(Packet.getType(), Type::ReadRequest);
+    ASSERT_EQ(Packet.getType(), types::ReadRequest);
     ASSERT_EQ(Packet.getFilename(), "/srv/tftp/ReadFile");
     ASSERT_EQ(Packet.getMode(), "netascii");
 
@@ -82,7 +82,7 @@ TEST(Data, Parse) {
     Data Packet;
     auto [success, bytesRead] = parse(PacketBytes, Length, Packet);
 
-    ASSERT_EQ(Packet.getType(), Type::DataPacket);
+    ASSERT_EQ(Packet.getType(), types::DataPacket);
     ASSERT_EQ(Packet.getBlock(), 0x01);
     const auto &Data = Packet.getData();
 
@@ -106,7 +106,7 @@ TEST(Acknowledgment, Parse) {
     Acknowledgment Packet;
     auto [success, bytesRead] = parse(PacketBytes, Length, Packet);
 
-    ASSERT_EQ(Packet.getType(), Type::AcknowledgmentPacket);
+    ASSERT_EQ(Packet.getType(), types::AcknowledgmentPacket);
     ASSERT_EQ(Packet.getBlock(), 0x01);
 
     ASSERT_EQ(success, true);
@@ -127,7 +127,7 @@ TEST(Error, Parse) {
     Error Packet;
     auto [success, bytesRead] = parse(PacketBytes, Length, Packet);
 
-    ASSERT_EQ(Packet.getType(), Type::ErrorPacket);
+    ASSERT_EQ(Packet.getType(), types::ErrorPacket);
     ASSERT_EQ(Packet.getErrorCode(), 0x01);
     ASSERT_EQ(Packet.getErrorMessage(), "File not found");
 
@@ -158,7 +158,7 @@ TEST(OptionAcknowledgment, Parse) {
     OptionAcknowledgment Packet;
     auto [success, bytesRead] = parse(PacketBytes, Length, Packet);
 
-    ASSERT_EQ(Packet.getType(), Type::OptionAcknowledgmentPacket);
+    ASSERT_EQ(Packet.getType(), types::OptionAcknowledgmentPacket);
 
     std::unordered_map<std::string, std::string> Options = {
         {"saveFiles", "true"}, {"discardQualifiers", "false"}, {"secret", "Ix0e86yG8YpFzwz1gS0XxJW3"}};
