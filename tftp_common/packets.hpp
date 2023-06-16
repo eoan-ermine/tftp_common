@@ -12,6 +12,7 @@
 #include <string_view>
 #include <unordered_map>
 #include <vector>
+#include <iostream>
 
 namespace tftp_common::packets {
 
@@ -39,27 +40,16 @@ class Request {
     /// Use with parsing functions only
     Request() = default;
     /// @param[Type] Assumptions: The \p type is either ::ReadRequest or ::WriteRequest
-    /// @param[Filename] Assumptions: The \p Filename is a view to **null-terminated string**
-    /// @param[Mode] Assumptions: The \p Mode is a view to **null-terminated string**
     Request(Type Type, std::string_view Filename, std::string_view Mode)
-        : Type_(Type), Filename(Filename.begin(), Filename.end() + 1), Mode(Mode.begin(), Mode.end() + 1) {
+        : Type_(Type), Filename(Filename), Mode(Mode) {
         assert(Type == Type::ReadRequest || Type == Type::WriteRequest);
-        assert(Filename[Filename.size()] == '\0');
-        assert(Mode[Mode.size()] == '\0');
     }
     /// @param[Type] Assumptions: The \p type is either ::ReadRequest or ::WriteRequest
-    /// @param[Filename] Assumptions: The \p Filename is a view to **null-terminated string**
-    /// @param[Mode] Assumptions: The \p Mode is a view to **null-terminated string**
     Request(Type Type, std::string &&Filename, std::string &&Mode)
-        : Type_(Type), Filename(std::make_move_iterator(Filename.begin()), std::make_move_iterator(Filename.end())),
-          Mode(std::make_move_iterator(Mode.begin()), std::make_move_iterator(Mode.end())) {
+        : Type_(Type), Filename(std::move(Filename)), Mode(std::move(Mode)) {
         assert(Type == Type::ReadRequest || Type == Type::WriteRequest);
-        assert(this->Filename[this->Filename.size()] == '\0');
-        assert(this->Mode[this->Mode.size()] == '\0');
     }
     /// @param[Type] Assumptions: The \p type is either ::ReadRequest or ::WriteRequest
-    /// @param[Filename] Assumptions: The \p Filename is a view to **null-terminated string**
-    /// @param[Mode] Assumptions: The \p Mode is a view to **null-terminated string**
     Request(Type Type, std::string_view Filename, std::string_view Mode, const std::vector<std::string> &OptionsNames,
             const std::vector<std::string> &OptionsValues)
         : Request(Type, Filename, Mode) {
@@ -67,16 +57,11 @@ class Request {
         this->OptionsValues = OptionsValues;
     }
     /// @param[Type] Assumptions: The \p type is either ::ReadRequest or ::WriteRequest
-    /// @param[Filename] Assumptions: The \p Filename is a view to **null-terminated string**
-    /// @param[Mode] Assumptions: The \p Mode is a view to **null-terminated string**
     Request(Type Type, std::string &&Filename, std::string &&Mode, std::vector<std::string> &&OptionsNames,
             std::vector<std::string> &&OptionsValues)
-        : Type_(Type), Filename(std::make_move_iterator(Filename.begin()), std::make_move_iterator(Filename.end())),
-          Mode(std::make_move_iterator(Mode.begin()), std::make_move_iterator(Mode.end())),
+        : Type_(Type), Filename(std::move(Filename)), Mode(std::move(Mode)),
           OptionsNames(std::move(OptionsNames)), OptionsValues(std::move(OptionsValues)) {
         assert(Type == Type::ReadRequest || Type == Type::WriteRequest);
-        assert(this->Filename[this->Filename.size()] == '\0');
-        assert(this->Mode[this->Mode.size()] == '\0');
     }
 
     /// Convert packet to network byte order and serialize it into the given buffer by the iterator
@@ -89,11 +74,14 @@ class Request {
         *(It++) = static_cast<std::uint8_t>(htons(Type_) >> 8);
 
         for (auto Byte : Filename) {
-            *(It++) = Byte;
+            *(It++) = static_cast<std::uint8_t>(Byte);
         }
+        *(It++) = '\0';
+
         for (auto Byte : Mode) {
-            *(It++) = Byte;
+            *(It++) = static_cast<std::uint8_t>(Byte);
         }
+        *(It++) = '\0';
 
         std::size_t OptionsSize = 0;
         for (std::size_t Idx = 0; Idx != OptionsNames.size(); ++Idx) {
@@ -108,17 +96,17 @@ class Request {
             OptionsSize += OptionsNames[Idx].size() + OptionsValues[Idx].size() + 2;
         }
 
-        return sizeof(Type) + Filename.size() + Mode.size() + OptionsSize;
+        return sizeof(Type) + Filename.size() + Mode.size() + OptionsSize + 2;
     }
 
     std::uint16_t getType() const { return Type_; }
 
     std::string_view getFilename() const {
-        return std::string_view(reinterpret_cast<const char *>(Filename.data()), Filename.size() - 1);
+        return std::string_view(Filename.data(), Filename.size());
     }
 
     std::string_view getMode() const {
-        return std::string_view(reinterpret_cast<const char *>(Mode.data()), Mode.size() - 1);
+        return std::string_view(Mode.data(), Mode.size());
     }
 
     std::string_view getOptionName(std::size_t Idx) const {
@@ -133,8 +121,8 @@ class Request {
     friend ParseResult parse(const std::uint8_t *Buffer, std::size_t Len, Request &Packet);
 
     std::uint16_t Type_;
-    std::vector<std::uint8_t> Filename;
-    std::vector<std::uint8_t> Mode;
+    std::string Filename;
+    std::string Mode;
     std::vector<std::string> OptionsNames;
     std::vector<std::string> OptionsValues;
 };
@@ -232,11 +220,9 @@ class Error {
     /// Use with parsing functions only
     Error() = default;
     /// @param[ErrorCode] Assumptions: The \p ErrorCode is equal or greater than zero and less or equal than eight
-    /// @param[ErrorMessage] Assumptions: The \p ErrorMessage is a view to **null-terminated string**
     Error(std::uint16_t ErrorCode, std::string_view ErrorMessage)
-        : ErrorCode(ErrorCode), ErrorMessage(ErrorMessage.begin(), ErrorMessage.end() + 1) {
+        : ErrorCode(ErrorCode), ErrorMessage(ErrorMessage) {
         assert(ErrorCode >= 0 && ErrorCode <= 8);
-        assert(ErrorMessage[ErrorMessage.size()] == '\0');
     }
 
     std::uint16_t getType() const { return Type_; }
@@ -244,7 +230,7 @@ class Error {
     std::uint16_t getErrorCode() const { return ErrorCode; }
 
     std::string_view getErrorMessage() const {
-        return std::string_view(reinterpret_cast<const char *>(ErrorMessage.data()), ErrorMessage.size() - 1);
+        return std::string_view(ErrorMessage.data(), ErrorMessage.size());
     }
 
     /// Convert packet to network byte order and serialize it into the given buffer by the iterator
@@ -255,11 +241,13 @@ class Error {
         *(It++) = static_cast<std::uint8_t>(htons(Type_) >> 8);
         *(It++) = static_cast<std::uint8_t>(htons(ErrorCode) >> 0);
         *(It++) = static_cast<std::uint8_t>(htons(ErrorCode) >> 8);
+        
         for (auto Byte : ErrorMessage) {
             *(It++) = Byte;
         }
+        *(It++) = '\0';
 
-        return sizeof(Type) + sizeof(ErrorCode) + ErrorMessage.size();
+        return sizeof(Type) + sizeof(ErrorCode) + ErrorMessage.size() + 1;
     }
 
   private:
@@ -267,7 +255,7 @@ class Error {
 
     std::uint16_t Type_ = Type::ErrorPacket;
     std::uint16_t ErrorCode;
-    std::vector<std::uint8_t> ErrorMessage;
+    std::string ErrorMessage;
 };
 
 /// Option Acknowledgment Trivial File Transfer Protocol packet

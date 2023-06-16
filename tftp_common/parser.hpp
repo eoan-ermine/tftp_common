@@ -45,21 +45,21 @@ ParseResult parse(const std::uint8_t *Buffer, std::size_t Len, Request &Packet) 
             break;
         // Filename
         case 2:
-            Packet.Filename.push_back(Byte);
-
             if (Byte == 0u) {
                 Step++;
+            } else {
+                Packet.Filename.push_back(Byte);
             }
             break;
         // Mode
         case 3:
-            Packet.Mode.push_back(Byte);
-
             if (Byte == 0u) {
                 if (Idx == Len - 1) {
                     return ParseResult{true, BytesRead};
                 }
                 Step++;
+            } else {
+                Packet.Mode.push_back(Byte);
             }
             break;
         // Option name
@@ -234,10 +234,10 @@ ParseResult parse(const std::uint8_t *Buffer, std::size_t Len, Error &Packet) {
             break;
         // ErrorMessage
         case 4:
-            Packet.ErrorMessage.push_back(Byte);
-
             if (Byte == 0u) {
                 return ParseResult{true, BytesRead};
+            } else {
+                Packet.ErrorMessage.push_back(Byte);
             }
             break;
         default:
