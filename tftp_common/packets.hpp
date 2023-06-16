@@ -31,7 +31,7 @@ enum Type : std::uint16_t {
     AcknowledgmentPacket = 0x04,
     /// Error (ERROR) operation code
     ErrorPacket = 0x05,
-    // Option Acknowledgment (OACK) operation code
+    /// Option Acknowledgment (OACK) operation code
     OptionAcknowledgmentPacket = 0x06
 };
 
