@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['type_65',['Type',['../namespacetftp__common_1_1packets.html#a2b58b8a0fcf82f3a4c69feb5078fea4a',1,'tftp_common::packets']]]
+  ['error_88',['Error',['../namespacetftp__common_1_1packets_1_1errors.html#ab7296f681687be9b652da978d957ef29',1,'tftp_common::packets::errors']]]
 ];

@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['serialize_26',['serialize',['../classtftp__common_1_1packets_1_1Request.html#a2a4359dccec1a4d6e3b7f8fc89382d69',1,'tftp_common::packets::Request::serialize()'],['../classtftp__common_1_1packets_1_1Data.html#a8af582900335b6ea2136dc8b08df0968',1,'tftp_common::packets::Data::serialize()'],['../classtftp__common_1_1packets_1_1Acknowledgment.html#a73799540964e4b609154453d89befe77',1,'tftp_common::packets::Acknowledgment::serialize()'],['../classtftp__common_1_1packets_1_1Error.html#af7199b14546117025789a1d5b3b65f81',1,'tftp_common::packets::Error::serialize()'],['../classtftp__common_1_1packets_1_1OptionAcknowledgment.html#a8ab4528d4dbe4573a605897162781d2f',1,'tftp_common::packets::OptionAcknowledgment::serialize()']]],
-  ['success_27',['Success',['../structtftp__common_1_1packets_1_1ParseResult.html#aa1a6e13627ef751531457a21a9771c9e',1,'tftp_common::packets::ParseResult']]]
+  ['netascii_25',['netascii',['../namespacetftp__common_1_1packets_1_1modes.html#a6acb5aab7ab56476a57dcaa97b1bf720ae85199168a5b6cb3cd6b3d971587327d',1,'tftp_common::packets::modes']]],
+  ['nosuchuser_26',['NoSuchUser',['../namespacetftp__common_1_1packets_1_1errors.html#ab7296f681687be9b652da978d957ef29a37b35d37652147cb9268937e8ea913cc',1,'tftp_common::packets::errors']]],
+  ['notdefined_27',['NotDefined',['../namespacetftp__common_1_1packets_1_1errors.html#ab7296f681687be9b652da978d957ef29a6fbe502c1ddd6c2c568d28b93715d2cb',1,'tftp_common::packets::errors']]]
 ];

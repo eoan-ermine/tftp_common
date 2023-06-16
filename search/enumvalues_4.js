@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['readrequest_70',['ReadRequest',['../namespacetftp__common_1_1packets.html#a2b58b8a0fcf82f3a4c69feb5078fea4aa2874473104c401d6085a1315201d27a0',1,'tftp_common::packets']]]
+  ['illegaloperation_98',['IllegalOperation',['../namespacetftp__common_1_1packets_1_1errors.html#ab7296f681687be9b652da978d957ef29a8354cc0f11904b63eedbd252979da32d',1,'tftp_common::packets::errors']]]
 ];
