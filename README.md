@@ -18,10 +18,11 @@ A simple header-only Trivial File Transfer Protocol (*TFTP*) packets parsing and
 
 ## Dependencies
 
-| Dependency name         | Minimum required version | Ubuntu 22.04                         |
-|-------------------------|--------------------------|--------------------------------------|
-| C++                     | C++17                    | sudo apt-get install build-essential |
-| Doxygen (optional)      | ---                      | sudo apt-get install doxygen         |
+| Dependency name                     | Minimum required version | Ubuntu 22.04                         |
+|-------------------------------------|--------------------------|--------------------------------------|
+| C++                                 | C++17                    | sudo apt-get install build-essential |
+| Doxygen (optional)                  | ---                      | sudo apt-get install doxygen         |
+| ClangFormat (development, optional) | ---                      | sudo apt-get install clang-format    |
 
 ## Quick start
 
