@@ -12,7 +12,6 @@
 #include <string_view>
 #include <unordered_map>
 #include <vector>
-#include <iostream>
 
 namespace tftp_common::packets {
 
@@ -35,13 +34,12 @@ enum Type : std::uint16_t {
 };
 
 /// Read/Write Request (RRQ/WRQ) Trivial File Transfer Protocol packet
-class Request final{
+class Request final {
   public:
     /// Use with parsing functions only
     Request() = default;
     /// @param[Type] Assumptions: The \p type is either ::ReadRequest or ::WriteRequest
-    Request(Type Type, std::string_view Filename, std::string_view Mode)
-        : Type_(Type), Filename(Filename), Mode(Mode) {
+    Request(Type Type, std::string_view Filename, std::string_view Mode) : Type_(Type), Filename(Filename), Mode(Mode) {
         assert(Type == Type::ReadRequest || Type == Type::WriteRequest);
     }
     /// @param[Type] Assumptions: The \p type is either ::ReadRequest or ::WriteRequest
@@ -59,8 +57,8 @@ class Request final{
     /// @param[Type] Assumptions: The \p type is either ::ReadRequest or ::WriteRequest
     Request(Type Type, std::string &&Filename, std::string &&Mode, std::vector<std::string> &&OptionsNames,
             std::vector<std::string> &&OptionsValues) noexcept
-        : Type_(Type), Filename(std::move(Filename)), Mode(std::move(Mode)),
-          OptionsNames(std::move(OptionsNames)), OptionsValues(std::move(OptionsValues)) {
+        : Type_(Type), Filename(std::move(Filename)), Mode(std::move(Mode)), OptionsNames(std::move(OptionsNames)),
+          OptionsValues(std::move(OptionsValues)) {
         assert(Type == Type::ReadRequest || Type == Type::WriteRequest);
     }
 
@@ -101,13 +99,9 @@ class Request final{
 
     std::uint16_t getType() const noexcept { return Type_; }
 
-    std::string_view getFilename() const noexcept {
-        return std::string_view(Filename.data(), Filename.size());
-    }
+    std::string_view getFilename() const noexcept { return std::string_view(Filename.data(), Filename.size()); }
 
-    std::string_view getMode() const noexcept {
-        return std::string_view(Mode.data(), Mode.size());
-    }
+    std::string_view getMode() const noexcept { return std::string_view(Mode.data(), Mode.size()); }
 
     std::string_view getOptionName(std::size_t Idx) const noexcept {
         return std::string_view(OptionsNames[Idx].data(), OptionsNames[Idx].size());
@@ -128,7 +122,7 @@ class Request final{
 };
 
 /// Data Trivial File Transfer Protocol packet
-class Data final{
+class Data final {
   public:
     /// Use with parsing functions only
     Data() = default;
@@ -220,8 +214,7 @@ class Error final {
     /// Use with parsing functions only
     Error() = default;
     /// @param[ErrorCode] Assumptions: The \p ErrorCode is equal or greater than zero and less or equal than eight
-    Error(std::uint16_t ErrorCode, std::string_view ErrorMessage)
-        : ErrorCode(ErrorCode), ErrorMessage(ErrorMessage) {
+    Error(std::uint16_t ErrorCode, std::string_view ErrorMessage) : ErrorCode(ErrorCode), ErrorMessage(ErrorMessage) {
         assert(ErrorCode >= 0 && ErrorCode <= 8);
     }
     /// @param[ErrorCode] Assumptions: The \p ErrorCode is equal or greater than zero and less or equal than eight
@@ -246,7 +239,7 @@ class Error final {
         *(It++) = static_cast<std::uint8_t>(htons(Type_) >> 8);
         *(It++) = static_cast<std::uint8_t>(htons(ErrorCode) >> 0);
         *(It++) = static_cast<std::uint8_t>(htons(ErrorCode) >> 8);
-        
+
         for (auto Byte : ErrorMessage) {
             *(It++) = Byte;
         }
