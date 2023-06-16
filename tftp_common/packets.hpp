@@ -35,7 +35,7 @@ enum Type : std::uint16_t {
     OptionAcknowledgmentPacket = 0x06
 };
 
-}
+} // namespace types
 
 namespace errors {
 
@@ -59,7 +59,7 @@ enum Error : std::uint16_t {
     NoSuchUser = 7
 };
 
-}
+} // namespace errors
 
 namespace modes {
 
@@ -71,7 +71,7 @@ enum TransferMode {
     octet
 };
 
-}
+} // namespace modes
 
 /// Read/Write Request (RRQ/WRQ) Trivial File Transfer Protocol packet
 class Request final {
@@ -79,7 +79,8 @@ class Request final {
     /// Use with parsing functions only
     Request() = default;
     /// @param[Type] Assumptions: The \p type is either ::ReadRequest or ::WriteRequest
-    Request(types::Type Type, std::string_view Filename, std::string_view Mode) : Type_(Type), Filename(Filename), Mode(Mode) {
+    Request(types::Type Type, std::string_view Filename, std::string_view Mode)
+        : Type_(Type), Filename(Filename), Mode(Mode) {
         assert(Type == types::ReadRequest || Type == types::WriteRequest);
     }
     /// @param[Type] Assumptions: The \p type is either ::ReadRequest or ::WriteRequest
@@ -88,8 +89,8 @@ class Request final {
         assert(Type == types::ReadRequest || Type == types::WriteRequest);
     }
     /// @param[Type] Assumptions: The \p type is either ::ReadRequest or ::WriteRequest
-    Request(types::Type Type, std::string_view Filename, std::string_view Mode, const std::vector<std::string> &OptionsNames,
-            const std::vector<std::string> &OptionsValues)
+    Request(types::Type Type, std::string_view Filename, std::string_view Mode,
+            const std::vector<std::string> &OptionsNames, const std::vector<std::string> &OptionsValues)
         : Request(Type, Filename, Mode) {
         this->OptionsNames = OptionsNames;
         this->OptionsValues = OptionsValues;
@@ -329,34 +330,22 @@ class OptionAcknowledgment final {
     std::uint16_t getType() const noexcept { return Type_; }
 
     /// @return Iterator to the first option (name and value) pair
-    auto begin() noexcept {
-        return Options.begin();
-    }
+    auto begin() noexcept { return Options.begin(); }
 
     /// @return Constant iterator to the first option (name and value) pair
-    auto begin() const noexcept {
-        return Options.begin();
-    }
+    auto begin() const noexcept { return Options.begin(); }
 
     /// @return Constant iterator to the first option (name and value) pair
-    auto cbegin() const noexcept {
-        return Options.cbegin();
-    }
+    auto cbegin() const noexcept { return Options.cbegin(); }
 
     /// @return Iterator to the element following the last option (name and value) pair
-    auto end() noexcept {
-        return Options.end();
-    }
+    auto end() noexcept { return Options.end(); }
 
     /// @return Constant iterator to the element following the last option (name and value) pair
-    auto end() const noexcept {
-        return Options.end();
-    }
+    auto end() const noexcept { return Options.end(); }
 
     /// @return Constant iterator to the element following the last option (name and value) pair
-    auto cend() const noexcept {
-        return Options.cend();
-    }
+    auto cend() const noexcept { return Options.cend(); }
 
     /// Get option value by its name
     /// @throws std::out_of_range if there's no option with the specified name
