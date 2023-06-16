@@ -110,21 +110,21 @@ $(function() {
 <div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;            <span class="keywordflow">break</span>;</div>
 <div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;        <span class="comment">// Filename</span></div>
 <div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;        <span class="keywordflow">case</span> 2:</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;            Packet.Filename.push_back(Byte);</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160; </div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;            <span class="keywordflow">if</span> (Byte == 0u) {</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;                Step++;</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;            <span class="keywordflow">if</span> (Byte == 0u) {</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;                Step++;</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;            } <span class="keywordflow">else</span> {</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;                Packet.Filename.push_back(Byte);</div>
 <div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;            }</div>
 <div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;            <span class="keywordflow">break</span>;</div>
 <div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;        <span class="comment">// Mode</span></div>
 <div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        <span class="keywordflow">case</span> 3:</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;            Packet.Mode.push_back(Byte);</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160; </div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;            <span class="keywordflow">if</span> (Byte == 0u) {</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;                <span class="keywordflow">if</span> (Idx == Len - 1) {</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;                    <span class="keywordflow">return</span> <a class="code" href="structtftp__common_1_1packets_1_1ParseResult.html">ParseResult</a>{<span class="keyword">true</span>, BytesRead};</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;                }</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;                Step++;</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;            <span class="keywordflow">if</span> (Byte == 0u) {</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;                <span class="keywordflow">if</span> (Idx == Len - 1) {</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;                    <span class="keywordflow">return</span> <a class="code" href="structtftp__common_1_1packets_1_1ParseResult.html">ParseResult</a>{<span class="keyword">true</span>, BytesRead};</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;                }</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;                Step++;</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;            } <span class="keywordflow">else</span> {</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;                Packet.Mode.push_back(Byte);</div>
 <div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;            }</div>
 <div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;            <span class="keywordflow">break</span>;</div>
 <div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;        <span class="comment">// Option name</span></div>
@@ -287,10 +287,10 @@ $(function() {
 <div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;            <span class="keywordflow">break</span>;</div>
 <div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;        <span class="comment">// ErrorMessage</span></div>
 <div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;        <span class="keywordflow">case</span> 4:</div>
-<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;            Packet.ErrorMessage.push_back(Byte);</div>
-<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160; </div>
-<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;            <span class="keywordflow">if</span> (Byte == 0u) {</div>
-<div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160;                <span class="keywordflow">return</span> <a class="code" href="structtftp__common_1_1packets_1_1ParseResult.html">ParseResult</a>{<span class="keyword">true</span>, BytesRead};</div>
+<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;            <span class="keywordflow">if</span> (Byte == 0u) {</div>
+<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;                <span class="keywordflow">return</span> <a class="code" href="structtftp__common_1_1packets_1_1ParseResult.html">ParseResult</a>{<span class="keyword">true</span>, BytesRead};</div>
+<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;            } <span class="keywordflow">else</span> {</div>
+<div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160;                Packet.ErrorMessage.push_back(Byte);</div>
 <div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160;            }</div>
 <div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;            <span class="keywordflow">break</span>;</div>
 <div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;        <span class="keywordflow">default</span>:</div>
@@ -358,10 +358,10 @@ $(function() {
 <div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160;}</div>
 <div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160; </div>
 <div class="line"><a name="l00311"></a><span class="lineno">  311</span>&#160;} <span class="comment">// namespace tftp_common::packets</span></div>
-<div class="ttc" id="aclasstftp__common_1_1packets_1_1Acknowledgment_html"><div class="ttname"><a href="classtftp__common_1_1packets_1_1Acknowledgment.html">tftp_common::packets::Acknowledgment</a></div><div class="ttdoc">Acknowledgment Trivial File Transfer Protocol packet.</div><div class="ttdef"><b>Definition:</b> packets.hpp:196</div></div>
-<div class="ttc" id="aclasstftp__common_1_1packets_1_1Data_html"><div class="ttname"><a href="classtftp__common_1_1packets_1_1Data.html">tftp_common::packets::Data</a></div><div class="ttdoc">Data Trivial File Transfer Protocol packet.</div><div class="ttdef"><b>Definition:</b> packets.hpp:143</div></div>
-<div class="ttc" id="aclasstftp__common_1_1packets_1_1Error_html"><div class="ttname"><a href="classtftp__common_1_1packets_1_1Error.html">tftp_common::packets::Error</a></div><div class="ttdoc">Error Trivial File Transfer Protocol packet.</div><div class="ttdef"><b>Definition:</b> packets.hpp:230</div></div>
-<div class="ttc" id="aclasstftp__common_1_1packets_1_1OptionAcknowledgment_html"><div class="ttname"><a href="classtftp__common_1_1packets_1_1OptionAcknowledgment.html">tftp_common::packets::OptionAcknowledgment</a></div><div class="ttdoc">Option Acknowledgment Trivial File Transfer Protocol packet.</div><div class="ttdef"><b>Definition:</b> packets.hpp:274</div></div>
+<div class="ttc" id="aclasstftp__common_1_1packets_1_1Acknowledgment_html"><div class="ttname"><a href="classtftp__common_1_1packets_1_1Acknowledgment.html">tftp_common::packets::Acknowledgment</a></div><div class="ttdoc">Acknowledgment Trivial File Transfer Protocol packet.</div><div class="ttdef"><b>Definition:</b> packets.hpp:178</div></div>
+<div class="ttc" id="aclasstftp__common_1_1packets_1_1Data_html"><div class="ttname"><a href="classtftp__common_1_1packets_1_1Data.html">tftp_common::packets::Data</a></div><div class="ttdoc">Data Trivial File Transfer Protocol packet.</div><div class="ttdef"><b>Definition:</b> packets.hpp:125</div></div>
+<div class="ttc" id="aclasstftp__common_1_1packets_1_1Error_html"><div class="ttname"><a href="classtftp__common_1_1packets_1_1Error.html">tftp_common::packets::Error</a></div><div class="ttdoc">Error Trivial File Transfer Protocol packet.</div><div class="ttdef"><b>Definition:</b> packets.hpp:212</div></div>
+<div class="ttc" id="aclasstftp__common_1_1packets_1_1OptionAcknowledgment_html"><div class="ttname"><a href="classtftp__common_1_1packets_1_1OptionAcknowledgment.html">tftp_common::packets::OptionAcknowledgment</a></div><div class="ttdoc">Option Acknowledgment Trivial File Transfer Protocol packet.</div><div class="ttdef"><b>Definition:</b> packets.hpp:260</div></div>
 <div class="ttc" id="aclasstftp__common_1_1packets_1_1Request_html"><div class="ttname"><a href="classtftp__common_1_1packets_1_1Request.html">tftp_common::packets::Request</a></div><div class="ttdoc">Read/Write Request (RRQ/WRQ) Trivial File Transfer Protocol packet.</div><div class="ttdef"><b>Definition:</b> packets.hpp:37</div></div>
 <div class="ttc" id="anamespacetftp__common_1_1packets_html"><div class="ttname"><a href="namespacetftp__common_1_1packets.html">tftp_common::packets</a></div><div class="ttdef"><b>Definition:</b> packets.hpp:16</div></div>
 <div class="ttc" id="anamespacetftp__common_1_1packets_html_a2b58b8a0fcf82f3a4c69feb5078fea4aa2874473104c401d6085a1315201d27a0"><div class="ttname"><a href="namespacetftp__common_1_1packets.html#a2b58b8a0fcf82f3a4c69feb5078fea4aa2874473104c401d6085a1315201d27a0">tftp_common::packets::ReadRequest</a></div><div class="ttdeci">@ ReadRequest</div><div class="ttdoc">Read request (RRQ) operation code.</div><div class="ttdef"><b>Definition:</b> packets.hpp:23</div></div>
