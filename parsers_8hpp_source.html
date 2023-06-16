@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>TFTP Common: tftp_common/parser.hpp Source File</title>
+<title>TFTP Common: tftp_common/parsers.hpp Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -67,10 +67,10 @@ $(function() {
 </div><!-- top -->
 <div class="header">
   <div class="headertitle">
-<div class="title">parser.hpp</div>  </div>
+<div class="title">parsers.hpp</div>  </div>
 </div><!--header-->
 <div class="contents">
-<a href="parser_8hpp.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#pragma once</span></div>
+<a href="parsers_8hpp.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#pragma once</span></div>
 <div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160; </div>
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="packets_8hpp.html">packets.hpp</a>&quot;</span></div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160; </div>
@@ -370,11 +370,11 @@ $(function() {
 <div class="ttc" id="anamespacetftp__common_1_1packets_html_a2b58b8a0fcf82f3a4c69feb5078fea4aabdff55c238fc75b9a540daa002f607ef"><div class="ttname"><a href="namespacetftp__common_1_1packets.html#a2b58b8a0fcf82f3a4c69feb5078fea4aabdff55c238fc75b9a540daa002f607ef">tftp_common::packets::AcknowledgmentPacket</a></div><div class="ttdeci">@ AcknowledgmentPacket</div><div class="ttdoc">Acknowledgment (ACK) operation code.</div><div class="ttdef"><b>Definition:</b> packets.hpp:29</div></div>
 <div class="ttc" id="anamespacetftp__common_1_1packets_html_a2b58b8a0fcf82f3a4c69feb5078fea4aaf3a9a61532c0ad253021dc3b7ec4a311"><div class="ttname"><a href="namespacetftp__common_1_1packets.html#a2b58b8a0fcf82f3a4c69feb5078fea4aaf3a9a61532c0ad253021dc3b7ec4a311">tftp_common::packets::DataPacket</a></div><div class="ttdeci">@ DataPacket</div><div class="ttdoc">Data (DATA) operation code.</div><div class="ttdef"><b>Definition:</b> packets.hpp:27</div></div>
 <div class="ttc" id="anamespacetftp__common_1_1packets_html_a2b58b8a0fcf82f3a4c69feb5078fea4aaf8e8023e4d99c777598afbac87ee3de6"><div class="ttname"><a href="namespacetftp__common_1_1packets.html#a2b58b8a0fcf82f3a4c69feb5078fea4aaf8e8023e4d99c777598afbac87ee3de6">tftp_common::packets::WriteRequest</a></div><div class="ttdeci">@ WriteRequest</div><div class="ttdoc">Write request (WRQ) operation code.</div><div class="ttdef"><b>Definition:</b> packets.hpp:25</div></div>
-<div class="ttc" id="anamespacetftp__common_1_1packets_html_af429981ce6cb612102dffb39f237c1f9"><div class="ttname"><a href="namespacetftp__common_1_1packets.html#af429981ce6cb612102dffb39f237c1f9">tftp_common::packets::parse</a></div><div class="ttdeci">ParseResult parse(const std::uint8_t *Buffer, std::size_t Len, Request &amp;Packet)</div><div class="ttdef"><b>Definition:</b> parser.hpp:19</div></div>
+<div class="ttc" id="anamespacetftp__common_1_1packets_html_af429981ce6cb612102dffb39f237c1f9"><div class="ttname"><a href="namespacetftp__common_1_1packets.html#af429981ce6cb612102dffb39f237c1f9">tftp_common::packets::parse</a></div><div class="ttdeci">ParseResult parse(const std::uint8_t *Buffer, std::size_t Len, Request &amp;Packet)</div><div class="ttdef"><b>Definition:</b> parsers.hpp:19</div></div>
 <div class="ttc" id="apackets_8hpp_html"><div class="ttname"><a href="packets_8hpp.html">packets.hpp</a></div></div>
-<div class="ttc" id="astructtftp__common_1_1packets_1_1ParseResult_html"><div class="ttname"><a href="structtftp__common_1_1packets_1_1ParseResult.html">tftp_common::packets::ParseResult</a></div><div class="ttdoc">The result of parsing a single packet.</div><div class="ttdef"><b>Definition:</b> parser.hpp:8</div></div>
-<div class="ttc" id="astructtftp__common_1_1packets_1_1ParseResult_html_aa1a6e13627ef751531457a21a9771c9e"><div class="ttname"><a href="structtftp__common_1_1packets_1_1ParseResult.html#aa1a6e13627ef751531457a21a9771c9e">tftp_common::packets::ParseResult::Success</a></div><div class="ttdeci">bool Success</div><div class="ttdoc">if the parsing was successful</div><div class="ttdef"><b>Definition:</b> parser.hpp:10</div></div>
-<div class="ttc" id="astructtftp__common_1_1packets_1_1ParseResult_html_aeee8ea92ab19b71850a9405bb00addef"><div class="ttname"><a href="structtftp__common_1_1packets_1_1ParseResult.html#aeee8ea92ab19b71850a9405bb00addef">tftp_common::packets::ParseResult::BytesRead</a></div><div class="ttdeci">std::size_t BytesRead</div><div class="ttdoc">count of bytes read</div><div class="ttdef"><b>Definition:</b> parser.hpp:12</div></div>
+<div class="ttc" id="astructtftp__common_1_1packets_1_1ParseResult_html"><div class="ttname"><a href="structtftp__common_1_1packets_1_1ParseResult.html">tftp_common::packets::ParseResult</a></div><div class="ttdoc">The result of parsing a single packet.</div><div class="ttdef"><b>Definition:</b> parsers.hpp:8</div></div>
+<div class="ttc" id="astructtftp__common_1_1packets_1_1ParseResult_html_aa1a6e13627ef751531457a21a9771c9e"><div class="ttname"><a href="structtftp__common_1_1packets_1_1ParseResult.html#aa1a6e13627ef751531457a21a9771c9e">tftp_common::packets::ParseResult::Success</a></div><div class="ttdeci">bool Success</div><div class="ttdoc">if the parsing was successful</div><div class="ttdef"><b>Definition:</b> parsers.hpp:10</div></div>
+<div class="ttc" id="astructtftp__common_1_1packets_1_1ParseResult_html_aeee8ea92ab19b71850a9405bb00addef"><div class="ttname"><a href="structtftp__common_1_1packets_1_1ParseResult.html#aeee8ea92ab19b71850a9405bb00addef">tftp_common::packets::ParseResult::BytesRead</a></div><div class="ttdeci">std::size_t BytesRead</div><div class="ttdoc">count of bytes read</div><div class="ttdef"><b>Definition:</b> parsers.hpp:12</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
