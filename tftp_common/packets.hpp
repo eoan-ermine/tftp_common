@@ -37,6 +37,30 @@ enum Type : std::uint16_t {
 
 }
 
+namespace errors {
+
+/// Trivial File Transfer Protocol error code
+enum Error : std::uint16_t {
+    /// Not defined, see error message (if any) error code
+    NotDefined = 0,
+    /// File not found error code
+    FileNotFound = 1,
+    /// Access violation error code
+    AccessViolation = 2,
+    /// Disk full or allocation exceeded error code
+    DiskFull = 3,
+    /// Illegal TFTP operation error code
+    IllegalOperation = 4,
+    /// Unknown transfer ID error code
+    UnknownTransferID = 5,
+    /// File already exists error code
+    FileAlreadyExists = 6,
+    /// No such user error code
+    NoSuchUser = 7
+};
+
+}
+
 /// Read/Write Request (RRQ/WRQ) Trivial File Transfer Protocol packet
 class Request final {
   public:
