@@ -5,6 +5,14 @@ project(tftp_common
     HOMEPAGE_URL "https://github.com/eoan-ermine/tftp_common"
 )
 
+include(cmake/ClangFormat.cmake)
+
+set(ALL_SOURCES
+    tftp_common/details/packets.hpp
+    tftp_common/details/parsers.hpp
+    tftp_common/tftp_common.hpp
+)
+
 include(GNUInstallDirs)
 
 add_library(${PROJECT_NAME} INTERFACE)
@@ -97,3 +105,5 @@ endif (BUILD_EXAMPLES)
 
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 include(Packing)
+
+add_clang_format_target()
