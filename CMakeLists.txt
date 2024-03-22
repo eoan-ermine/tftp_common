@@ -6,6 +6,7 @@ project(tftp_common
 )
 
 include(cmake/ClangFormat.cmake)
+include(cmake/Doxygen.cmake)
 
 set(ALL_SOURCES
     tftp_common/details/packets.hpp
@@ -71,25 +72,6 @@ if (MAIN_PROJECT)
     install(DIRECTORY ${PROJECT_SOURCE_DIR}/tftp_common/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME})
 endif()
 
-option(BUILD_DOC "Build documentation" OFF)
-
-if (BUILD_DOCS)
-    find_package(Doxygen)
-
-    if (DOXYGEN_FOUND)
-        set(DOXYGEN_IN ${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile)
-        set(DOXYGEN_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/docs)
-        add_custom_target(doc_doxygen ALL
-            COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYGEN_IN}
-            WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-            COMMENT "Generating API documentation with Doxygen"
-            VERBATIM
-        )
-    else (DOXYGEN_FOUND)
-      message("Doxygen need to be installed to generate the doxygen documentation")
-    endif (DOXYGEN_FOUND)
-endif (BUILD_DOCS)
-
 option(BUILD_TESTS "Build tests" OFF)
 
 if (BUILD_TESTS)
@@ -107,3 +89,4 @@ set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 include(Packing)
 
 add_clang_format_target()
+add_docs_target()
