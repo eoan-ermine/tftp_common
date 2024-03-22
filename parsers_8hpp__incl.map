@@ -1,11 +1,11 @@
-<map id="tftp_common/parsers.hpp" name="tftp_common/parsers.hpp">
-<area shape="rect" id="node1" title=" " alt="" coords="241,5,429,32"/>
-<area shape="rect" id="node2" href="$packets_8hpp.html" title=" " alt="" coords="285,80,385,107"/>
-<area shape="rect" id="node3" title=" " alt="" coords="5,155,97,181"/>
-<area shape="rect" id="node4" title=" " alt="" coords="122,155,191,181"/>
-<area shape="rect" id="node5" title=" " alt="" coords="215,155,282,181"/>
-<area shape="rect" id="node6" title=" " alt="" coords="306,155,365,181"/>
-<area shape="rect" id="node7" title=" " alt="" coords="389,155,487,181"/>
-<area shape="rect" id="node8" title=" " alt="" coords="511,155,635,181"/>
-<area shape="rect" id="node9" title=" " alt="" coords="659,155,721,181"/>
+<map id="tftp_common/details/parsers.hpp" name="tftp_common/details/parsers.hpp">
+<area shape="rect" id="node1" title=" " alt="" coords="257,5,413,47"/>
+<area shape="rect" id="node2" href="$packets_8hpp.html" title=" " alt="" coords="285,95,385,121"/>
+<area shape="rect" id="node3" title=" " alt="" coords="5,169,97,196"/>
+<area shape="rect" id="node4" title=" " alt="" coords="122,169,191,196"/>
+<area shape="rect" id="node5" title=" " alt="" coords="215,169,282,196"/>
+<area shape="rect" id="node6" title=" " alt="" coords="306,169,365,196"/>
+<area shape="rect" id="node7" title=" " alt="" coords="389,169,487,196"/>
+<area shape="rect" id="node8" title=" " alt="" coords="511,169,635,196"/>
+<area shape="rect" id="node9" title=" " alt="" coords="659,169,721,196"/>
 </map>
