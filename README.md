@@ -1,13 +1,10 @@
-# TFTP Common: Under Construction, Should Not Be Used In Production
+# TFTP Common
 
 A simple header-only Trivial File Transfer Protocol (*TFTP*) packets parsing and serialization library.
 
 [RFC 1350](https://datatracker.ietf.org/doc/html/rfc1350) (*TFTP Protocol Revision 2*) compilant, [RFC 2347](https://datatracker.ietf.org/doc/html/rfc2347) (*TFTP Option Extension*) support.
 
-![C++ Standard](https://img.shields.io/badge/C%2B%2B-17-blue)
-[![Build and test status](https://img.shields.io/github/actions/workflow/status/eoan-ermine/tftp_common/build_and_test.yml)](https://github.com/eoan-ermine/tftp_common/actions/workflows/build_and_test.yml)
-[![Docs build and deployment status](https://img.shields.io/github/actions/workflow/status/eoan-ermine/tftp_common/build_docs.yml?label=docs)](https://github.com/eoan-ermine/tftp_common/actions/workflows/build_docs.yml)
-[![Link to doxygen documentation](https://img.shields.io/badge/-doxygen%20documentation-blue)](https://eoanermine.com/tftp_common/)
+![C++ Standard](https://img.shields.io/badge/C%2B%2B-17-blue) ![](https://github.com/eoan-ermine/tftp_common/actions/workflows/build_and_test.yml/badge.svg) ![](https://github.com/eoan-ermine/tftp_common/actions/workflows/documentation.yml/badge.svg) ![](https://github.com/eoan-ermine/tftp_common/actions/workflows/style.yml/badge.svg) [![](https://img.shields.io/badge/docs-blue)](https://eoanermine.com/tftp_common/)
 
 ## Supported platforms
 
@@ -60,11 +57,7 @@ Variables customize how the build will be generated. Options are boolean variabl
 cmake -DVARIABLE=value path/to/tftp_common/source
 ```
 
-## CMake variables
-
-* `BUILD_DOCS: BOOL`
-
-Adds doxygen build target as a dependency of the default build target. Defaults to OFF.
+### CMake variables
 
 * `BUILD_TESTS: BOOL`
 
@@ -73,3 +66,9 @@ Adds test build targets as a dependencies of the default build target. Defaults 
 * `BUILD_EXAMPLES: BOOL`
 
 Adds examples build targets as a dependencies of the default build target. Defaults to OFF.
+
+## CMake targets
+
+* The `format` target (i.e `ninja format`) will run clang-format on all project files
+* The `check-format` target (i.e `ninja check-format`) will verify that project's code follows formatting conventions
+* The `docs` target (i.e `ninja docs`) will generate documentation using doxygen
