@@ -1,5 +1,7 @@
 <map id="tftp_common/details/packets.hpp" name="tftp_common/details/packets.hpp">
-<area shape="rect" id="node1" title=" " alt="" coords="63,5,219,47"/>
-<area shape="rect" id="node2" href="$parsers_8hpp.html" title=" " alt="" coords="5,95,161,136"/>
-<area shape="rect" id="node3" href="$tftp__common_8hpp.html" title=" " alt="" coords="27,184,254,211"/>
+<area shape="rect" id="node1" title=" " alt="" coords="196,5,352,47"/>
+<area shape="rect" id="node2" href="$packets__test_8cpp.html" title=" " alt="" coords="5,102,172,129"/>
+<area shape="rect" id="node3" href="$parsers_8hpp.html" title=" " alt="" coords="196,95,352,136"/>
+<area shape="rect" id="node5" href="$tftp__common_8hpp.html" title=" " alt="" coords="277,184,503,211"/>
+<area shape="rect" id="node4" href="$parse__test_8cpp.html" title=" " alt="" coords="99,184,252,211"/>
 </map>
