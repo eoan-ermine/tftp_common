@@ -4,11 +4,11 @@ var indexSectionsWithContent =
   1: "adeoprt",
   2: "ct",
   3: "cprt",
-  4: "abcdegmoprst",
-  5: "bdelnsuv",
-  6: "et",
-  7: "adefinoruw",
-  8: "p",
+  4: "abcdegimoprst",
+  5: "bdelnpuv",
+  6: "bp",
+  7: "et",
+  8: "adefinoruw",
   9: "e",
   10: "t"
 };
@@ -21,9 +21,9 @@ var indexSectionNames =
   3: "files",
   4: "functions",
   5: "variables",
-  6: "enums",
-  7: "enumvalues",
-  8: "related",
+  6: "typedefs",
+  7: "enums",
+  8: "enumvalues",
   9: "defines",
   10: "pages"
 };
@@ -36,9 +36,9 @@ var indexSectionLabels =
   3: "Files",
   4: "Functions",
   5: "Variables",
-  6: "Enumerations",
-  7: "Enumerator",
-  8: "Friends",
+  6: "Typedefs",
+  7: "Enumerations",
+  8: "Enumerator",
   9: "Macros",
   10: "Pages"
 };

@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>tftp_common: tftp_common::packets::ParseResult Struct Reference</title>
+<title>tftp_common: tftp_common::packets::ParseResult&lt; T &gt; Struct Template Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -70,7 +70,7 @@ $(function() {
 <a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="structtftp__common_1_1packets_1_1ParseResult-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">tftp_common::packets::ParseResult Struct Reference</div>  </div>
+<div class="title">tftp_common::packets::ParseResult&lt; T &gt; Struct Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 
@@ -81,45 +81,46 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:aa1a6e13627ef751531457a21a9771c9e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structtftp__common_1_1packets_1_1ParseResult.html#aa1a6e13627ef751531457a21a9771c9e">Success</a></td></tr>
-<tr class="memdesc:aa1a6e13627ef751531457a21a9771c9e"><td class="mdescLeft">&#160;</td><td class="mdescRight">if the parsing was successful  <a href="structtftp__common_1_1packets_1_1ParseResult.html#aa1a6e13627ef751531457a21a9771c9e">More...</a><br /></td></tr>
-<tr class="separator:aa1a6e13627ef751531457a21a9771c9e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aeee8ea92ab19b71850a9405bb00addef"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structtftp__common_1_1packets_1_1ParseResult.html#aeee8ea92ab19b71850a9405bb00addef">BytesRead</a></td></tr>
-<tr class="memdesc:aeee8ea92ab19b71850a9405bb00addef"><td class="mdescLeft">&#160;</td><td class="mdescRight">count of bytes read  <a href="structtftp__common_1_1packets_1_1ParseResult.html#aeee8ea92ab19b71850a9405bb00addef">More...</a><br /></td></tr>
-<tr class="separator:aeee8ea92ab19b71850a9405bb00addef"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a92d1b9f6eb32ab38fd8e2bd608d61f63"><td class="memItemLeft" align="right" valign="top">T&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structtftp__common_1_1packets_1_1ParseResult.html#a92d1b9f6eb32ab38fd8e2bd608d61f63">Packet</a></td></tr>
+<tr class="separator:a92d1b9f6eb32ab38fd8e2bd608d61f63"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a545e8c78844fe716b1e29c31c8ccbc8b"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structtftp__common_1_1packets_1_1ParseResult.html#a545e8c78844fe716b1e29c31c8ccbc8b">BytesRead</a></td></tr>
+<tr class="separator:a545e8c78844fe716b1e29c31c8ccbc8b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>The result of parsing a single packet. </p>
+<div class="textblock"><h3>template&lt;typename T&gt;<br />
+struct tftp_common::packets::ParseResult&lt; T &gt;</h3>
+
+<p>The result of parsing a single packet. </p>
 </div><h2 class="groupheader">Member Data Documentation</h2>
-<a id="aeee8ea92ab19b71850a9405bb00addef"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aeee8ea92ab19b71850a9405bb00addef">&#9670;&nbsp;</a></span>BytesRead</h2>
+<a id="a545e8c78844fe716b1e29c31c8ccbc8b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a545e8c78844fe716b1e29c31c8ccbc8b">&#9670;&nbsp;</a></span>BytesRead</h2>
 
 <div class="memitem">
 <div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">std::size_t tftp_common::packets::ParseResult::BytesRead</td>
+          <td class="memname">std::size_t <a class="el" href="structtftp__common_1_1packets_1_1ParseResult.html">tftp_common::packets::ParseResult</a>&lt; T &gt;::BytesRead</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>count of bytes read </p>
-
 </div>
 </div>
-<a id="aa1a6e13627ef751531457a21a9771c9e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa1a6e13627ef751531457a21a9771c9e">&#9670;&nbsp;</a></span>Success</h2>
+<a id="a92d1b9f6eb32ab38fd8e2bd608d61f63"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a92d1b9f6eb32ab38fd8e2bd608d61f63">&#9670;&nbsp;</a></span>Packet</h2>
 
 <div class="memitem">
 <div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">bool tftp_common::packets::ParseResult::Success</td>
+          <td class="memname">T <a class="el" href="structtftp__common_1_1packets_1_1ParseResult.html">tftp_common::packets::ParseResult</a>&lt; T &gt;::Packet</td>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p>if the parsing was successful </p>
 
 </div>
 </div>

@@ -1,4 +1,0 @@
-<map id="tftp_common::packets::OptionAcknowledgment::getType" name="tftp_common::packets::OptionAcknowledgment::getType">
-<area shape="rect" id="node1" title=" " alt="" coords="108,5,295,61"/>
-<area shape="rect" id="node2" href="$parse__test_8cpp.html#a66fbb7bca9e43f1a49e28b896227f9a6" title="Test that Option Acknowledgment packet parsing is going fine." alt="" coords="5,20,60,47"/>
-</map>

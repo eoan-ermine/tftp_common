@@ -1,6 +1,0 @@
-<map id="TEST" name="TEST">
-<area shape="rect" id="node1" title="Test that Acknowledgment packet parsing is going fine." alt="" coords="5,78,60,105"/>
-<area shape="rect" id="node2" href="$classtftp__common_1_1packets_1_1Acknowledgment.html#adccdf142bf0c3bb4da71f8c2dcb3562e" title=" " alt="" coords="108,5,316,47"/>
-<area shape="rect" id="node3" href="$classtftp__common_1_1packets_1_1Acknowledgment.html#a36230b20c043663a6faa779c1a08565e" title=" " alt="" coords="111,71,313,112"/>
-<area shape="rect" id="node4" href="$namespacetftp__common_1_1packets.html#af429981ce6cb612102dffb39f237c1f9" title=" " alt="" coords="129,136,295,177"/>
-</map>
