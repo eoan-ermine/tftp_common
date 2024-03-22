@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>tftp_common: TFTP Common: Under Construction, Should Not Be Used In Production</title>
+<title>tftp_common: TFTP Common</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -63,12 +63,12 @@ $(function() {
 
 <div class="PageDoc"><div class="header">
   <div class="headertitle">
-<div class="title">TFTP Common: Under Construction, Should Not Be Used In Production </div>  </div>
+<div class="title">TFTP Common </div>  </div>
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><p><a class="anchor" id="md_README"></a> A simple header-only Trivial File Transfer Protocol (<em>TFTP</em>) packets parsing and serialization library.</p>
 <p><a href="https://datatracker.ietf.org/doc/html/rfc1350">RFC 1350</a> (<em>TFTP Protocol Revision 2</em>) compilant, <a href="https://datatracker.ietf.org/doc/html/rfc2347">RFC 2347</a> (<em>TFTP Option Extension</em>) support.</p>
-<p><img src="https://img.shields.io/badge/C%2B%2B-17-blue" alt="C++ Standard" class="inline"/> <a href="https://github.com/eoan-ermine/tftp_common/actions/workflows/build_and_test.yml"><img src="https://img.shields.io/github/actions/workflow/status/eoan-ermine/tftp_common/build_and_test.yml" alt="Build and test status" class="inline"/></a> <a href="https://github.com/eoan-ermine/tftp_common/actions/workflows/build_docs.yml"><img src="https://img.shields.io/github/actions/workflow/status/eoan-ermine/tftp_common/build_docs.yml?label=docs" alt="Docs build and deployment status" class="inline"/></a> <a href="https://eoanermine.com/tftp_common/"><img src="https://img.shields.io/badge/-doxygen%20documentation-blue" alt="Link to doxygen documentation" class="inline"/></a></p>
+<p><img src="https://img.shields.io/badge/C%2B%2B-17-blue" alt="C++ Standard" class="inline"/> <img src="https://github.com/eoan-ermine/tftp_common/actions/workflows/build_and_test.yml/badge.svg" alt="" style="pointer-events: none;" class="inline"/> <img src="https://github.com/eoan-ermine/tftp_common/actions/workflows/documentation.yml/badge.svg" alt="" style="pointer-events: none;" class="inline"/> <img src="https://github.com/eoan-ermine/tftp_common/actions/workflows/style.yml/badge.svg" alt="" style="pointer-events: none;" class="inline"/> <a href="https://eoanermine.com/tftp_common/"><img src="https://img.shields.io/badge/docs-blue" alt="" class="inline"/></a></p>
 <h1><a class="anchor" id="autotoc_md1"></a>
 Supported platforms</h1>
 <table class="markdownTable">
@@ -114,12 +114,8 @@ Quick start</h1>
 Options and variables</h1>
 <p>Variables customize how the build will be generated. Options are boolean variables, with possible values ON/OFF. Options and variables are defined on the CMake command line like this:</p>
 <div class="fragment"><div class="line">cmake -DVARIABLE=value path/to/tftp_common/source</div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md5"></a>
-CMake variables</h1>
-<ul>
-<li><code>BUILD_DOCS: BOOL</code></li>
-</ul>
-<p>Adds doxygen build target as a dependency of the default build target. Defaults to OFF.</p>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md5"></a>
+CMake variables</h2>
 <ul>
 <li><code>BUILD_TESTS: BOOL</code></li>
 </ul>
@@ -127,7 +123,14 @@ CMake variables</h1>
 <ul>
 <li><code>BUILD_EXAMPLES: BOOL</code></li>
 </ul>
-<p>Adds examples build targets as a dependencies of the default build target. Defaults to OFF. </p>
+<p>Adds examples build targets as a dependencies of the default build target. Defaults to OFF.</p>
+<h1><a class="anchor" id="autotoc_md6"></a>
+CMake targets</h1>
+<ul>
+<li>The <code>format</code> target (i.e <code>ninja format</code>) will run clang-format on all project files</li>
+<li>The <code>check-format</code> target (i.e <code>ninja check-format</code>) will verify that project's code follows formatting conventions</li>
+<li>The <code>docs</code> target (i.e <code>ninja docs</code>) will generate documentation using doxygen </li>
+</ul>
 </div></div><!-- PageDoc -->
 </div><!-- contents -->
 <!-- start footer part -->
