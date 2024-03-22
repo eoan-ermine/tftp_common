@@ -15,8 +15,6 @@
 
 namespace tftp_common::packets {
 
-struct ParseResult;
-
 namespace types {
 
 /// Trivial File Transfer Protocol packet type
@@ -153,8 +151,6 @@ class Request final {
     }
 
   private:
-    friend ParseResult parse(const std::uint8_t *Buffer, std::size_t Len, Request &Packet);
-
     std::uint16_t Type_;
     std::string Filename;
     std::string Mode;
@@ -208,8 +204,6 @@ class Data final {
     const std::vector<std::uint8_t> &getData() const noexcept { return DataBuffer; }
 
   private:
-    friend ParseResult parse(const std::uint8_t *Buffer, std::size_t Len, Data &Packet);
-
     std::uint16_t Type_ = types::DataPacket;
     std::uint16_t Block;
     std::vector<std::uint8_t> DataBuffer;
@@ -243,8 +237,6 @@ class Acknowledgment final {
     }
 
   private:
-    friend ParseResult parse(const std::uint8_t *Buffer, std::size_t Len, Acknowledgment &Packet);
-
     std::uint16_t Type_ = types::AcknowledgmentPacket;
     std::uint16_t Block;
 };
@@ -290,8 +282,6 @@ class Error final {
     }
 
   private:
-    friend ParseResult parse(const std::uint8_t *Buffer, std::size_t Len, Error &Packet);
-
     std::uint16_t Type_ = types::ErrorPacket;
     std::uint16_t ErrorCode;
     std::string ErrorMessage;
@@ -352,8 +342,6 @@ class OptionAcknowledgment final {
     std::string_view getOptionValue(const std::string &OptionName) const noexcept { return Options.at(OptionName); }
 
   private:
-    friend ParseResult parse(const std::uint8_t *Buffer, std::size_t Len, OptionAcknowledgment &Packet);
-
     std::uint16_t Type_ = types::OptionAcknowledgmentPacket;
     // According to the RFC, the order in which options are specified is not significant, so it's fine
     std::unordered_map<std::string, std::string> Options;

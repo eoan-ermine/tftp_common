@@ -14,15 +14,15 @@ TEST(Request, Parse) {
                                   0x6e, 0x65, 0x74, 0x61, 0x73, 0x63, 0x69, 0x69, 0x00};
     auto Length = sizeof(PacketBytes) / sizeof(std::uint8_t);
 
-    Request Packet;
-    auto [success, bytesRead] = parse(PacketBytes, Length, Packet);
+    auto Res = Parser<Request>::parse(PacketBytes, Length);
+    auto [Packet, BytesRead] = Res.get();
 
     ASSERT_EQ(Packet.getType(), types::ReadRequest);
     ASSERT_EQ(Packet.getFilename(), "/srv/tftp/ReadFile");
     ASSERT_EQ(Packet.getMode(), "netascii");
 
-    ASSERT_EQ(success, true);
-    ASSERT_EQ(bytesRead, Length);
+    ASSERT_EQ(Res.isSuccess(), true);
+    ASSERT_EQ(BytesRead, Length);
 }
 
 /// Test that Request packet with options parsing is going fine
@@ -50,8 +50,8 @@ TEST(Request, OptionParse) {
                                   0x7A, 0x31, 0x67, 0x53, 0x30, 0x58, 0x78, 0x4A, 0x57, 0x33, 0x00};
     auto Length = sizeof(PacketBytes) / sizeof(std::uint8_t);
 
-    Request Packet;
-    auto [success, bytesRead] = parse(PacketBytes, Length, Packet);
+    auto Res = Parser<Request>::parse(PacketBytes, Length);
+    auto [Packet, BytesRead] = Res.get();
 
     ASSERT_EQ(Packet.getType(), types::ReadRequest);
     ASSERT_EQ(Packet.getFilename(), "/srv/tftp/ReadFile");
@@ -64,8 +64,8 @@ TEST(Request, OptionParse) {
         ASSERT_EQ(Packet.getOptionValue(Idx), OptionsValues[Idx]);
     }
 
-    ASSERT_EQ(success, true);
-    ASSERT_EQ(bytesRead, Length);
+    ASSERT_EQ(Res.isSuccess(), true);
+    ASSERT_EQ(BytesRead, Length);
 }
 
 /// Test that Data packet parsing is going fine
@@ -79,8 +79,8 @@ TEST(Data, Parse) {
                                   0x2e, 0x2e, 0x0d, 0x0a};
     auto Length = sizeof(PacketBytes) / sizeof(std::uint8_t);
 
-    Data Packet;
-    auto [success, bytesRead] = parse(PacketBytes, Length, Packet);
+    auto Res = Parser<Data>::parse(PacketBytes, Length);
+    auto [Packet, BytesRead] = Res.get();
 
     ASSERT_EQ(Packet.getType(), types::DataPacket);
     ASSERT_EQ(Packet.getBlock(), 0x01);
@@ -91,8 +91,8 @@ TEST(Data, Parse) {
         ASSERT_EQ(Data[Idx], PacketBytes[BaseOffset + Idx]);
     }
 
-    ASSERT_EQ(success, true);
-    ASSERT_EQ(bytesRead, Length);
+    ASSERT_EQ(Res.isSuccess(), true);
+    ASSERT_EQ(BytesRead, Length);
 }
 
 /// Test that Acknowledgment packet parsing is going fine
@@ -103,14 +103,14 @@ TEST(Acknowledgment, Parse) {
                                   0x00, 0x01};
     auto Length = sizeof(PacketBytes) / sizeof(std::uint8_t);
 
-    Acknowledgment Packet;
-    auto [success, bytesRead] = parse(PacketBytes, Length, Packet);
+    auto Res = Parser<Acknowledgment>::parse(PacketBytes, Length);
+    auto [Packet, BytesRead] = Res.get();
 
     ASSERT_EQ(Packet.getType(), types::AcknowledgmentPacket);
     ASSERT_EQ(Packet.getBlock(), 0x01);
 
-    ASSERT_EQ(success, true);
-    ASSERT_EQ(bytesRead, Length);
+    ASSERT_EQ(Res.isSuccess(), true);
+    ASSERT_EQ(BytesRead, Length);
 }
 
 /// Test that Error packet parsing is going fine
@@ -124,15 +124,15 @@ TEST(Error, Parse) {
                                   0x00};
     auto Length = sizeof(PacketBytes) / sizeof(std::uint8_t);
 
-    Error Packet;
-    auto [success, bytesRead] = parse(PacketBytes, Length, Packet);
+    auto Res = Parser<Error>::parse(PacketBytes, Length);
+    auto [Packet, BytesRead] = Res.get();
 
     ASSERT_EQ(Packet.getType(), types::ErrorPacket);
     ASSERT_EQ(Packet.getErrorCode(), 0x01);
     ASSERT_EQ(Packet.getErrorMessage(), "File not found");
 
-    ASSERT_EQ(success, true);
-    ASSERT_EQ(bytesRead, Length);
+    ASSERT_EQ(Res.isSuccess(), true);
+    ASSERT_EQ(BytesRead, Length);
 }
 
 /// Test that Option Acknowledgment packet parsing is going fine
@@ -155,8 +155,8 @@ TEST(OptionAcknowledgment, Parse) {
                                   0x7A, 0x31, 0x67, 0x53, 0x30, 0x58, 0x78, 0x4A, 0x57, 0x33, 0x00};
     auto Length = sizeof(PacketBytes) / sizeof(std::uint8_t);
 
-    OptionAcknowledgment Packet;
-    auto [success, bytesRead] = parse(PacketBytes, Length, Packet);
+    auto Res = Parser<OptionAcknowledgment>::parse(PacketBytes, Length);
+    auto [Packet, BytesRead] = Res.get();
 
     ASSERT_EQ(Packet.getType(), types::OptionAcknowledgmentPacket);
 
@@ -166,8 +166,8 @@ TEST(OptionAcknowledgment, Parse) {
         ASSERT_EQ(Packet.getOptionValue(Key), Value);
     }
 
-    ASSERT_EQ(success, true);
-    ASSERT_EQ(bytesRead, Length);
+    ASSERT_EQ(Res.isSuccess(), true);
+    ASSERT_EQ(BytesRead, Length);
 }
 
 int main(int argc, char **argv) {
