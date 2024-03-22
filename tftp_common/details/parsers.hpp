@@ -7,34 +7,26 @@
 namespace tftp_common::packets {
 
 /// The result of parsing a single packet
-template <typename T>
-struct ParseResult {
+template <typename T> struct ParseResult {
     T Packet;
     std::size_t BytesRead;
 };
 
 /// Return type of `parse` functions
-template <typename T>
-struct ParseReturn : public std::variant<ParseResult<T>, std::nullopt_t> {
+template <typename T> struct ParseReturn : public std::variant<ParseResult<T>, std::nullopt_t> {
     using base = std::variant<ParseResult<T>, std::nullopt_t>;
     using base::base;
 
-    ParseResult<T> get() const noexcept {
-        return std::get<ParseResult<T>>(*this);
-    }
+    ParseResult<T> get() const noexcept { return std::get<ParseResult<T>>(*this); }
 
-    bool isSuccess() const noexcept {
-        return !std::holds_alternative<std::nullopt_t>(*this);
-    }
+    bool isSuccess() const noexcept { return !std::holds_alternative<std::nullopt_t>(*this); }
 };
 
-template <typename T>
-struct Parser {
+template <typename T> struct Parser {
     using PacketType = T;
 };
 
-template <>
-struct Parser<Request> {
+template <> struct Parser<Request> {
     /// Parse read/write request packet from buffer converting all fields to host byte order
     /// @param[Buffer] Assumptions: \p Buffer is not a nullptr, it's size is greater or equal than \p Len
     /// @param[Len] Assumptions: \p Len is greater than zero
@@ -84,7 +76,8 @@ struct Parser<Request> {
             case 3:
                 if (Byte == 0u) {
                     if (Idx == Len - 1) {
-                        return ParseResult<Request>{Request{(types::Type) Type_, std::move(Filename), std::move(Mode)}, BytesRead};
+                        return ParseResult<Request>{Request{(types::Type)Type_, std::move(Filename), std::move(Mode)},
+                                                    BytesRead};
                     }
                     Step++;
                 } else {
@@ -106,7 +99,9 @@ struct Parser<Request> {
                     OptionsValues.push_back(std::move(Value));
 
                     if (Idx == Len - 1) {
-                        return ParseResult<Request>{Request{(types::Type) Type_, std::move(Filename), std::move(Mode), std::move(OptionsNames), std::move(OptionsValues)}, BytesRead};
+                        return ParseResult<Request>{Request{(types::Type)Type_, std::move(Filename), std::move(Mode),
+                                                            std::move(OptionsNames), std::move(OptionsValues)},
+                                                    BytesRead};
                     }
                     Step--;
                 } else {
@@ -121,8 +116,7 @@ struct Parser<Request> {
     }
 };
 
-template <>
-struct Parser<Data> {
+template <> struct Parser<Data> {
     /// Parse data packet from buffer converting all fields to host byte order
     /// @param[Buffer] Assumptions: \p Buffer is not a nullptr, it's size is greater or equal than \p Len
     /// @param[Len] Assumptions: \p Len is greater than zero
@@ -134,7 +128,6 @@ struct Parser<Data> {
         std::uint16_t Type_;
         std::uint16_t Block;
         std::vector<std::uint8_t> DataBuffer;
-
 
         std::size_t Step = 0;
         std::size_t BytesRead = 0;
@@ -184,8 +177,7 @@ struct Parser<Data> {
     }
 };
 
-template <>
-struct Parser<Acknowledgment> {
+template <> struct Parser<Acknowledgment> {
     /// Parse acknowledgment packet from buffer converting all fields to host byte order
     /// @param[Buffer] Assumptions: \p Buffer is not a nullptr, it's size is greater or equal than \p Len
     /// @param[Len] Assumptions: \p Len is greater than zero
@@ -235,8 +227,7 @@ struct Parser<Acknowledgment> {
     }
 };
 
-template <>
-struct Parser<Error> {
+template <> struct Parser<Error> {
     /// Parse error packet from buffer converting all fields to host byte order
     /// @param[Buffer] Assumptions: \p Buffer is not a nullptr, it's size is greater or equal than \p Len
     /// @param[Len] Assumptions: \p Len is greater than zero
@@ -296,8 +287,7 @@ struct Parser<Error> {
     }
 };
 
-template <>
-struct Parser<OptionAcknowledgment> {
+template <> struct Parser<OptionAcknowledgment> {
 
     /// Parse error packet from buffer converting all fields to host byte order
     /// @param[Buffer] Assumptions: \p Buffer is not a nullptr, it's size is greater or equal than \p Len
