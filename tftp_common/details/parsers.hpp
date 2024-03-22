@@ -66,7 +66,6 @@ ParseResult parse(const std::uint8_t *Buffer, std::size_t Len, Request &Packet) 
         case 4:
             if (Byte == 0u) {
                 Packet.OptionsNames.push_back(std::move(Name));
-                Name.clear();
                 Step++;
             } else {
                 Name.push_back(Byte);
@@ -76,7 +75,6 @@ ParseResult parse(const std::uint8_t *Buffer, std::size_t Len, Request &Packet) 
         case 5:
             if (Byte == 0u) {
                 Packet.OptionsValues.push_back(std::move(Value));
-                Value.clear();
 
                 if (Idx == Len - 1) {
                     return ParseResult{true, BytesRead};
@@ -289,9 +287,6 @@ ParseResult parse(const std::uint8_t *Buffer, std::size_t Len, OptionAcknowledgm
         case 3:
             if (Byte == 0u) {
                 Packet.Options.emplace(std::move(Name), std::move(Value));
-
-                Name.clear();
-                Value.clear();
 
                 if (Idx == Len - 1) {
                     return ParseResult{true, BytesRead};
