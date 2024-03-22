@@ -1,4 +1,4 @@
-#include "../tftp_common/packets.hpp"
+#include "../tftp_common/details/packets.hpp"
 #include <gtest/gtest.h>
 
 using namespace tftp_common::packets;

@@ -1,4 +1,4 @@
 #pragma once
 
-#include "packets.hpp"
-#include "parsers.hpp"
+#include "details/packets.hpp"
+#include "details/parsers.hpp"
